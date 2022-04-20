@@ -13,6 +13,8 @@ import { useNavigation, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import QRCode from 'react-qr-code';
 
+import { Restaurants_Screen } from "./src/components/screens/Restaurants_Screen";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -67,13 +69,13 @@ function Create_Group_Screen() {
   );
 }
 
-function Restaurants_Screen() {
-  return (
-    <View style={styles.container}>
-      <Text>Nothing to see here</Text>
-    </View>
-  );
-}
+// function Restaurants_Screen() {
+//   return (
+//     <View style={styles.container}>
+//       <Text>Nothing to see here</Text>
+//     </View>
+//   );
+// }
 
 function Share_Link_Screen() {
   return (
