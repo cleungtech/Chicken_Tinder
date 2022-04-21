@@ -8,7 +8,12 @@ const missing_request_body_data = new Error(
   'Missing data in the request body!'
 );
 
+const invalid_id = new Error(
+  'Provided id is invalid!'
+)
+
 module.exports = {
-  missing_request_body_data,
   json_message,
+  missing_request_body_data,
+  invalid_id,
 }

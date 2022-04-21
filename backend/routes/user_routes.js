@@ -14,18 +14,28 @@ router.post('/', async (request, response) => {
     response.status(201).json(new_user);
 
   } catch (error) {
-
-    if (error === custom_error.missing_request_body_data) {
-      response.status(400);
-    } else {
-      response.status(500);
-    }
+    response.status(error === custom_error.missing_request_body_data ? 400:500);
     response.json(custom_error.json_message(error));
   }
 });
 
+// View a user
+router.get('/:user_id', async(request, response) => {
+
+  try {
+    const user_id = request.params.user_id;
+    const found_user = await user.view_user(user_id);
+    response.status(200).json(found_user);
+
+  } catch (error) {
+    response.status(error === custom_error.invalid_id ? 400:500);
+    response.json(custom_error.json_message(error));
+  }
+})
+
 // Validate the body of the create user request
 const validate_create_request = (request_body) => {
+  
   const { user_name } = request_body;
   if (!user_name) throw custom_error.missing_request_body_data;
 }

@@ -14,18 +14,28 @@ router.post('/', async (request, response) => {
     response.status(201).json(new_flock);
 
   } catch (error) {
-
-    if (error === custom_error.missing_request_body_data) {
-      response.status(400);
-    } else {
-      response.status(500);
-    }
+    response.status(error === custom_error.missing_request_body_data ? 400:500);
     response.json(custom_error.json_message(error));
   }
 });
 
+// View a flock
+router.get('/:flock_id', async(request, response) => {
+
+  try {
+    const flock_id = request.params.flock_id;
+    const found_flock = await flock.view_flock(flock_id);
+    response.status(200).json(found_flock);
+
+  } catch (error) {
+    response.status(error === custom_error.invalid_id ? 400:500);
+    response.json(custom_error.json_message(error));
+  }
+})
+
 // Validate the body of the create flock request
 const validate_create_request = (request_body) => {
+
   const { flock_name, host_id, location } = request_body;
   if (!flock_name || !host_id || !location)
     throw custom_error.missing_request_body_data;

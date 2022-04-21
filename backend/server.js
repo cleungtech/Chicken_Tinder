@@ -17,7 +17,7 @@ app.use('/flock', flocks);
 
 // Manage users
 const users = require('./routes/user_routes');
-app.use('/users', users);
+app.use('/user', users);
 
 // Catch bad requests
 app.use((req, res) => {

@@ -12,11 +12,16 @@ const create_user = async (user_name) => {
   }
 
   const user_id = await database.create(USER, user_data);
-
-  return {
-    user_id: user_id,
-    ...user_data
-  }
+  return { user_id: user_id, ...user_data }
 }
 
-module.exports = { create_user };
+// View a user in database (by id)
+const view_user = async (user_id) => {
+  const user_data = await database.view(USER, user_id);
+  return { user_id: parseInt(user_id, 10), ...user_data };
+}
+
+module.exports = { 
+  create_user,
+  view_user
+};
