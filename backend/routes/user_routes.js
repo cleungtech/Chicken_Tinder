@@ -14,8 +14,7 @@ router.post('/', async (request, response) => {
     response.status(201).json(new_user);
 
   } catch (error) {
-    response.status(error === custom_error.missing_request_body_data ? 400:500);
-    response.json(custom_error.json_message(error));
+    custom_error.respond(error, response);
   }
 });
 
@@ -28,14 +27,13 @@ router.get('/:user_id', async(request, response) => {
     response.status(200).json(found_user);
 
   } catch (error) {
-    response.status(error === custom_error.invalid_id ? 400:500);
-    response.json(custom_error.json_message(error));
+    custom_error.respond(error, response);
   }
 })
 
 // Validate the body of the create user request
 const validate_create_request = (request_body) => {
-  
+
   const { user_name } = request_body;
   if (!user_name) throw custom_error.missing_request_body_data;
 }

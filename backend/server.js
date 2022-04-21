@@ -20,9 +20,8 @@ const users = require('./routes/user_routes');
 app.use('/user', users);
 
 // Catch bad requests
-app.use((req, res) => {
-  console.log('bad request');
-  res.status(400).send('Bad Request');
+app.use((request, response) => {
+  response.status(400).send('Invalid URL and/or HTTP method');
 })
 
 // Start server

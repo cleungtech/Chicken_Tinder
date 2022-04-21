@@ -14,8 +14,7 @@ router.post('/', async (request, response) => {
     response.status(201).json(new_flock);
 
   } catch (error) {
-    response.status(error === custom_error.missing_request_body_data ? 400:500);
-    response.json(custom_error.json_message(error));
+    custom_error.respond(error, response);
   }
 });
 
@@ -28,8 +27,23 @@ router.get('/:flock_id', async(request, response) => {
     response.status(200).json(found_flock);
 
   } catch (error) {
-    response.status(error === custom_error.invalid_id ? 400:500);
-    response.json(custom_error.json_message(error));
+    custom_error.respond(error, response);
+  }
+})
+
+// Join a flock
+router.put('/:flock_id', async(request, response) => {
+
+  try {
+    const flock_id = request.params.flock_id;
+    validate_join_request(request.body);
+
+    const { user_id } = request.body;
+    await flock.join_flock(flock_id, user_id);
+    response.status(200).send();
+
+  } catch (error) {
+    custom_error.respond(error, response);
   }
 })
 
@@ -43,6 +57,13 @@ const validate_create_request = (request_body) => {
   const { longitude, latitude } = location;
   if (!longitude || !latitude) 
     throw custom_error.missing_request_body_data;
+}
+
+// Validate the body of the join flock request
+const validate_join_request = (request_body) => {
+
+  const { user_id } = request_body;
+  if (!user_id) throw custom_error.missing_request_body_data;
 }
 
 module.exports = router;
