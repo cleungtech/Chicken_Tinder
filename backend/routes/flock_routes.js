@@ -47,6 +47,19 @@ router.put('/:flock_id', async(request, response) => {
   }
 })
 
+// Disband a flock
+router.delete('/:flock_id', async(request, response) => {
+
+  try {
+    const flock_id = request.params.flock_id;
+    await flock.delete_flock(flock_id);
+    response.status(200).send();
+
+  } catch (error) {
+    custom_error.respond(error, response);
+  }
+})
+
 // Validate the body of the create flock request
 const validate_create_request = (request_body) => {
 

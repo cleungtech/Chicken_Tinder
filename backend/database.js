@@ -40,8 +40,15 @@ const update = async (kind, id, data) => {
   await datastore.save(modified_entity);
 }
 
+// Remove an entity in datastore
+const remove = async (kind, id) => {
+  const key = get_key(kind, id);
+  await datastore.delete(key);
+}
+
 module.exports = {
   create,
   view,
   update,
+  remove,
 }

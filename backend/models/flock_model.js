@@ -32,8 +32,14 @@ const join_flock = async (flock_id, user_id) => {
   await database.update(FLOCK, flock_id, flock_data);
 }
 
+// Deleting a flock
+const delete_flock = async (flock_id) => {
+  await database.remove(FLOCK, flock_id);
+}
+
 module.exports = { 
   create_flock,
   view_flock,
   join_flock,
+  delete_flock
 };
