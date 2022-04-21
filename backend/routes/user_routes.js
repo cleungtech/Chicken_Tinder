@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 
 // Creating a user
-router.post('/', async (request, response) => {
+router.post('/', async (request, response, next) => {
 
   try {
     validate_create_request(request.body);
@@ -14,12 +14,12 @@ router.post('/', async (request, response) => {
     response.status(201).json(new_user);
 
   } catch (error) {
-    custom_error.respond(error, response);
+    next(error);
   }
 });
 
 // View a user
-router.get('/:user_id', async(request, response) => {
+router.get('/:user_id', async (request, response, next) => {
 
   try {
     const user_id = request.params.user_id;
@@ -27,13 +27,12 @@ router.get('/:user_id', async(request, response) => {
     response.status(200).json(found_user);
 
   } catch (error) {
-    custom_error.respond(error, response);
+    next(error)
   }
 })
 
 // Validate the body of the create user request
 const validate_create_request = (request_body) => {
-
   const { user_name } = request_body;
   if (!user_name) throw custom_error.missing_request_body_data;
 }

@@ -43,7 +43,8 @@ const update = async (kind, id, data) => {
 // Remove an entity in datastore
 const remove = async (kind, id) => {
   const key = get_key(kind, id);
-  await datastore.delete(key);
+  const db_return = await datastore.delete(key);
+  if (!db_return[0].indexUpdates) throw custom_error.invalid_id;
 }
 
 module.exports = {

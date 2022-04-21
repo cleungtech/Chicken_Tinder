@@ -1,20 +1,6 @@
-const respond = (error, response) => {
-
-  switch (error) {
-    case invalid_id:
-      response.status(400);
-      break;
-    case missing_request_body_data:
-      response.status(400);
-      break;
-    case already_in_flock:
-      response.status(400);
-      break;
-    default:
-      response.status(500);
-  }
-  response.json({ 'Error': error.message });
-}
+const not_found = new Error(
+  'Invalid URL and/or HTTP method'
+)
 
 const missing_request_body_data = new Error(
   'Missing data in the request body!'
@@ -29,7 +15,7 @@ const already_in_flock = new Error(
 )
 
 module.exports = {
-  respond,
+  not_found,
   missing_request_body_data,
   invalid_id,
   already_in_flock,

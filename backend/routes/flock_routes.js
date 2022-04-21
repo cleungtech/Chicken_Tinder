@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 
 // Creating a flock (must have host_id created before calling)
-router.post('/', async (request, response) => {
+router.post('/', async (request, response, next) => {
 
   try {
     validate_create_request(request.body);
@@ -14,12 +14,12 @@ router.post('/', async (request, response) => {
     response.status(201).json(new_flock);
 
   } catch (error) {
-    custom_error.respond(error, response);
+    next(error);
   }
 });
 
 // View a flock
-router.get('/:flock_id', async(request, response) => {
+router.get('/:flock_id', async (request, response, next) => {
 
   try {
     const flock_id = request.params.flock_id;
@@ -27,12 +27,12 @@ router.get('/:flock_id', async(request, response) => {
     response.status(200).json(found_flock);
 
   } catch (error) {
-    custom_error.respond(error, response);
+    next(error);
   }
 })
 
 // Join a flock
-router.put('/:flock_id', async(request, response) => {
+router.put('/:flock_id', async (request, response, next) => {
 
   try {
     const flock_id = request.params.flock_id;
@@ -43,12 +43,12 @@ router.put('/:flock_id', async(request, response) => {
     response.status(200).send();
 
   } catch (error) {
-    custom_error.respond(error, response);
+    next(error);
   }
 })
 
 // Disband a flock
-router.delete('/:flock_id', async(request, response) => {
+router.delete('/:flock_id', async (request, response, next) => {
 
   try {
     const flock_id = request.params.flock_id;
@@ -56,7 +56,7 @@ router.delete('/:flock_id', async(request, response) => {
     response.status(200).send();
 
   } catch (error) {
-    custom_error.respond(error, response);
+    next(error);
   }
 })
 
