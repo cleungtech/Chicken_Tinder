@@ -1,88 +1,86 @@
-import React, {Component} from 'react';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState, useEffect} from 'react';
 import { 
   Image, 
+  SafeAreaView,
   TouchableOpacity, 
   View, 
   Text, 
-  StyleSheet, 
 } from 'react-native';
 
-import { Found_Restaurants } from 
-        "./src/components/models/Found_Restuarants"
+import styles from "../../styles/css.js";
 
-class Restaurants_Screen extends Component{
-    // hard-coded list of restaurant cards
-    fake_data = { 
-        "businesses": [
-            {
-                "name": "test1",
-                "rating": 10,
-                "review_count": 100,
-                "image_url": "image1.com"
-            },
-            {
-                "name": "test2",
-                "rating": 20,
-                "review_count": 200,
-                "image_url": "image2.com"
-            },
-            {
-                "name": "test3",
-                "rating": 30,
-                "review_count": 300,
-                "image_url": "image3.com"
-            },
-        ]
-    }
+fake_data = [
+        {
+            "name": "test1",
+            "rating": 10,
+            "review_count": 100,
+            "image_url": "image1.com"
+        },
+        {
+            "name": "test2",
+            "rating": 20,
+            "review_count": 200,
+            "image_url": "image2.com"
+        },
+        {
+            "name": "test3",
+            "rating": 30,
+            "review_count": 300,
+            "image_url": "image3.com"
+        },
+]
 
-    nearby_shops = Found_Restaurants(fake_data)
+export function Restaurants_Screen() {
+    const [current_index, set_current_index] = useState(0);
+    const [current_shop, set_current_shop] = useState(fake_data[current_index]);
 
-    constructor(props) {
-        this.state = {
-            gesture_name: 'None',
-            current_restaurant: nearby_shops[0]
+    useEffect(() => {
+        set_current_shop(fake_data[current_index]);
+    }, [current_index]);
+
+    function advance_list() {
+        if (current_index == 2) {
+            // logic for determining winner goes here
+            set_current_index(0);
+        } else {
+            set_current_index(current_index => current_index + 1);
         }
     }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text>Nothing to see here</Text>
-
+    return (
+        <SafeAreaView style={styles.container}>
+            <StatusBar style="auto" />
+            <Restaurant_Card shop_data={current_shop} />
+            <View style={styles.row}>
+            <Vote_Button 
+                button_name='dislike' 
+                press_function={advance_list}
+            />
+            <Vote_Button 
+                button_name='like' 
+                press_function={advance_list}
+            />
             </View>
-        );
-    }
-
-    renderCards = () => {
-        return nearby_shops.map((item, i) => {
-            return (
-                <Animated.View
-                    style={{
-                    height: 100,
-                    width: 100,
-                    padding: 10
-                    }}
-                >
-                    <Image
-                    style={{
-                        flex: 1,
-                        height: null,
-                        width: null,
-                        resizeMode: "cover",
-                        borderRadius: 20
-                    }}
-                    source={item.uri}
-                    />
-                </Animated.View>
-            );
-        });
-    }
+        </SafeAreaView>
+    )
 }
 
-function Vote_Button({button_name}) {
+function Restaurant_Card({shop_data}) {
+    return (
+        <View style={styles.card}>
+            <Text>Name: {shop_data.name}</Text>
+            <Text>Name: {shop_data.rating}</Text>
+            <Text>Name: {shop_data.review_count}</Text>
+            <Text>Name: {shop_data.image_url}</Text>
+        </View>
+    );
+}
+
+function Vote_Button({button_name, press_function}) {
     return (
       <TouchableOpacity
-        onPress={() => alert("Not Implemented Yet!")}
+        onPress={press_function}
         style={styles.button}
         activeOpacity={0.5}
       >
@@ -90,14 +88,3 @@ function Vote_Button({button_name}) {
       </TouchableOpacity>
     );
   }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
-
-export { Restaurants_Screen };
