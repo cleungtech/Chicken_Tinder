@@ -5,14 +5,10 @@ import {
   View, 
   Text, 
   StyleSheet, 
-  SafeAreaView,
-  Dimensions,
-  Animated
 } from 'react-native';
 
 import { Found_Restaurants } from 
         "./src/components/models/Found_Restuarants"
-
 
 class Restaurants_Screen extends Component{
     // hard-coded list of restaurant cards
