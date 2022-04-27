@@ -18,7 +18,10 @@ export function Share_Link_Screen({ route }) {
     const [flock_url, set_flock_url] = useState(default_url);
     const [qr_value, set_qr_value] = useState("");
 
-    // make the post request to api
+    // send fetch request to create the group
+
+    // after getting the response, update the flock_url
+
     return (
       <SafeAreaView style={{alignItems: "center", marginTop: 50}}>
         <StatusBar style="auto" />

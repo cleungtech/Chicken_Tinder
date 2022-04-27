@@ -12,7 +12,7 @@ export function Create_Group_Screen({ route }) {
     const username = route.params.username;
     console.log(username);
 
-    // make the fetch request here
+    // make the fetch request here to create a user
 
     return (
       <SafeAreaView style={styles.container}>
@@ -20,12 +20,16 @@ export function Create_Group_Screen({ route }) {
         <Nav_Button 
           button_name="Create a Flock" 
           route="Select"
-          nav_params={{user_type: "host"}}
+          nav_params={{
+            username: username, 
+            user_type: "host"}}
         />
         <Nav_Button
           button_name="Join a Room" 
           route="Join"
-          nav_params={{user_type: "member"}}
+          nav_params={{
+            username: username,
+            user_type: "member"}}
         />
         <Useless_Button button_name="I'm Flying Solo" />
       </SafeAreaView>
