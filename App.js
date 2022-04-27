@@ -8,6 +8,7 @@ import { Select_Screen } from "./src/components/screens/Select_Screen.js";
 import { Create_Group_Screen } from "./src/components/screens/Create_Group_Screen.js";
 import { Restaurants_Screen } from "./src/components/screens/Restaurants_Screen.js";
 import { Share_Link_Screen } from "./src/components/screens/Share_Link_Screen.js";
+import { Join_Screen } from "./src/components/screens/Join_Screen.js";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ export default function App() {
         <Stack.Screen name="Create Group" component={Create_Group_Screen} />
         <Stack.Screen name="Restaurants" component={Restaurants_Screen} />
         <Stack.Screen name="Share Link" component={Share_Link_Screen} />
+        <Stack.Screen name="Join" component={Join_Screen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
