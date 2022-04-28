@@ -7,10 +7,12 @@ const USER = 'user';
 // Create an user in database
 const create_user = async (request) => {
 
-  const required_properties = ["user_name"];
-  model_helpers.validate_request(request.body, ...required_properties);
+  const { user_name } = request.body;
+  if (!user_name) throw custom_error.missing_data;
 
-  const user_data = model_helpers.create_data(required_properties, request.body);
+  const user_data = {
+    user_name: user_name
+  }
   const user_id = parseInt(await database.create(USER, user_data));
 
   return { 
@@ -34,11 +36,13 @@ const view_user = async (request) => {
 // Update a user in a database
 const update_user = async (request) => {
 
-  const required_properties = ["user_name"];
-  model_helpers.validate_request(request.body, ...required_properties);
+  const { user_name } = request.body;
+  const { user_id } = request.params;
+  if (!user_name || !user_id) throw custom_error.missing_data;
 
-  const user_id = request.params.user_id;
-  const user_data = model_helpers.create_data(required_properties, request.body);
+  const user_data = {
+    user_name: user_name
+  }
   await database.update(USER, user_id, user_data);
 
   return { 

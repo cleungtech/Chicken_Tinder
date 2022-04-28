@@ -8,9 +8,7 @@ const router = express.Router();
 router.post('/', async (request, response, next) => {
 
   try {
-    validate_create_request(request.body);
-    const { flock_name, host_id, location } = request.body;
-    const new_flock = await flock.create_flock(flock_name, host_id, location);
+    const new_flock = await flock.create_flock(request);
     response.status(201).json(new_flock);
 
   } catch (error) {
@@ -22,8 +20,7 @@ router.post('/', async (request, response, next) => {
 router.get('/:flock_id', async (request, response, next) => {
 
   try {
-    const flock_id = request.params.flock_id;
-    const found_flock = await flock.view_flock(flock_id);
+    const found_flock = await flock.view_flock(request);
     response.status(200).json(found_flock);
 
   } catch (error) {
@@ -32,14 +29,10 @@ router.get('/:flock_id', async (request, response, next) => {
 })
 
 // Join a flock
-router.put('/:flock_id', async (request, response, next) => {
+router.post('/:flock_id/user/:user_id', async (request, response, next) => {
 
   try {
-    const flock_id = request.params.flock_id;
-    validate_join_request(request.body);
-
-    const { user_id } = request.body;
-    await flock.join_flock(flock_id, user_id);
+    await flock.join_flock(request);
     response.status(200).send();
 
   } catch (error) {
@@ -59,24 +52,5 @@ router.delete('/:flock_id', async (request, response, next) => {
     next(error);
   }
 })
-
-// Validate the body of the create flock request
-const validate_create_request = (request_body) => {
-
-  const { flock_name, host_id, location } = request_body;
-  if (!flock_name || !host_id || !location)
-    throw custom_error.missing_request_body_data;
-
-  const { longitude, latitude } = location;
-  if (!longitude || !latitude) 
-    throw custom_error.missing_request_body_data;
-}
-
-// Validate the body of the join flock request
-const validate_join_request = (request_body) => {
-
-  const { user_id } = request_body;
-  if (!user_id) throw custom_error.missing_request_body_data;
-}
 
 module.exports = router;

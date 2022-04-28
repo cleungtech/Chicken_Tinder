@@ -17,7 +17,7 @@ const get_key = (kind, id=null) => {
   return key;
 }
 
-// Get an entity by ID
+// Get an entity by ID (can also use for validating id)
 const view = async (kind, id) => {
   const key = get_key(kind, id);
   const [ entity ] = await datastore.get(key);
