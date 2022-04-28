@@ -44,9 +44,8 @@ router.post('/:flock_id/user/:user_id', async (request, response, next) => {
 router.delete('/:flock_id', async (request, response, next) => {
 
   try {
-    const flock_id = request.params.flock_id;
-    await flock.delete_flock(flock_id);
-    response.status(200).send();
+    await flock.delete_flock(request);
+    response.status(204).send();
 
   } catch (error) {
     next(error);

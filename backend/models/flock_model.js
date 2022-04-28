@@ -67,7 +67,8 @@ const join_flock = async (request) => {
 }
 
 // Deleting a flock
-const delete_flock = async (flock_id) => {
+const delete_flock = async (request) => {
+  const flock_id = request.params.flock_id;
   await database.remove(FLOCK, flock_id);
 }
 
