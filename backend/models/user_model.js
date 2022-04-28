@@ -42,7 +42,7 @@ const update_user = async (request) => {
   await database.update(USER, user_id, user_data);
 
   return { 
-    user_id: user_id, 
+    user_id: parseInt(user_id), 
     ...user_data,
     self: model_helpers.get_self_URL(request, USER, user_id)
    }
