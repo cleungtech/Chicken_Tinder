@@ -33,7 +33,19 @@ router.put('/:user_id', async (request, response, next) => {
 
   try {
     const updated_user = await user.update_user(request);
-    response.status(201).json(updated_user);
+    response.status(200).json(updated_user);
+
+  } catch (error) {
+    next(error)
+  }
+})
+
+// Delete a user
+router.delete('/:user_id', async (request, response, next) => {
+
+  try {
+    await user.delete_user(request);
+    response.status(204).send();
 
   } catch (error) {
     next(error)

@@ -36,6 +36,8 @@ const create = async (kind, data) => {
 // Update an entity in Datastore
 const update = async (kind, id, data) => {
   const key = get_key(kind, id);
+  const [ entity ] = await datastore.get(key);
+  if (!entity) throw custom_error.invalid_id;
   const modified_entity = create_entity(key, data);
   await datastore.save(modified_entity);
 }

@@ -35,7 +35,6 @@ const view_user = async (request) => {
 const update_user = async (request) => {
 
   const required_properties = ["user_name"];
-
   model_helpers.validate_request(request.body, ...required_properties);
 
   const user_id = request.params.user_id;
@@ -49,8 +48,16 @@ const update_user = async (request) => {
    }
 }
 
+// Delete a user in a database
+const delete_user = async (request) => {
+  
+  const user_id = request.params.user_id;
+  await database.remove(USER, user_id);
+}
+
 module.exports = { 
   create_user,
   view_user,
-  update_user
+  update_user,
+  delete_user
 };
