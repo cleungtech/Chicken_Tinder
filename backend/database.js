@@ -12,7 +12,7 @@ const create_entity = (key, data) => {
 
 // Get the Datastore key
 const get_key = (kind, id=null) => {
-  const key = id ? datastore.key([kind, parseInt(id,10)]) : datastore.key(kind);
+  const key = id ? datastore.key([kind, parseInt(id)]) : datastore.key(kind);
   if (id && isNaN(key.id)) throw custom_error.invalid_id;
   return key;
 }
