@@ -8,9 +8,7 @@ const router = express.Router();
 router.post('/', async (request, response, next) => {
 
   try {
-    validate_create_request(request.body);
-    const { user_name } = request.body;
-    const new_user = await user.create_user(user_name);
+    const new_user = await user.create_user(request);
     response.status(201).json(new_user);
 
   } catch (error) {
@@ -22,8 +20,7 @@ router.post('/', async (request, response, next) => {
 router.get('/:user_id', async (request, response, next) => {
 
   try {
-    const user_id = request.params.user_id;
-    const found_user = await user.view_user(user_id);
+    const found_user = await user.view_user(request);
     response.status(200).json(found_user);
 
   } catch (error) {
@@ -31,10 +28,16 @@ router.get('/:user_id', async (request, response, next) => {
   }
 })
 
-// Validate the body of the create user request
-const validate_create_request = (request_body) => {
-  const { user_name } = request_body;
-  if (!user_name) throw custom_error.missing_request_body_data;
-}
+// Update a user
+router.put('/:user_id', async (request, response, next) => {
+
+  try {
+    const updated_user = await user.update_user(request);
+    response.status(201).json(updated_user);
+
+  } catch (error) {
+    next(error)
+  }
+})
 
 module.exports = router;
