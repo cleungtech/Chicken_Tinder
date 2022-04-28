@@ -10,8 +10,8 @@ import QRCode from "react-qr-code";
 
 export function Share_Link_Screen({ route }) {
     const user_info = route.params;
-    console.log(user_info.user_type);
-    console.log(user_info.urgency);
+    // console.log(user_info.user_type);
+    // console.log(user_info.urgency);
 
     const default_url = "https://chicken-tinder-347213.uk.r.appspot.com/api";
 

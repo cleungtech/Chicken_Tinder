@@ -11,6 +11,12 @@ import styles from "../../styles/css.js";
 export function Select_Screen({ route }) {
     const user_type = route.params.user_type;
     const username = route.params.username;
+    const user_id = route.params.user_id;
+
+    console.log("new user info below:");
+    console.log("username " + username)
+    console.log("user_id: " + user_id);
+    
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar style="auto" />
@@ -21,7 +27,6 @@ export function Select_Screen({ route }) {
             username: username,
             user_type: user_type,
             urgency: "now",
-            
           }}
         />
         <Nav_Button 
