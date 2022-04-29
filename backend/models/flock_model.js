@@ -48,6 +48,31 @@ const view_flock = async (request) => {
   return construct_return(flock_id, flock_data, request);
 }
 
+// Check the current status of the flock
+// Lightweight method to see if all users have voted
+// If so, it will return the most voted restaurant
+const check_flock = async (request) => {
+
+  const flock_id = request.params.flock_id;
+  const flock_data = await database.view(FLOCK, flock_id);
+
+  const { user_votes, restaurant_votes } = flock_data;
+
+  const remaining_votes = Object.values(user_votes).reduce((total, each) => 
+    total + each, 0);
+
+  const ranked_restaurants = Object.keys(restaurant_votes);
+  ranked_restaurants.sort((id_1, id_2) => {
+    return restaurant_votes[id_2] - restaurant_votes[id_1];
+  })
+
+  const flock_status = {
+    remaining_votes: remaining_votes,
+    ranked_restaurants: ranked_restaurants
+  }
+
+  return construct_return(flock_id, flock_status, request);
+}
 // Joining a flock
 const join_flock = async (request) => {
 
@@ -104,6 +129,7 @@ const construct_return = (flock_id, flock_data, request) => {
 module.exports = {
   create_flock,
   view_flock,
+  check_flock,
   join_flock,
   vote_restaurant,
   delete_flock

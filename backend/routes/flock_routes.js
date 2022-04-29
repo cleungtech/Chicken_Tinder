@@ -28,6 +28,18 @@ router.get('/:flock_id', async (request, response, next) => {
   }
 })
 
+// Check the status of a flock
+router.get('/:flock_id/status', async (request, response, next) => {
+
+  try {
+    const flock_status = await flock.check_flock(request);
+    response.status(200).json(flock_status);
+
+  } catch (error) {
+    next(error);
+  }
+})
+
 
 // Join a flock
 router.post('/:flock_id/user/:user_id', async (request, response, next) => {
