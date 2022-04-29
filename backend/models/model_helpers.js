@@ -1,7 +1,7 @@
 const custom_error = require('../custom_errors.js');
 
 // Create a URL pointing to itself
-const get_self_URL = (request, resource, id) => {
+const get_URL = (request, resource, id) => {
   const protocol = request.protocol;
   const host = request.headers.host;
   return `${protocol}://${host}/api/${resource}/${id}`;
@@ -13,6 +13,6 @@ const create_data = (required_properties, request_body) => {
 }
 
 module.exports = {
-  get_self_URL,
+  get_URL,
   create_data
 }
