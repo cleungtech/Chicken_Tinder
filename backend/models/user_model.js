@@ -15,22 +15,14 @@ const create_user = async (request) => {
   }
   const user_id = parseInt(await database.create(USER, user_data));
 
-  return { 
-    user_id: user_id, 
-    ...user_data,
-    self: model_helpers.get_URL(request, USER, user_id)
-   }
+  return construct_return(user_id, user_data, request);
 }
 
 // View a user in database
 const view_user = async (request) => {
   const user_id = request.params.user_id;
   const user_data = await database.view(USER, user_id);
-  return { 
-    user_id: parseInt(user_id), 
-    ...user_data,
-    self: model_helpers.get_URL(request, USER, user_id)
-   }
+  return construct_return(user_id, user_data, request);
 }
 
 // Update a user in a database
@@ -45,11 +37,7 @@ const update_user = async (request) => {
   }
   await database.update(USER, user_id, user_data);
 
-  return { 
-    user_id: parseInt(user_id), 
-    ...user_data,
-    self: model_helpers.get_URL(request, USER, user_id)
-   }
+  return construct_return(user_id, user_data, request);
 }
 
 // Delete a user in a database
@@ -57,6 +45,15 @@ const delete_user = async (request) => {
   
   const user_id = request.params.user_id;
   await database.remove(USER, user_id);
+}
+
+// Contruct a user for returns
+const construct_return = (user_id, user_data, request) => {
+  return { 
+    user_id: parseInt(user_id), 
+    ...user_data,
+    self: model_helpers.get_URL(request, USER, user_id)
+  };
 }
 
 module.exports = { 

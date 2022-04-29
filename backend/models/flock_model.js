@@ -60,6 +60,7 @@ const join_flock = async (request) => {
 
   flock_data.user_votes[user_id] = restaurant.NUM_RESTAURANT;
   const response = await database.update(FLOCK, flock_id, flock_data);
+  return construct_return(flock_id, flock_data, request);
 }
 
 // Deleting a flock

@@ -32,8 +32,8 @@ router.get('/:flock_id', async (request, response, next) => {
 router.post('/:flock_id/user/:user_id', async (request, response, next) => {
 
   try {
-    await flock.join_flock(request);
-    response.status(200).send();
+    const updated_flock = await flock.join_flock(request);
+    response.status(200).json(updated_flock);
 
   } catch (error) {
     next(error);

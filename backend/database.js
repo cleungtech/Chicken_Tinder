@@ -39,7 +39,8 @@ const update = async (kind, id, data) => {
   const [ entity ] = await datastore.get(key);
   if (!entity) throw custom_error.invalid_id;
   const modified_entity = create_entity(key, data);
-  await datastore.save(modified_entity);
+  const db_return = await datastore.save(modified_entity);
+  if (!db_return[0].indexUpdates) throw custom_error.invalid_id;
 }
 
 // Remove an entity in datastore
