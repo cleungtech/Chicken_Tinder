@@ -14,9 +14,19 @@ const already_in_flock = new Error(
   'This user is already in the flock'
 )
 
+const user_not_in_flock = new Error(
+  'This user is not in the flock'
+)
+
+const user_out_of_votes = new Error(
+  'This user ran out of votes'
+)
+
 module.exports = {
   not_found,
   missing_data,
   invalid_id,
   already_in_flock,
+  user_not_in_flock,
+  user_out_of_votes
 }

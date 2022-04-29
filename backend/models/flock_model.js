@@ -59,7 +59,30 @@ const join_flock = async (request) => {
     throw custom_error.already_in_flock;
 
   flock_data.user_votes[user_id] = restaurant.NUM_RESTAURANT;
-  const response = await database.update(FLOCK, flock_id, flock_data);
+  await database.update(FLOCK, flock_id, flock_data);
+  return construct_return(flock_id, flock_data, request);
+}
+
+// Vote for a restaurant
+const vote_restaurant = async (request) => {
+
+  const { flock_id, user_id, restaurant_id } = request.params;
+
+  await database.view(USER, user_id);
+  const flock_data = await database.view(FLOCK, flock_id);
+
+  if (!flock_data.user_votes.hasOwnProperty(user_id)) 
+    throw custom_error.user_not_in_flock;
+
+  if (!flock_data.restaurant_votes.hasOwnProperty(restaurant_id)) 
+    throw custom_error.invalid_id;
+
+  if (flock_data.user_votes[user_id] <= 0)
+    throw custom_error.user_out_of_votes;
+
+  flock_data.user_votes[user_id] -= 1;
+  flock_data.restaurant_votes[restaurant_id] += 1;
+  await database.update(FLOCK, flock_id, flock_data);
   return construct_return(flock_id, flock_data, request);
 }
 
@@ -82,5 +105,6 @@ module.exports = {
   create_flock,
   view_flock,
   join_flock,
+  vote_restaurant,
   delete_flock
 };

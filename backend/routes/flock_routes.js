@@ -28,12 +28,25 @@ router.get('/:flock_id', async (request, response, next) => {
   }
 })
 
+
 // Join a flock
 router.post('/:flock_id/user/:user_id', async (request, response, next) => {
 
   try {
     const updated_flock = await flock.join_flock(request);
     response.status(200).json(updated_flock);
+
+  } catch (error) {
+    next(error);
+  }
+})
+
+// Vote for a restaurant
+router.post('/:flock_id/restaurant/:restaurant_id/user/:user_id', async (request, response, next) => {
+
+  try {
+    const updated_flock = await flock.vote_restaurant(request);
+    response.status(204).send();
 
   } catch (error) {
     next(error);

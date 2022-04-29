@@ -37,6 +37,9 @@ app.use((error, request, response, next) => {
     case custom_error.invalid_id:
     case custom_error.missing_data:
     case custom_error.already_in_flock:
+    case custom_error.already_in_flock:
+    case custom_error.user_not_in_flock:
+    case custom_error.user_out_of_votes:
       response.status(400);
       break;
     case custom_error.not_found:
