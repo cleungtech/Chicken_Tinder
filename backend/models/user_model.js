@@ -18,7 +18,7 @@ const create_user = async (request) => {
   return { 
     user_id: user_id, 
     ...user_data,
-    self: model_helpers.get_self_URL(request, USER, user_id)
+    self: model_helpers.get_URL(request, USER, user_id)
    }
 }
 
@@ -29,7 +29,7 @@ const view_user = async (request) => {
   return { 
     user_id: parseInt(user_id), 
     ...user_data,
-    self: model_helpers.get_self_URL(request, USER, user_id)
+    self: model_helpers.get_URL(request, USER, user_id)
    }
 }
 
@@ -48,7 +48,7 @@ const update_user = async (request) => {
   return { 
     user_id: parseInt(user_id), 
     ...user_data,
-    self: model_helpers.get_self_URL(request, USER, user_id)
+    self: model_helpers.get_URL(request, USER, user_id)
    }
 }
 
