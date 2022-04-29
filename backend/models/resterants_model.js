@@ -1,4 +1,3 @@
-const model_helpers = require('./model_helpers.js');
 const yelp = require('yelp-fusion');
 const client = yelp.client(process.env.YELP_API_KEY);
 
