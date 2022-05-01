@@ -8,10 +8,14 @@ import { Nav_Button } from "../models/Buttons.js";
 import { Useless_Button } from "../models/Buttons.js";
 import styles from "../../styles/css.js";
 
-export function Create_Group_Screen({ route }) {
-    const username = route.params.username;
+export function Flock_Screen({ route }) {
+    const user_info = route.params;
 
-    const [user_res, set_user_res] = useState({});
+    const [user_res, set_user_res] = useState({
+      user_id: "",
+      user_name: "",
+      num_votes: -1,
+    });
     const [is_loading, set_loading] = useState(true);
 
     const create_user = async () => {
@@ -24,7 +28,7 @@ export function Create_Group_Screen({ route }) {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            "user_name": username,
+            "user_name": user_info.user_name,
           })
           }
         );
@@ -51,7 +55,7 @@ export function Create_Group_Screen({ route }) {
           button_name="Create a Flock" 
           route="Select"
           nav_params={{
-            username: username, 
+            user_name: user_info.user_name, 
             user_type: "host",
             user_id: user_res.user_id
           }}
@@ -60,7 +64,7 @@ export function Create_Group_Screen({ route }) {
           button_name="Join a Room" 
           route="Join"
           nav_params={{
-            username: username,
+            user_name: user_info.user_name,
             user_type: "member",
             user_id: user_res.user_id
           }}

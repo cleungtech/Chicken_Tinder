@@ -9,13 +9,15 @@ import { Nav_Button } from "../models/Buttons.js";
 import styles from "../../styles/css.js";
 
 export function Select_Screen({ route }) {
-    const user_type = route.params.user_type;
-    const username = route.params.username;
-    const user_id = route.params.user_id;
+    const user_info = route.params;
 
     console.log("new user info below:");
-    console.log("username " + username)
-    console.log("user_id: " + user_id);
+    console.log("username: " + user_info.user_name)
+    console.log("user_id: " + user_info.user_id);
+
+    // textfield for flock name here
+
+
     
     return (
       <SafeAreaView style={styles.container}>
@@ -24,8 +26,9 @@ export function Select_Screen({ route }) {
           button_name="We're Hangry NOW!" 
           route="Share Link"
           nav_params={{
-            username: username,
-            user_type: user_type,
+            user_name: user_info.user_name,
+            user_id: user_info.user_id,
+            user_type: user_info.user_type,
             urgency: "now",
           }}
         />
@@ -33,8 +36,9 @@ export function Select_Screen({ route }) {
           button_name="We're Hungry Later..." 
           route="Share Link"
           nav_params={{
-            username: username,
-            user_type: user_type,
+            user_name: user_info.user_name,
+            user_id: user_info.ser_id,
+            user_type: user_info.user_type,
             urgency: "later",
           }}
         />

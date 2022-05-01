@@ -10,10 +10,8 @@ import { Useless_Button } from "../models/Buttons.js";
 
 import styles from "../../styles/css.js";
 
-export function Join_Screen({route}) {
-    const user_type = route.params.user_type;
-    const username = route.params.username;
-    console.log(user_type);
+export function Join_Screen({ route }) {
+    const user_info = route.params;
 
     return (
       <SafeAreaView style={styles.container}>

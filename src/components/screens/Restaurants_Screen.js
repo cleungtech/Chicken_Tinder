@@ -31,9 +31,15 @@ fake_data = [
         },
 ]
 
-export function Restaurants_Screen() {
+export function Restaurants_Screen({ route }) {
+    const flock_info = route.params;
+
     const [current_index, set_current_index] = useState(0);
     const [current_shop, set_current_shop] = useState(fake_data[current_index]);
+
+    console.log("flock name: " + flock_info.flock_name);
+    console.log("flock id: " + flock_info.flock_id);
+    console.log("host: " + flock_info.host);
 
     useEffect(() => {
         set_current_shop(fake_data[current_index]);
