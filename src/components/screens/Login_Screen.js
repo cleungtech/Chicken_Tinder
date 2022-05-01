@@ -35,4 +35,3 @@ export function Login_Screen() {
       </SafeAreaView>
     );
 }
-  

@@ -33,20 +33,22 @@ fake_data = [
 
 export function Restaurants_Screen({ route }) {
     const flock_info = route.params;
+    const restaurants = flock_info.restaurants;
 
     const [current_index, set_current_index] = useState(0);
-    const [current_shop, set_current_shop] = useState(fake_data[current_index]);
+    const [current_shop, set_current_shop] = useState(restaurants[current_index]);
 
-    console.log("flock name: " + flock_info.flock_name);
-    console.log("flock id: " + flock_info.flock_id);
-    console.log("host: " + flock_info.host);
+    // console.log("flock name: " + flock_info.flock_name);
+    // console.log("flock id: " + flock_info.flock_id);
+    // console.log("host: " + flock_info.host);
+    // console.log("restaurants: " + flock_info.restaurants);
 
     useEffect(() => {
-        set_current_shop(fake_data[current_index]);
+        set_current_shop(restaurants[current_index]);
     }, [current_index]);
 
     function advance_list() {
-        if (current_index == 2) {
+        if (current_index == 9) {
             // logic for determining winner goes here
             set_current_index(0);
         } else {
@@ -73,12 +75,16 @@ export function Restaurants_Screen({ route }) {
 }
 
 function Restaurant_Card({shop_data}) {
+
     return (
         <View style={styles.card}>
-            <Text>Name: {shop_data.name}</Text>
-            <Text>Name: {shop_data.rating}</Text>
-            <Text>Name: {shop_data.review_count}</Text>
-            <Text>Name: {shop_data.image_url}</Text>
+            <Text>{shop_data.name}</Text>
+            <Text>Rating: {shop_data.rating}</Text>
+            <Text>Review Count: {shop_data.review_count}</Text>
+            <Image
+                style={{width: 200, height: 200}}
+                source={{uri: shop_data.image_url}}
+            />
         </View>
     );
 }

@@ -15,13 +15,13 @@ export function Share_Link_Screen({ route }) {
 
     const [flock_url, set_flock_url] = useState("");
     const [flock_res, set_flock_res] = useState({
-      flock_id: "",
-      host: "",
-      flock_name: "",
+      flock_id: user_info.user_id,
+      host: user_info.user_id,
+      flock_name: user_info.flock_name,
       location: {},
       users: []
     });
-    const [is_loading, set_loading] = useState(true);
+    const [url_is_loading, set_url_loading] = useState(true);
 
     // send fetch request to create the flock
 
@@ -36,10 +36,10 @@ export function Share_Link_Screen({ route }) {
           },
           body: JSON.stringify({
             "host_id": user_info.user_id,
-            "flock_name": "test_flock",
+            "flock_name": user_info.flock_name,
             "location": {
-              "longitude": 73.7781,
-              "latitude": 40.6413,
+              "longitude": 40.4406,
+              "latitude": -79.9959,
             }
           })
           }
@@ -49,7 +49,7 @@ export function Share_Link_Screen({ route }) {
       } catch (error) {
         console.error(error);
       } finally {
-        set_loading(false);
+        set_url_loading(false);
       }
     };
 
@@ -58,7 +58,7 @@ export function Share_Link_Screen({ route }) {
     }, []);
 
     useEffect(() => {
-      set_flock_url("https://chicken-tinder-347213.uk.r.appspot.com/api/flock/" + flock_res.flock_id);
+      set_flock_url("" + flock_res.self);
     }, [flock_res]);
 
     return (
@@ -73,6 +73,7 @@ export function Share_Link_Screen({ route }) {
             flock_name: flock_res.flock_name,
             flock_id: flock_res.flock_id,
             host: flock_res.host,
+            restaurants: flock_res.restaurants,
           }}
         />
       </SafeAreaView>
