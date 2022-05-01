@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import { 
   Image, 
   TouchableOpacity, 
@@ -8,62 +8,174 @@ import {
   TextInput, 
   StyleSheet, 
   SafeAreaView,
+  useColorScheme,
 } from 'react-native';
+import {
+  getHeaderTitle,
+  Header,
+  HeaderBackButton,
+  SafeAreaProviderCompat,
+  Screen,
+} from '@react-navigation/elements';
 import { useNavigation, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import QRCode from 'react-qr-code';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+//import { NavigationBar } from 'navigationbar-react-native';
 
 // ***********************************************************************************
 
 const Stack = createNativeStackNavigator();
 
+const bottom_tab = createBottomTabNavigator();
+
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome">
-        <Stack.Screen name="Welcome" component={welcome_screen} options={{ title: '' }} />
-        <Stack.Screen name="Select Role" component={select_host_guest_screen} options={{ title: '' }} />
-        <Stack.Screen name="Select Timeline" component={select_now_later_screen} options={{ title: '' }} />
-        <Stack.Screen name="Create Group" component={create_group_screen} options={{ title: '' }} />
-        <Stack.Screen name="Lobby" component={lobby_screen} options={{ title: '' }} />
-        <Stack.Screen name="Tutorial" component={tutorial_screen} options={{ title: '' }} />
-        <Stack.Screen name="Voting" component={voting_screen} options={{ title: '' }} />
-        <Stack.Screen name="Tiebreaker" component={tiebreak_screen} options={{ title: '' , }} />
-        <Stack.Screen name="Results" component={results_screen} options={{ title: '' }} />
-      </Stack.Navigator>
+      {/* <Stack.Navigator> */}
+        <bottom_tab.Navigator
+          initialRouteName="Welcome"
+
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+
+              if (route.name === 'Welcome') {
+                iconName = focused ? 'home' : 'egg-outline';
+              } else if (route.name === 'Select Role') {
+                iconName = focused ? 'person' : 'egg-outline';
+              } else if (route.name === 'Select Timeline') {
+                iconName = focused ? 'time' : 'egg-outline';
+              } else if (route.name === 'Create Group') {
+                iconName = focused ? 'add-circle' : 'egg-outline';
+              } else if (route.name === 'Lobby') {
+                iconName = focused ? 'people' : 'egg-outline';
+              } else if (route.name === 'Tutorial') {
+                iconName = focused ? 'library' : 'egg-outline';
+              } else if (route.name === 'Voting') {
+                iconName = focused ? 'restaurant' : 'egg-outline';
+              } else if (route.name === 'Tiebreaker') {
+                iconName = focused ? 'create' : 'egg-outline';
+              } else if (route.name === 'Results') {
+                iconName = focused ? 'qr-code' : 'egg-outline';
+              }
+
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: chicken_red,
+            tabBarInactiveTintColor: chicken_red,
+            tabBarLabelPosition: 'below-icon',
+            tabBarShowLabel: true,
+            title: '',
+          })}
+        >
+          <bottom_tab.Screen
+            name="Welcome"
+            component={Welcome_screen}
+            options={{
+              tabBarLabel: 'Welcome',
+              backgroundColor: chicken_red,
+              // headerBackground: chicken_red,
+            }}
+          />
+          <bottom_tab.Screen
+            name="Select Role"
+            component={Select_host_guest_screen}
+            options={{
+              tabBarLabel: 'Role',        
+            }}
+          />
+          <bottom_tab.Screen
+            name="Select Timeline"
+            component={Select_now_later_screen}
+            options={{
+              tabBarLabel: 'Timeline',            
+            }}
+          />
+          <bottom_tab.Screen
+            name="Create Group"
+            component={Create_group_screen}
+            options={{
+              tabBarLabel: 'Create',            
+            }}
+          />
+          <bottom_tab.Screen
+            name="Lobby"
+            component={Lobby_screen}
+            options={{
+              tabBarLabel: 'Lobby',            
+            }}
+          />
+          <bottom_tab.Screen
+            name="Tutorial"
+            component={Tutorial_screen}
+            options={{
+              tabBarLabel: 'Tutorial',            
+            }}
+          />
+          <bottom_tab.Screen
+            name="Voting"
+            component={Voting_screen}
+            options={{
+              tabBarLabel: 'Voting',            
+            }}
+          />
+          <bottom_tab.Screen
+            name="Tiebreaker"
+            component={Tiebreak_screen}
+            options={{
+              tabBarLabel: 'Tiebreaker',            
+            }}
+          />
+          <bottom_tab.Screen
+            name="Results"
+            component={Results_screen}
+            options={{
+              tabBarLabel: 'Results',            
+            }}
+          />
+        </bottom_tab.Navigator>
+      {/* </Stack.Navigator> */}
     </NavigationContainer>
   );
 }
 
 // ***********************************************************************************
 
-function welcome_screen() {
+const chicken_red = '#ff6a6a';
+const chicken_yellow = '#ecaa1d';
+const chicken_red_light = '#fc9797';
+const chicken_yellow_light = '#eace92';
+const chicken_yellow_dark = '#b87f04';
+
+// ***********************************************************************************
+
+function Welcome_screen() {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.welcome_container}>
       <StatusBar style="auto" />
-      <Text>Login/Signup</Text>
       <Image
         style={styles.placeholder}
-        source={require('./assets/tender.jpg')}
+        source={require('./assets/chicken_tinder_outline_white.png')}
       />
-      <Credentials inputfield="Username"/>
-      <Credentials inputfield="Password"/>
-      <Nav_Button button_name="Get Started" route="Select"/>
+      <Nav_Button button_name="Get Started" route="Select Role"/>
     </SafeAreaView>
   );
 }
 
-function select_host_guest_screen() {
+function Select_host_guest_screen() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <Nav_Button button_name="Create a flock" route="Create Group"/>
+      <Nav_Button button_name="Create a flock" route="Select Timeline"/>
       <Useless_Button button_name="Join a flock"/>
+      <Useless_Button button_name="I'm flying solo"/>
     </View>
   )
 }
 
-function select_now_later_screen() {
+function Select_now_later_screen() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -74,62 +186,112 @@ function select_now_later_screen() {
 }
 
 
-function create_group_screen() {
+function Create_group_screen() {
   return (
-    <View style={{alignItems: "center", marginTop: 50}}>
+    <View style={styles.container}>
       <QRCode value="https://google.com/" />
       <StatusBar style="auto" />
       {/* <Nav_Button button_name="Share Link" route="Share Link"/> */}
-      <Useless_Button button_name="Join a Room" />
-      <Useless_Button button_name="I'm Flying Solo" />
+      <Useless_Button button_name="Copy Link" />
+      <Nav_Button button_name="Go to Lobby" route="Lobby"/>
       {/* <Nav_Button button_name="Go See Restaurants" route="Restaurants"/> */}
     </View>
   );
 }
 
-function lobby_screen() {
+function Lobby_screen() {
   return (
     <View style={styles.container}>
-      <Text>Nothing to see here</Text>
+      <View style={styles.button}>
+        <Text style={styles.button_text}>Our Coop</Text>
+      </View>
+      <>
+        <View style={styles.container_horizontal}>
+          <Ionicons name='egg' size='24' color={chicken_red_light}/>
+          <Text style={styles.lobby_text}>woodstock_lvr</Text>
+        </View>
+        <View style={styles.container_horizontal}>
+          <Ionicons name='egg' size='24' color={chicken_red_light}/>
+          <Text style={styles.lobby_text}>feathers_4_dayz</Text>
+        </View>
+        <View style={styles.container_horizontal}>
+          <Ionicons name='egg' size='24' color={chicken_red_light}/>
+          <Text style={styles.lobby_text}>coop_troop</Text>
+        </View>
+        <View style={styles.container_horizontal}>
+          <Ionicons name='egg' size='24' color={chicken_red_light}/>
+          <Text style={styles.lobby_text}>the_chick_2_pick</Text>
+        </View>
+      </>
     </View>
   );
 }
 
-function tutorial_screen() {
+function Tutorial_screen() {
   return (
     <View style={styles.container}>
-      <Text>Nothing to see here</Text>
+      <View style={styles.button}>
+        <Text style={styles.button_text}>Tutorial</Text>
+      </View>
     </View>
   );
 }
 
-function voting_screen() {
+function Voting_screen() {
   return (
     <View style={styles.container}>
-      <Text>Nothing to see here</Text>
+      <View style={styles.button}>
+        <Text style={styles.button_text}>Voting</Text>
+      </View>
+      <>
+        <View style={styles.container_horizontal}>
+          <Image
+            style={styles.image_icon}
+            source={require('./assets/dislike_icon.png')}
+          />
+
+          <View style={styles.image_container}>
+            <Image
+              style={styles.image_rounded}
+              source={require('./assets/restaurant_image.jpg')}
+            />
+          </View>
+
+          <Image
+            style={styles.image_icon}
+            source={require('./assets/like_icon.png')}
+          />
+        </View>
+      </>
     </View>
   );
 }
 
-function tiebreak_screen() {
+function Tiebreak_screen() {
   return (
     <View style={styles.container}>
-      <Text>Nothing to see here</Text>
+      <View style={styles.button}>
+        <Text style={styles.button_text}>Tiebreaker</Text>
+      </View>
     </View>
   );
 }
 
-function results_screen() {
+function Results_screen() {
   return (
     <View style={styles.container}>
-      <Text>Nothing to see here</Text>
+      <View style={styles.button}>
+        <Text style={styles.button_text}>Results</Text>
+      </View>
+      <QRCode value="https://google.com/" size={100}/>
     </View>
   );
 }
 
 // ***********************************************************************************
 
-const Credentials = (props) => {
+// username and password
+const Credentials = (props) => { 
   return (
     <TextInput
       style={styles.credentials}
@@ -138,19 +300,29 @@ const Credentials = (props) => {
   );
 }
 
-function Nav_Button({button_name, route}){
+// ***********************************************************************************
+
+// const [bgColor, setBgColor] = useState(chicken_yellow_light);
+
+// linking buttons to destination screens
+function Nav_Button({button_name, route, backgroundColor}){
   const navigation = useNavigation();
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate(route)}
       style={styles.button}
+      //onMouseEnter={() => backgroundColor=useState().chicken_yellow}
+      //onMouseLeave={() => backgroundColor.useColorScheme(chicken_yellow_light)}
+      onPress={() => navigation.navigate(route)}
       activeOpacity={0.5}
     >
-      <Text>{button_name}</Text>
+      <Text style={styles.button_text}>{button_name}</Text>
     </TouchableOpacity>
   );
 }
 
+// ***********************************************************************************
+
+// for placeholder buttons
 function Useless_Button({button_name}) {
   return (
     <TouchableOpacity
@@ -158,17 +330,45 @@ function Useless_Button({button_name}) {
       style={styles.button}
       activeOpacity={0.5}
     >
-      <Text>{button_name}</Text>
+      <Text style={styles.button_text}>{button_name}</Text>
     </TouchableOpacity>
   );
 }
 
+// ***********************************************************************************
+
 const styles = StyleSheet.create({
+  welcome_header: {
+    flex: 1,
+    backgroundColor: chicken_red,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  header: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  welcome_container: {
+    flex: 1,
+    backgroundColor: chicken_red,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  container_horizontal: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  container_inner: {
+    margin: '20',
+    alignItems: 'center',
   },
   credentials: {
     height: 40,
@@ -179,13 +379,46 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 30,
     alignItems: 'center',
-    backgroundColor: '#ff9800',
-    padding: 5,
-    borderRadius: 10
+    padding: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    backgroundColor: chicken_yellow_light,
+  },
+  image_container: {
+    marginTop: 30,
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 20,
+    borderColor: chicken_red_light,
+    borderWidth: 5,
+  },
+  button_text: {
+    fontSize: 16,
+    lineHeight: 21,
+    letterSpacing: 0.25,
+    color: 'white',
+  },
+  lobby_text: {
+    fontSize: 16,
+    lineHeight: 21,
+    letterSpacing: 0.25,
+    color: chicken_red_light,
   },
   placeholder: {
     width: 200,
     height: 200,
     resizeMode: 'contain'
-  }
+  },
+  image_rounded: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
+    borderRadius: 10,
+  },
+  image_icon: {
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+    borderRadius: 10,
+  },
 });
