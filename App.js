@@ -13,23 +13,31 @@ import { useNavigation, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import QRCode from 'react-qr-code';
 
+// ***********************************************************************************
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={Login_Screen} />
-        <Stack.Screen name="Select" component={Select_Screen} />
-        <Stack.Screen name="Create Group" component={Create_Group_Screen} />
-        <Stack.Screen name="Restaurants" component={Restaurants_Screen} />
-        <Stack.Screen name="Share Link" component={Share_Link_Screen} />
+      <Stack.Navigator initialRouteName="Welcome">
+        <Stack.Screen name="Welcome" component={welcome_screen} options={{ title: '' }} />
+        <Stack.Screen name="Select Role" component={select_host_guest_screen} options={{ title: '' }} />
+        <Stack.Screen name="Select Timeline" component={select_now_later_screen} options={{ title: '' }} />
+        <Stack.Screen name="Create Group" component={create_group_screen} options={{ title: '' }} />
+        <Stack.Screen name="Lobby" component={lobby_screen} options={{ title: '' }} />
+        <Stack.Screen name="Tutorial" component={tutorial_screen} options={{ title: '' }} />
+        <Stack.Screen name="Voting" component={voting_screen} options={{ title: '' }} />
+        <Stack.Screen name="Tiebreaker" component={tiebreak_screen} options={{ title: '' , }} />
+        <Stack.Screen name="Results" component={results_screen} options={{ title: '' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-function Login_Screen() {
+// ***********************************************************************************
+
+function welcome_screen() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
@@ -45,29 +53,41 @@ function Login_Screen() {
   );
 }
 
-function Select_Screen() {
+function select_host_guest_screen() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <Nav_Button button_name="We're Hangry NOW!" route="Create Group"/>
-      <Useless_Button button_name="We're Hungry Later..."/>
+      <Nav_Button button_name="Create a flock" route="Create Group"/>
+      <Useless_Button button_name="Join a flock"/>
     </View>
   )
 }
 
-function Create_Group_Screen() {
+function select_now_later_screen() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <Nav_Button button_name="Share Link" route="Share Link"/>
+      <Nav_Button button_name="We're hungry now" route="Create Group"/>
+      <Useless_Button button_name="We'll be hungry later"/>
+    </View>
+  )
+}
+
+
+function create_group_screen() {
+  return (
+    <View style={{alignItems: "center", marginTop: 50}}>
+      <QRCode value="https://google.com/" />
+      <StatusBar style="auto" />
+      {/* <Nav_Button button_name="Share Link" route="Share Link"/> */}
       <Useless_Button button_name="Join a Room" />
       <Useless_Button button_name="I'm Flying Solo" />
-      <Nav_Button button_name="Go See Restaurants" route="Restaurants"/>
+      {/* <Nav_Button button_name="Go See Restaurants" route="Restaurants"/> */}
     </View>
   );
 }
 
-function Restaurants_Screen() {
+function lobby_screen() {
   return (
     <View style={styles.container}>
       <Text>Nothing to see here</Text>
@@ -75,13 +95,39 @@ function Restaurants_Screen() {
   );
 }
 
-function Share_Link_Screen() {
+function tutorial_screen() {
   return (
-    <View style={{alignItems: "center", marginTop: 50}}>
-      <QRCode value="https://www.google.com/" />
+    <View style={styles.container}>
+      <Text>Nothing to see here</Text>
     </View>
   );
 }
+
+function voting_screen() {
+  return (
+    <View style={styles.container}>
+      <Text>Nothing to see here</Text>
+    </View>
+  );
+}
+
+function tiebreak_screen() {
+  return (
+    <View style={styles.container}>
+      <Text>Nothing to see here</Text>
+    </View>
+  );
+}
+
+function results_screen() {
+  return (
+    <View style={styles.container}>
+      <Text>Nothing to see here</Text>
+    </View>
+  );
+}
+
+// ***********************************************************************************
 
 const Credentials = (props) => {
   return (
