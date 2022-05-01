@@ -51,12 +51,12 @@ export default function App() {
                 iconName = focused ? 'add-circle' : 'egg-outline';
               } else if (route.name === 'Lobby') {
                 iconName = focused ? 'people' : 'egg-outline';
-              } else if (route.name === 'Tutorial') {
-                iconName = focused ? 'library' : 'egg-outline';
+              // } else if (route.name === 'Tutorial') {
+              //   iconName = focused ? 'library' : 'egg-outline';
               } else if (route.name === 'Voting') {
                 iconName = focused ? 'restaurant' : 'egg-outline';
-              } else if (route.name === 'Tiebreaker') {
-                iconName = focused ? 'create' : 'egg-outline';
+              // } else if (route.name === 'Tiebreaker') {
+              //   iconName = focused ? 'create' : 'egg-outline';
               } else if (route.name === 'Results') {
                 iconName = focused ? 'qr-code' : 'egg-outline';
               }
@@ -107,13 +107,13 @@ export default function App() {
               tabBarLabel: 'Lobby',            
             }}
           />
-          <bottom_tab.Screen
+          {/* <bottom_tab.Screen
             name="Tutorial"
             component={Tutorial_screen}
             options={{
               tabBarLabel: 'Tutorial',            
             }}
-          />
+          /> */}
           <bottom_tab.Screen
             name="Voting"
             component={Voting_screen}
@@ -121,13 +121,13 @@ export default function App() {
               tabBarLabel: 'Voting',            
             }}
           />
-          <bottom_tab.Screen
+          {/* <bottom_tab.Screen
             name="Tiebreaker"
             component={Tiebreak_screen}
             options={{
               tabBarLabel: 'Tiebreaker',            
             }}
-          />
+          /> */}
           <bottom_tab.Screen
             name="Results"
             component={Results_screen}
@@ -189,6 +189,10 @@ function Select_now_later_screen() {
 function Create_group_screen() {
   return (
     <View style={styles.container}>
+      <View style={styles.no_click_button}>
+        <Text style={styles.title_text}>Your Flock</Text>
+      </View>
+      <View style={{padding:10}}></View>
       <QRCode value="https://google.com/" />
       <StatusBar style="auto" />
       {/* <Nav_Button button_name="Share Link" route="Share Link"/> */}
@@ -202,24 +206,25 @@ function Create_group_screen() {
 function Lobby_screen() {
   return (
     <View style={styles.container}>
-      <View style={styles.button}>
-        <Text style={styles.button_text}>Our Coop</Text>
+      <View style={styles.no_click_button}>
+        <Text style={styles.title_text}>Our Coop:</Text>
       </View>
+      <View style={{padding:10}}></View>
       <>
         <View style={styles.container_horizontal}>
-          <Ionicons name='egg' size='24' color={chicken_red_light}/>
+          <Ionicons name='egg' size='24' color={chicken_red}/>
           <Text style={styles.lobby_text}>woodstock_lvr</Text>
         </View>
         <View style={styles.container_horizontal}>
-          <Ionicons name='egg' size='24' color={chicken_red_light}/>
+          <Ionicons name='egg' size='24' color={chicken_red}/>
           <Text style={styles.lobby_text}>feathers_4_dayz</Text>
         </View>
         <View style={styles.container_horizontal}>
-          <Ionicons name='egg' size='24' color={chicken_red_light}/>
+          <Ionicons name='egg' size='24' color={chicken_red}/>
           <Text style={styles.lobby_text}>coop_troop</Text>
         </View>
         <View style={styles.container_horizontal}>
-          <Ionicons name='egg' size='24' color={chicken_red_light}/>
+          <Ionicons name='egg' size='24' color={chicken_red}/>
           <Text style={styles.lobby_text}>the_chick_2_pick</Text>
         </View>
       </>
@@ -230,8 +235,8 @@ function Lobby_screen() {
 function Tutorial_screen() {
   return (
     <View style={styles.container}>
-      <View style={styles.button}>
-        <Text style={styles.button_text}>Tutorial</Text>
+      <View style={styles.no_click_button}>
+        <Text style={styles.title_text}>Tutorial</Text>
       </View>
     </View>
   );
@@ -240,8 +245,8 @@ function Tutorial_screen() {
 function Voting_screen() {
   return (
     <View style={styles.container}>
-      <View style={styles.button}>
-        <Text style={styles.button_text}>Voting</Text>
+      <View style={styles.no_click_button}>
+        <Text style={styles.title_text}>Let's Vote!</Text>
       </View>
       <>
         <View style={styles.container_horizontal}>
@@ -270,8 +275,8 @@ function Voting_screen() {
 function Tiebreak_screen() {
   return (
     <View style={styles.container}>
-      <View style={styles.button}>
-        <Text style={styles.button_text}>Tiebreaker</Text>
+      <View style={styles.no_click_button}>
+        <Text style={styles.title_text}>It's a Tie:</Text>
       </View>
     </View>
   );
@@ -280,10 +285,14 @@ function Tiebreak_screen() {
 function Results_screen() {
   return (
     <View style={styles.container}>
-      <View style={styles.button}>
-        <Text style={styles.button_text}>Results</Text>
+      <View style={styles.no_click_button}>
+        <Text style={styles.title_text}>Results</Text>
       </View>
-      <QRCode value="https://google.com/" size={100}/>
+      <View style={{padding:10}}></View>
+      <QRCode value="https://google.com/" />
+      <StatusBar style="auto" />
+      <Useless_Button button_name="Share Results" />
+      <Useless_Button button_name="Vote Again" />
     </View>
   );
 }
@@ -362,9 +371,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  // vertical_spacer: {
+  //   flex:
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // },
   container_horizontal: {
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 10,
   },
   container_inner: {
     margin: '20',
@@ -384,6 +399,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: chicken_yellow_light,
   },
+  no_click_button: {
+    marginTop: 30,
+    alignItems: 'center',
+    padding: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    backgroundColor: chicken_red,
+  },
   image_container: {
     marginTop: 30,
     alignItems: 'center',
@@ -398,11 +421,17 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     color: 'white',
   },
+  title_text: {
+    fontSize: 20,
+    lineHeight: 21,
+    letterSpacing: 0.25,
+    color: 'white',
+  },
   lobby_text: {
     fontSize: 16,
     lineHeight: 21,
     letterSpacing: 0.25,
-    color: chicken_red_light,
+    color: chicken_red,
   },
   placeholder: {
     width: 200,
