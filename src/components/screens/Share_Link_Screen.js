@@ -11,7 +11,7 @@ import QRCode from "react-qr-code";
 export function Share_Link_Screen({ route }) {
     const user_info = route.params;
 
-    const default_url = "https://chicken-tinder-347213.uk.r.appspot.com/api";
+    const default_url = "https://chicken-tinder-347213.uk.r.appspot.com/api/";
 
     const [flock_url, set_flock_url] = useState("");
     const [flock_res, set_flock_res] = useState({
@@ -23,12 +23,10 @@ export function Share_Link_Screen({ route }) {
     });
     const [url_is_loading, set_url_loading] = useState(true);
 
-    // send fetch request to create the flock
-
     const create_flock = async () => {
       try {
         const response = await fetch(
-          'https://chicken-tinder-347213.uk.r.appspot.com/api/flock', {
+          default_url + "flock", {
           method: 'POST',
           headers: {
             Accept: 'application/json',

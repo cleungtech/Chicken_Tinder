@@ -45,8 +45,8 @@ export function Flock_Screen({ route }) {
       create_user();
     }, []);
 
-    // need to disable the nav buttons until the user_res is finished loading
-    // look into the disabled property for touchable opacity
+    // need to handle situation where the data has not loaded yet from async
+    // call and should display loading circle instead
 
     return (
       <SafeAreaView style={styles.container}>

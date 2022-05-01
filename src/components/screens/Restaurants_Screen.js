@@ -38,11 +38,6 @@ export function Restaurants_Screen({ route }) {
     const [current_index, set_current_index] = useState(0);
     const [current_shop, set_current_shop] = useState(restaurants[current_index]);
 
-    // console.log("flock name: " + flock_info.flock_name);
-    // console.log("flock id: " + flock_info.flock_id);
-    // console.log("host: " + flock_info.host);
-    // console.log("restaurants: " + flock_info.restaurants);
-
     useEffect(() => {
         set_current_shop(restaurants[current_index]);
     }, [current_index]);
