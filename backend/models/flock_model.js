@@ -6,7 +6,6 @@ const restaurant = require('./resterants_model.js');
 const FLOCK = 'flock';
 const USER = 'user';
 
-
 // Create a flock in database
 const create_flock = async (request) => {
 
@@ -22,7 +21,7 @@ const create_flock = async (request) => {
   const flock_data = {
     flock_name: flock_name,
     location: location,
-    host: parseInt(host_id),
+    host: Number(host_id),
     user_votes: {},
     restaurant_votes: {},
     restaurants: restaurants
@@ -66,9 +65,16 @@ const check_flock = async (request) => {
     return restaurant_votes[id_2] - restaurant_votes[id_1];
   })
 
+  const most_voted_restaurants = ranked_restaurants.filter(id => 
+    restaurant_votes[id] !== 0 &&
+    restaurant_votes[id] === restaurant_votes[ranked_restaurants[0]]
+    )
+
   const flock_status = {
     remaining_votes: remaining_votes,
-    ranked_restaurants: ranked_restaurants
+    ranked_restaurants: ranked_restaurants,
+    restaurant_votes: restaurant_votes,
+    most_voted_restaurants: most_voted_restaurants
   }
 
   return construct_return(flock_id, flock_status, request);
@@ -92,21 +98,29 @@ const join_flock = async (request) => {
 const vote_restaurant = async (request) => {
 
   const { flock_id, user_id, restaurant_id } = request.params;
+  const num_votes = Number(request.query.vote);
 
   await database.view(USER, user_id);
   const flock_data = await database.view(FLOCK, flock_id);
 
+  // User not in flock
   if (!flock_data.user_votes.hasOwnProperty(user_id)) 
     throw custom_error.user_not_in_flock;
 
+  // Restaurant not in flock
   if (!flock_data.restaurant_votes.hasOwnProperty(restaurant_id)) 
     throw custom_error.invalid_id;
 
+  // User has not more votes
   if (flock_data.user_votes[user_id] <= 0)
     throw custom_error.user_out_of_votes;
 
+  // User specified vote count is invalid
+  if (isNaN(num_votes) || num_votes < 0 || num_votes > 2)
+    throw custom_error.invalid_vote;
+
   flock_data.user_votes[user_id] -= 1;
-  flock_data.restaurant_votes[restaurant_id] += 1;
+  flock_data.restaurant_votes[restaurant_id] += num_votes;
   await database.update(FLOCK, flock_id, flock_data);
   return construct_return(flock_id, flock_data, request);
 }
@@ -120,7 +134,7 @@ const delete_flock = async (request) => {
 // Contruct a flock for returns
 const construct_return = (flock_id, flock_data, request) => {
   return { 
-    flock_id: parseInt(flock_id), 
+    flock_id: Number(flock_id), 
     ...flock_data,
     self: model_helpers.get_URL(request, FLOCK, flock_id)
   };

@@ -57,7 +57,7 @@ router.post('/:flock_id/user/:user_id', async (request, response, next) => {
 router.post('/:flock_id/restaurant/:restaurant_id/user/:user_id', async (request, response, next) => {
 
   try {
-    const updated_flock = await flock.vote_restaurant(request);
+    await flock.vote_restaurant(request);
     response.status(204).send();
 
   } catch (error) {

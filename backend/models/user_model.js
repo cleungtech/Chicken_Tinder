@@ -50,7 +50,7 @@ const delete_user = async (request) => {
 // Contruct a user for returns
 const construct_return = (user_id, user_data, request) => {
   return { 
-    user_id: parseInt(user_id), 
+    user_id: Number(user_id), 
     ...user_data,
     self: model_helpers.get_URL(request, USER, user_id)
   };
