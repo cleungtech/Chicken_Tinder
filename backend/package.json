@@ -1,0 +1,16 @@
+{
+  "name": "chicken_tinder_backend",
+  "version": "1.0.0",
+  "description": "Backend server for the Chicken Tinder app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chi Hang Leung",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/datastore": "^6.6.2",
+    "express": "^4.17.3"
+  }
+}
