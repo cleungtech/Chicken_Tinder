@@ -10,26 +10,10 @@ import {
 
 import styles from "../../styles/css.js";
 
-fake_data = [
-        {
-            "name": "test1",
-            "rating": 10,
-            "review_count": 100,
-            "image_url": "image1.com"
-        },
-        {
-            "name": "test2",
-            "rating": 20,
-            "review_count": 200,
-            "image_url": "image2.com"
-        },
-        {
-            "name": "test3",
-            "rating": 30,
-            "review_count": 300,
-            "image_url": "image3.com"
-        },
-]
+const image_paths = {
+    dislike: require("../../../assets/dislike_icon.png"),
+    like: require("../../../assets/like_icon.png")
+}
 
 export function Restaurants_Screen({ route }) {
     const flock_info = route.params;
@@ -57,12 +41,14 @@ export function Restaurants_Screen({ route }) {
             <Restaurant_Card shop_data={current_shop} />
             <View style={styles.row}>
             <Vote_Button 
-                button_name='dislike' 
+                button_name="Dislike"
                 press_function={advance_list}
+                image_path={image_paths.dislike}
             />
             <Vote_Button 
-                button_name='like' 
+                button_name="Like" 
                 press_function={advance_list}
+                image_path={image_paths.like}
             />
             </View>
         </SafeAreaView>
@@ -70,28 +56,32 @@ export function Restaurants_Screen({ route }) {
 }
 
 function Restaurant_Card({shop_data}) {
-
     return (
         <View style={styles.card}>
+            <Image
+                style={styles.image_rounded}
+                source={{uri: shop_data.image_url}}
+            />
             <Text>{shop_data.name}</Text>
             <Text>Rating: {shop_data.rating}</Text>
             <Text>Review Count: {shop_data.review_count}</Text>
-            <Image
-                style={{width: 200, height: 200}}
-                source={{uri: shop_data.image_url}}
-            />
         </View>
     );
 }
 
-function Vote_Button({button_name, press_function}) {
+function Vote_Button({button_name, press_function, image_path}) {
     return (
       <TouchableOpacity
         onPress={press_function}
-        style={styles.button}
+        style={styles.vote_button}
         activeOpacity={0.5}
       >
         <Text>{button_name}</Text>
+        <Image
+            style={styles.vote_icon}
+            source={image_path}
+        />
       </TouchableOpacity>
     );
-  }
+}
+

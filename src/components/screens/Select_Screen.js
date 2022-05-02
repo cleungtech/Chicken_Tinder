@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { 
+  Text,
   SafeAreaView,
 } from 'react-native';
 
@@ -16,12 +17,13 @@ export function Select_Screen({ route }) {
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar style="auto" />
+        <Text>Flock Name:</Text>
         <Credentials 
           inputfield="Enter a flock name here"
           change_function={new_flock => set_flock_name(new_flock)}
         />
         <Nav_Button 
-          button_name="We're Hangry NOW!" 
+          button_name="We're Hungry NOW!" 
           route="Share Link"
           nav_params={{
             user_name: user_info.user_name,

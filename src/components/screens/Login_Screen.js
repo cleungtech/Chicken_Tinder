@@ -13,15 +13,14 @@ import { Credentials } from "../models/TextFields.js";
 import styles from "../../styles/css.js";
 
 export function Login_Screen() {
-    const [user_name, set_user_name] = useState("");
+    const [user_name, set_user_name] = useState("User");
 
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.welcome_container}>
         <StatusBar style="auto" />
-        <Text>Login/Signup</Text>
         <Image
           style={styles.placeholder}
-          source={require('../../../assets/tender.jpg')}
+          source={require("../../../assets/chicken_tinder_outline_white.png")}
         />
         <Credentials 
           inputfield="Username"

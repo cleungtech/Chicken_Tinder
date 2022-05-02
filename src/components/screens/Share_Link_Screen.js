@@ -8,6 +8,8 @@ import {
 import { Nav_Button } from "../models/Buttons.js";
 import QRCode from "react-qr-code";
 
+import styles from "../../styles/css.js";
+
 export function Share_Link_Screen({ route }) {
     const user_info = route.params;
 
@@ -62,6 +64,7 @@ export function Share_Link_Screen({ route }) {
     return (
       <SafeAreaView style={{alignItems: "center", marginTop: 50}}>
         <StatusBar style="auto" />
+        <Text style={styles.title_text}>{user_info.flock_name}</Text>
         <QRCode value={flock_url} />
         <Text>{flock_url}</Text>
         <Nav_Button

@@ -21,7 +21,7 @@ export function Flock_Screen({ route }) {
     const create_user = async () => {
       try {
         const response = await fetch(
-          'https://chicken-tinder-347213.uk.r.appspot.com/api/user', {
+          "https://chicken-tinder-347213.uk.r.appspot.com/api/user", {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -61,7 +61,7 @@ export function Flock_Screen({ route }) {
           }}
         />
         <Nav_Button
-          button_name="Join a Room" 
+          button_name="Join a Flock" 
           route="Join"
           nav_params={{
             user_name: user_info.user_name,
