@@ -35,11 +35,15 @@ app.use((error, request, response, next) => {
   
   switch (error) {
     case custom_error.invalid_id:
-    case custom_error.missing_request_body_data:
+    case custom_error.missing_data:
     case custom_error.already_in_flock:
+    case custom_error.already_in_flock:
+    case custom_error.user_not_in_flock:
+    case custom_error.user_out_of_votes:
+    case custom_error.invalid_vote:
       response.status(400);
       break;
-    case custom_error.not_found.message:
+    case custom_error.not_found:
       response.status(404);
       break;
     default:

@@ -12,12 +12,12 @@ const create_entity = (key, data) => {
 
 // Get the Datastore key
 const get_key = (kind, id=null) => {
-  const key = id ? datastore.key([kind, parseInt(id,10)]) : datastore.key(kind);
+  const key = id ? datastore.key([kind, Number(id)]) : datastore.key(kind);
   if (id && isNaN(key.id)) throw custom_error.invalid_id;
   return key;
 }
 
-// Get an entity by ID
+// Get an entity by ID (can also use for validating id)
 const view = async (kind, id) => {
   const key = get_key(kind, id);
   const [ entity ] = await datastore.get(key);
@@ -36,8 +36,11 @@ const create = async (kind, data) => {
 // Update an entity in Datastore
 const update = async (kind, id, data) => {
   const key = get_key(kind, id);
+  const [ entity ] = await datastore.get(key);
+  if (!entity) throw custom_error.invalid_id;
   const modified_entity = create_entity(key, data);
-  await datastore.save(modified_entity);
+  const db_return = await datastore.save(modified_entity);
+  if (!db_return[0].indexUpdates) throw custom_error.invalid_id;
 }
 
 // Remove an entity in datastore
