@@ -10,7 +10,10 @@ import { Restaurants_Screen } from "./src/components/screens/Restaurants_Screen.
 import { Share_Link_Screen } from "./src/components/screens/Share_Link_Screen.js";
 import { Join_Screen } from "./src/components/screens/Join_Screen.js";
 
+
 const Stack = createNativeStackNavigator();
+
+const bottom_tab = createBottomTabNavigator();
 
 export default function App() {
   return (
