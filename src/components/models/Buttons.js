@@ -6,13 +6,14 @@ import {
 
 import styles from "../../styles/css.js";
 
-export function Nav_Button({button_name, route, nav_params}){
+export function Nav_Button({button_name, route, nav_params, is_disabled}){
     const navigation = useNavigation();
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate(route, nav_params)}
         style={styles.button}
         activeOpacity={0.5}
+        disabled={is_disabled}
       >
         <Text style={styles.button_text}>{button_name}</Text>
       </TouchableOpacity>

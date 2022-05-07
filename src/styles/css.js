@@ -2,11 +2,13 @@ import {
     StyleSheet, 
 } from 'react-native';
 
-const chicken_red = '#ff6a6a';
-const chicken_yellow = '#ecaa1d';
-const chicken_red_light = '#fc9797';
-const chicken_yellow_light = '#eace92';
-const chicken_yellow_dark = '#b87f04';
+export const chicken_colors = {
+    red: '#ff6a6a',
+    yellow: '#ecaa1d',
+    red_light: '#fc9797',
+    yellow_light: '#eace92',
+    yellow_dark:'#b87f04',
+}
 
 export default StyleSheet.create({
     container: {
@@ -28,7 +30,7 @@ export default StyleSheet.create({
         padding: 10,
         paddingHorizontal: 20,
         borderRadius: 20,
-        backgroundColor: chicken_yellow_light,
+        backgroundColor: chicken_colors.yellow_light,
       },
     placeholder: {
         width: 200,
@@ -64,7 +66,7 @@ export default StyleSheet.create({
 
     welcome_header: {
         flex: 1,
-        backgroundColor: chicken_red,
+        backgroundColor: chicken_colors.red,
         alignItems: 'center',
         justifyContent: 'center',
       },
@@ -76,7 +78,7 @@ export default StyleSheet.create({
     },
     welcome_container: {
         flex: 1,
-        backgroundColor: chicken_red,
+        backgroundColor: chicken_colors.red,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -95,14 +97,14 @@ export default StyleSheet.create({
         padding: 10,
         paddingHorizontal: 20,
         borderRadius: 20,
-        backgroundColor: chicken_red,
+        backgroundColor: chicken_colors.red,
     },
     image_container: {
         marginTop: 30,
         alignItems: 'center',
         padding: 10,
         borderRadius: 20,
-        borderColor: chicken_red_light,
+        borderColor: chicken_colors.red_light,
         borderWidth: 5,
     },
     button_text: {
@@ -121,7 +123,7 @@ export default StyleSheet.create({
         fontSize: 16,
         lineHeight: 21,
         letterSpacing: 0.25,
-        color: chicken_red,
+        color: chicken_colors.red,
     },
     image_rounded: {
         width: 300,
