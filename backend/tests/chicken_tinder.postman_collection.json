@@ -1,0 +1,2890 @@
+{
+	"info": {
+		"_postman_id": "ed3ff4af-d204-42dd-a5e5-6a61c4f8ab95",
+		"name": "Chicken Tinder",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Invalid request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", () => {",
+							"    pm.response.to.have.status(404);",
+							"})",
+							"",
+							"pm.test(\"Correct Response message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"not_found_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/invalidEndpoint",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"invalidEndpoint"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', () => {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"",
+							"pm.test('User name is correct', () => {",
+							"    const { user_name } = pm.response.json();",
+							"    pm.expect(user_name).to.eql(pm.environment.get('host_name'));",
+							"})",
+							"",
+							"pm.test('Response contains user id', () => {",
+							"    const { user_id } = pm.response.json();",
+							"    pm.expect(user_id).to.not.eql(undefined);",
+							"    pm.environment.set('user_id', user_id);",
+							"})",
+							"",
+							"pm.test('Response contains a link to the user', () => {",
+							"    const { self } = pm.response.json();",
+							"    pm.expect(self).to.not.eql(undefined);",
+							"})",
+							"",
+							"pm.test('User\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const user_id = pm.environment.get('user_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/user/${user_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_name\": \"{{host_name}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/user",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a user without the name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"missing_data_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/user",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View a user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('User id is correct', () => {",
+							"    const { user_id } = pm.response.json();",
+							"    pm.expect(user_id).to.eql(pm.environment.get('user_id'));",
+							"})",
+							"",
+							"pm.test('User name is correct', () => {",
+							"    const { user_name } = pm.response.json();",
+							"    pm.expect(user_name).to.eql(pm.environment.get('host_name'));",
+							"})",
+							"",
+							"pm.test('User\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const user_id = pm.environment.get('user_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/user/${user_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/{{user_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View a user with invalid id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/{{invalid_user_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"{{invalid_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('User name is correct', () => {",
+							"    const { user_name } = pm.response.json();",
+							"    pm.expect(user_name).to.eql('Patrick');",
+							"})",
+							"",
+							"pm.test('User id is correct', () => {",
+							"    const { user_id } = pm.response.json();",
+							"    pm.expect(user_id).to.eql(pm.environment.get('user_id'));",
+							"})",
+							"",
+							"pm.test('User\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const user_id = pm.environment.get('user_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/user/${user_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_name\": \"Patrick\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/user/{{user_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a user with invalid id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_name\": \"{{user_name}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/user/{{invalid_user_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"{{invalid_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a user without a user name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"missing_data_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/user/{{user_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 204', () => {",
+							"    pm.response.to.have.status(204);",
+							"})",
+							"",
+							"pm.environment.unset(\"user_id\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/{{user_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a user with invalid id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/{{invalid_user_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"{{invalid_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Confirm user is deleted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/{{user_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a user as a host",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', () => {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"",
+							"pm.test('User name is correct', () => {",
+							"    const { user_name } = pm.response.json();",
+							"    pm.expect(user_name).to.eql(pm.environment.get('host_name'));",
+							"})",
+							"",
+							"pm.test('Response contains user id', () => {",
+							"    const { user_id } = pm.response.json();",
+							"    pm.expect(user_id).to.not.eql(undefined);",
+							"    pm.environment.set('host_id', user_id);",
+							"})",
+							"",
+							"pm.test('Response contains a link to the user', () => {",
+							"    const { self } = pm.response.json();",
+							"    pm.expect(self).to.not.eql(undefined);",
+							"})",
+							"",
+							"pm.test('User\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const host_id = pm.environment.get('host_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/user/${host_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_name\": \"{{host_name}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/user",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a flock",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', () => {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"",
+							"pm.test('Flock name is correct', () => {",
+							"    const { flock_name } = pm.response.json();",
+							"    pm.expect(flock_name).to.eql(pm.environment.get('flock_name'));",
+							"})",
+							"",
+							"pm.test('Flock location is correct', () => {",
+							"    const { location } = pm.response.json();",
+							"    const { latitude, longitude } = location;",
+							"    pm.expect(latitude).to.eql(pm.environment.get('flock_latitude'));",
+							"    pm.expect(longitude).to.eql(pm.environment.get('flock_longitude'));",
+							"})",
+							"",
+							"pm.test('Response contains flock id', () => {",
+							"    const { flock_id } = pm.response.json();",
+							"    pm.expect(flock_id).to.not.eql(undefined);",
+							"    pm.environment.set('flock_id', flock_id);",
+							"})",
+							"",
+							"pm.test('The host is one of the users and have 10 votes', () => {",
+							"    const { user_votes } = pm.response.json();",
+							"    pm.expect(Object.keys(user_votes)).to.have.lengthOf(1);",
+							"    const host_id = pm.environment.get('host_id');",
+							"    pm.expect(user_votes[host_id]).to.eql(parseInt(pm.environment.get('num_restaurant')));",
+							"})",
+							"",
+							"pm.test('Response contains restaurant votes', () => {",
+							"    const { restaurant_votes } = pm.response.json();",
+							"    pm.expect(restaurant_votes).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(Object.keys(restaurant_votes)).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Response contains correct number of restaurants', () => {",
+							"    const { restaurants } = pm.response.json();",
+							"    pm.expect(restaurants).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(restaurants).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Flock\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const flock_id = pm.environment.get('flock_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/flock/${flock_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"flock_longitude\", Number(pm.environment.get(\"flock_longitude\")));",
+							"pm.environment.set(\"flock_latitude\", Number(pm.environment.get(\"flock_latitude\")));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"flock_name\": \"{{flock_name}}\",\n    \"host_id\": \"{{host_id}}\",\n    \"location\": {\n        \"longitude\": {{flock_longitude}},\n        \"latitude\": {{flock_latitude}}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/flock",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a flock without name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"missing_data_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"host_id\": \"{{host_id}}\",\n    \"location\": {\n        \"longitude\": {{flock_longitude}},\n        \"latitude\": {{flock_latitude}}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/flock",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a flock without host id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"missing_data_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"flock_name\": \"{{flock_name}}\",\n    \"location\": {\n        \"longitude\": {{flock_longitude}},\n        \"latitude\": {{flock_latitude}}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/flock",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a flock without location",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"missing_data_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"flock_name\": \"{{flock_name}}\",\n    \"host_id\": \"{{host_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/flock",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a flock without longitude in location",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"missing_data_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"flock_name\": \"{{flock_name}}\",\n    \"host_id\": \"{{host_id}}\",\n    \"location\": {\n        \"longitude\": {{flock_longitude}}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/flock",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a flock without latitude in location",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"missing_data_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"flock_name\": \"{{flock_name}}\",\n    \"host_id\": \"{{host_id}}\",\n    \"location\": {\n        \"latitude\": {{flock_latitude}}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/flock",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a flock with invalid host id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"flock_name\": \"{{flock_name}}\",\n    \"host_id\": \"{{invalid_user_id}}\",\n    \"location\": {\n        \"longitude\": {{flock_longitude}},\n        \"latitude\": {{flock_latitude}}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/flock",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View a flock",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Flock id is correct', () => {",
+							"    const { flock_id } = pm.response.json();",
+							"    pm.expect(flock_id).to.eql(pm.environment.get('flock_id'));",
+							"})",
+							"",
+							"pm.test('Host id is correct', () => {",
+							"    const { host } = pm.response.json();",
+							"    pm.expect(host).to.eql(pm.environment.get('host_id'));",
+							"})",
+							"",
+							"pm.test('Flock name is correct', () => {",
+							"    const { flock_name } = pm.response.json();",
+							"    pm.expect(flock_name).to.eql(pm.environment.get('flock_name'));",
+							"})",
+							"",
+							"pm.test('Flock location is correct', () => {",
+							"    const { location } = pm.response.json();",
+							"    const { latitude, longitude } = location;",
+							"    pm.expect(latitude).to.eql(pm.environment.get('flock_latitude'));",
+							"    pm.expect(longitude).to.eql(pm.environment.get('flock_longitude'));",
+							"})",
+							"",
+							"pm.test('The host is one of the users and have 10 votes', () => {",
+							"    const { user_votes } = pm.response.json();",
+							"    pm.expect(Object.keys(user_votes)).to.have.lengthOf(1);",
+							"    const host_id = pm.environment.get('host_id');",
+							"    pm.expect(user_votes[host_id]).to.eql(parseInt(pm.environment.get('num_restaurant')));",
+							"})",
+							"",
+							"pm.test('Response contains restaurant votes', () => {",
+							"    const { restaurant_votes } = pm.response.json();",
+							"    pm.expect(restaurant_votes).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(Object.keys(restaurant_votes)).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Response contains correct number of restaurants', () => {",
+							"    const { restaurants } = pm.response.json();",
+							"    pm.expect(restaurants).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(restaurants).to.have.lengthOf(num_restaurant);",
+							"    restaurants.forEach((restaurant, i) => pm.environment.set(`restaurant${i}`, restaurant.id));",
+							"})",
+							"",
+							"pm.test('Flock\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const flock_id = pm.environment.get('flock_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/flock/${flock_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View a flock with invalid id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{invalid_flock_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{invalid_flock_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a user1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', () => {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"",
+							"pm.test('User name is correct', () => {",
+							"    const { user_name } = pm.response.json();",
+							"    pm.expect(user_name).to.eql(pm.environment.get('user1_name'));",
+							"})",
+							"",
+							"pm.test('Response contains user id', () => {",
+							"    const { user_id } = pm.response.json();",
+							"    pm.expect(user_id).to.not.eql(undefined);",
+							"    pm.environment.set('user1_id', user_id);",
+							"})",
+							"",
+							"pm.test('Response contains a link to the user', () => {",
+							"    const { self } = pm.response.json();",
+							"    pm.expect(self).to.not.eql(undefined);",
+							"})",
+							"",
+							"pm.test('User\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const user1_id = pm.environment.get('user1_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/user/${user1_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_name\": \"{{user1_name}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/user",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a user2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', () => {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"",
+							"pm.test('User name is correct', () => {",
+							"    const { user_name } = pm.response.json();",
+							"    pm.expect(user_name).to.eql(pm.environment.get('user2_name'));",
+							"})",
+							"",
+							"pm.test('Response contains user id', () => {",
+							"    const { user_id } = pm.response.json();",
+							"    pm.expect(user_id).to.not.eql(undefined);",
+							"    pm.environment.set('user2_id', user_id);",
+							"})",
+							"",
+							"pm.test('Response contains a link to the user', () => {",
+							"    const { self } = pm.response.json();",
+							"    pm.expect(self).to.not.eql(undefined);",
+							"})",
+							"",
+							"pm.test('User\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const user2_id = pm.environment.get('user2_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/user/${user2_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_name\": \"{{user2_name}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/user",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Join a flock (User1)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Flock id is correct', () => {",
+							"    const { flock_id } = pm.response.json();",
+							"    pm.expect(flock_id).to.eql(pm.environment.get('flock_id'));",
+							"})",
+							"",
+							"pm.test('Host id is correct', () => {",
+							"    const { host } = pm.response.json();",
+							"    pm.expect(host).to.eql(pm.environment.get('host_id'));",
+							"})",
+							"",
+							"",
+							"pm.test('Flock name is correct', () => {",
+							"    const { flock_name } = pm.response.json();",
+							"    pm.expect(flock_name).to.eql(pm.environment.get('flock_name'));",
+							"})",
+							"",
+							"pm.test('Flock location is correct', () => {",
+							"    const { location } = pm.response.json();",
+							"    const { latitude, longitude } = location;",
+							"    pm.expect(latitude).to.eql(pm.environment.get('flock_latitude'));",
+							"    pm.expect(longitude).to.eql(pm.environment.get('flock_longitude'));",
+							"})",
+							"",
+							"pm.test('User 1 has joined the flock', () => {",
+							"    const { user_votes } = pm.response.json();",
+							"    pm.expect(Object.keys(user_votes)).to.have.lengthOf(2);",
+							"    const user1_id = pm.environment.get('user1_id');",
+							"    pm.expect(user_votes[user1_id]).to.eql(parseInt(pm.environment.get('num_restaurant')));",
+							"})",
+							"",
+							"pm.test('Response contains restaurant votes', () => {",
+							"    const { restaurant_votes } = pm.response.json();",
+							"    pm.expect(restaurant_votes).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(Object.keys(restaurant_votes)).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Response contains correct number of restaurants', () => {",
+							"    const { restaurants } = pm.response.json();",
+							"    pm.expect(restaurants).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(restaurants).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Flock\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const flock_id = pm.environment.get('flock_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/flock/${flock_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/user/{{user1_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"user",
+						"{{user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Join a flock with invalid flock id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{invalid_flock_id}}/user/{{user1_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{invalid_flock_id}}",
+						"user",
+						"{{user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Join a flock with invalid flock id Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/user/{{invalid_user_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"user",
+						"{{invalid_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Confirm User1 has joined flock",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Flock id is correct', () => {",
+							"    const { flock_id } = pm.response.json();",
+							"    pm.expect(flock_id).to.eql(pm.environment.get('flock_id'));",
+							"})",
+							"",
+							"pm.test('Host id is correct', () => {",
+							"    const { host } = pm.response.json();",
+							"    pm.expect(host).to.eql(pm.environment.get('host_id'));",
+							"})",
+							"",
+							"",
+							"pm.test('Flock name is correct', () => {",
+							"    const { flock_name } = pm.response.json();",
+							"    pm.expect(flock_name).to.eql(pm.environment.get('flock_name'));",
+							"})",
+							"",
+							"pm.test('Flock location is correct', () => {",
+							"    const { location } = pm.response.json();",
+							"    const { latitude, longitude } = location;",
+							"    pm.expect(latitude).to.eql(pm.environment.get('flock_latitude'));",
+							"    pm.expect(longitude).to.eql(pm.environment.get('flock_longitude'));",
+							"})",
+							"",
+							"pm.test('User 1 has joined the flock', () => {",
+							"    const { user_votes } = pm.response.json();",
+							"    pm.expect(Object.keys(user_votes)).to.have.lengthOf(2);",
+							"    const user1_id = pm.environment.get('user1_id');",
+							"    pm.expect(user_votes[user1_id]).to.eql(parseInt(pm.environment.get('num_restaurant')));",
+							"})",
+							"",
+							"pm.test('Response contains restaurant votes', () => {",
+							"    const { restaurant_votes } = pm.response.json();",
+							"    pm.expect(restaurant_votes).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(Object.keys(restaurant_votes)).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Response contains correct number of restaurants', () => {",
+							"    const { restaurants } = pm.response.json();",
+							"    pm.expect(restaurants).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(restaurants).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Flock\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const flock_id = pm.environment.get('flock_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/flock/${flock_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User1 vote for Restaurant0",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 204', () => {",
+							"    pm.response.to.have.status(204);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/restaurant/{{restaurant0}}/user/{{user1_id}}?vote=1",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"restaurant",
+						"{{restaurant0}}",
+						"user",
+						"{{user1_id}}"
+					],
+					"query": [
+						{
+							"key": "vote",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Confirm User1 has voted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Flock id is correct', () => {",
+							"    const { flock_id } = pm.response.json();",
+							"    pm.expect(flock_id).to.eql(pm.environment.get('flock_id'));",
+							"})",
+							"",
+							"pm.test('Host id is correct', () => {",
+							"    const { host } = pm.response.json();",
+							"    pm.expect(host).to.eql(pm.environment.get('host_id'));",
+							"})",
+							"",
+							"",
+							"pm.test('Flock name is correct', () => {",
+							"    const { flock_name } = pm.response.json();",
+							"    pm.expect(flock_name).to.eql(pm.environment.get('flock_name'));",
+							"})",
+							"",
+							"pm.test('Flock location is correct', () => {",
+							"    const { location } = pm.response.json();",
+							"    const { latitude, longitude } = location;",
+							"    pm.expect(latitude).to.eql(pm.environment.get('flock_latitude'));",
+							"    pm.expect(longitude).to.eql(pm.environment.get('flock_longitude'));",
+							"})",
+							"",
+							"pm.test('User1\\'s available votes has decremented by 1', () => {",
+							"    const { user_votes } = pm.response.json();",
+							"    const num_user1_votes = user_votes[pm.environment.get('user1_id')];",
+							"    pm.expect(num_user1_votes).to.eql(pm.environment.get('num_restaurant')-1);",
+							"})",
+							"",
+							"pm.test('Restaurant0\\'s votes has incremented by 1', () => {",
+							"    const { restaurant_votes } = pm.response.json();",
+							"    const num_restaurant0_votes = restaurant_votes[pm.environment.get('restaurant0')];",
+							"    pm.expect(num_restaurant0_votes).to.eql(1);",
+							"})",
+							"",
+							"pm.test('Response contains restaurant votes', () => {",
+							"    const { restaurant_votes } = pm.response.json();",
+							"    pm.expect(restaurant_votes).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(Object.keys(restaurant_votes)).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Response contains correct number of restaurants', () => {",
+							"    const { restaurants } = pm.response.json();",
+							"    pm.expect(restaurants).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(restaurants).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Flock\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const flock_id = pm.environment.get('flock_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/flock/${flock_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Voting with invalid flock id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{invalid_flock_id}}/restaurant/{{restaurant1}}/user/{{user1_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{invalid_flock_id}}",
+						"restaurant",
+						"{{restaurant1}}",
+						"user",
+						"{{user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Voting with invalid user id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/restaurant/{{restaurant1}}/user/{{invalid_user_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"restaurant",
+						"{{restaurant1}}",
+						"user",
+						"{{invalid_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Voting with invalid restaurant id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/restaurant/{{invalid_restaurant}}/user/{{user1_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"restaurant",
+						"{{invalid_restaurant}}",
+						"user",
+						"{{user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Voting before joining flock (User2)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get('user_not_in_flock_error'));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/restaurant/{{restaurant1}}/user/{{user2_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"restaurant",
+						"{{restaurant1}}",
+						"user",
+						"{{user2_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Voting without specifying num vote",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get('invalid_vote_error'));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/restaurant/{{restaurant1}}/user/{{user1_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"restaurant",
+						"{{restaurant1}}",
+						"user",
+						"{{user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Voting with with more than 2 votes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get('invalid_vote_error'));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/restaurant/{{restaurant1}}/user/{{user1_id}}?vote=3",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"restaurant",
+						"{{restaurant1}}",
+						"user",
+						"{{user1_id}}"
+					],
+					"query": [
+						{
+							"key": "vote",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Voting with with less than 0 vote",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get('invalid_vote_error'));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/restaurant/{{restaurant1}}/user/{{user1_id}}?vote=-1",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"restaurant",
+						"{{restaurant1}}",
+						"user",
+						"{{user1_id}}"
+					],
+					"query": [
+						{
+							"key": "vote",
+							"value": "-1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Voting with with non-numeric vote",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get('invalid_vote_error'));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/restaurant/{{restaurant1}}/user/{{user1_id}}?vote=abc",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"restaurant",
+						"{{restaurant1}}",
+						"user",
+						"{{user1_id}}"
+					],
+					"query": [
+						{
+							"key": "vote",
+							"value": "abc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Join a flock (User2)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Flock id is correct', () => {",
+							"    const { flock_id } = pm.response.json();",
+							"    pm.expect(flock_id).to.eql(pm.environment.get('flock_id'));",
+							"})",
+							"",
+							"pm.test('Host id is correct', () => {",
+							"    const { host } = pm.response.json();",
+							"    pm.expect(host).to.eql(pm.environment.get('host_id'));",
+							"})",
+							"",
+							"pm.test('Flock name is correct', () => {",
+							"    const { flock_name } = pm.response.json();",
+							"    pm.expect(flock_name).to.eql(pm.environment.get('flock_name'));",
+							"})",
+							"",
+							"pm.test('Flock location is correct', () => {",
+							"    const { location } = pm.response.json();",
+							"    const { latitude, longitude } = location;",
+							"    pm.expect(latitude).to.eql(pm.environment.get('flock_latitude'));",
+							"    pm.expect(longitude).to.eql(pm.environment.get('flock_longitude'));",
+							"})",
+							"",
+							"pm.test('User 2 has joined the flock', () => {",
+							"    const { user_votes } = pm.response.json();",
+							"    pm.expect(Object.keys(user_votes)).to.have.lengthOf(3);",
+							"    const user2_id = pm.environment.get('user2_id');",
+							"    pm.expect(user_votes[user2_id]).to.eql(parseInt(pm.environment.get('num_restaurant')));",
+							"})",
+							"",
+							"pm.test('Response contains restaurant votes', () => {",
+							"    const { restaurant_votes } = pm.response.json();",
+							"    pm.expect(restaurant_votes).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(Object.keys(restaurant_votes)).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Response contains correct number of restaurants', () => {",
+							"    const { restaurants } = pm.response.json();",
+							"    pm.expect(restaurants).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(restaurants).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Flock\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const flock_id = pm.environment.get('flock_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/flock/${flock_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/user/{{user2_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"user",
+						"{{user2_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Voting when the user ran out of votes (user2)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get('user_out_of_votes_error'));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const host_url = pm.environment.get('URL');",
+							"const flock_id = pm.environment.get('flock_id');",
+							"",
+							"const options = (restaurant_i, user_i, vote) => {",
+							"    const user_id = pm.environment.get(`user${user_i}_id`);",
+							"    const restaurant_id = pm.environment.get(`restaurant${restaurant_i}`);",
+							"    const url = `${host_url}/flock/${flock_id}/restaurant/${restaurant_id}/user/${user_id}`;",
+							"",
+							"    return {",
+							"    url: `${url}?vote=${vote}`,",
+							"    method: 'POST',",
+							"    headers: {",
+							"        'Accept': '*/*',",
+							"        'Content-Type': 'application/json'",
+							"    }",
+							"}}",
+							"",
+							"pm.sendRequest(options(0, 2, 0), (err, res) => {",
+							"pm.sendRequest(options(1, 2, 1), (err, res) => {",
+							"pm.sendRequest(options(2, 2, 2), (err, res) => {",
+							"pm.sendRequest(options(3, 2, 0), (err, res) => {",
+							"pm.sendRequest(options(4, 2, 1), (err, res) => {",
+							"pm.sendRequest(options(5, 2, 2), (err, res) => {",
+							"pm.sendRequest(options(6, 2, 0), (err, res) => {",
+							"pm.sendRequest(options(7, 2, 1), (err, res) => {",
+							"pm.sendRequest(options(8, 2, 2), (err, res) => {",
+							"pm.sendRequest(options(9, 2, 0), (err, res) => {      ",
+							"})})})})})})})})})})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/restaurant/{{restaurant2}}/user/{{user2_id}}?vote=1",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"restaurant",
+						"{{restaurant2}}",
+						"user",
+						"{{user2_id}}"
+					],
+					"query": [
+						{
+							"key": "vote",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Flock Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Flock id is correct', () => {",
+							"    const { flock_id } = pm.response.json();",
+							"    pm.expect(flock_id).to.eql(pm.environment.get('flock_id'));",
+							"})",
+							"",
+							"pm.test('Remaining number of votes is correct', () => {",
+							"    const { remaining_votes } = pm.response.json();",
+							"    pm.expect(remaining_votes).to.eql(pm.environment.get('num_restaurant')*3-11);",
+							"})",
+							"",
+							"pm.test('Response contains a list of ranked restaurants', () => {",
+							"    const { ranked_restaurants } = pm.response.json();",
+							"    pm.expect(ranked_restaurants).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(ranked_restaurants).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Response contains a list of restaurant votes', () => {",
+							"    const { restaurant_votes } = pm.response.json();",
+							"    pm.expect(restaurant_votes).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(Object.keys(restaurant_votes)).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Response contain the correct Most voted restaurant', () => {",
+							"    const { most_voted_restaurants } = pm.response.json();",
+							"    pm.expect(most_voted_restaurants).to.not.eql(undefined);",
+							"    pm.expect(most_voted_restaurants).to.have.lengthOf(3);",
+							"    pm.expect(most_voted_restaurants).to.include(pm.environment.get('restaurant2'));",
+							"    pm.expect(most_voted_restaurants).to.include(pm.environment.get('restaurant5'));",
+							"    pm.expect(most_voted_restaurants).to.include(pm.environment.get('restaurant8'));",
+							"})",
+							"",
+							"pm.test('Flock\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const flock_id = pm.environment.get('flock_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/flock/${flock_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/status",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Flock Status with invalid id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{invalid_flock_id}}/status",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{invalid_flock_id}}",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Flock after all members have voted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Flock id is correct', () => {",
+							"    const { flock_id } = pm.response.json();",
+							"    pm.expect(flock_id).to.eql(pm.environment.get('flock_id'));",
+							"})",
+							"",
+							"pm.test('Remaining number of votes is correct', () => {",
+							"    const { remaining_votes } = pm.response.json();",
+							"    pm.expect(remaining_votes).to.eql(0);",
+							"})",
+							"",
+							"pm.test('Response contains a list of ranked restaurants', () => {",
+							"    const { ranked_restaurants } = pm.response.json();",
+							"    pm.expect(ranked_restaurants).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(ranked_restaurants).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Response contains a list of restaurant votes', () => {",
+							"    const { restaurant_votes } = pm.response.json();",
+							"    pm.expect(restaurant_votes).to.not.eql(undefined);",
+							"    const num_restaurant = pm.environment.get('num_restaurant')",
+							"    pm.expect(Object.keys(restaurant_votes)).to.have.lengthOf(num_restaurant);",
+							"})",
+							"",
+							"pm.test('Response contain the correct Most voted restaurant', () => {",
+							"    const { most_voted_restaurants } = pm.response.json();",
+							"    pm.expect(most_voted_restaurants).to.not.eql(undefined);",
+							"    pm.expect(most_voted_restaurants).to.have.lengthOf(1);",
+							"    pm.expect(most_voted_restaurants).to.include(pm.environment.get('restaurant5'));",
+							"})",
+							"",
+							"pm.test('Flock\\'s link is correct', () => {",
+							"    const { self } = pm.response.json();",
+							"    const protocol = pm.environment.get('protocol');",
+							"    const URL = pm.environment.get('URL');",
+							"    const flock_id = pm.environment.get('flock_id');",
+							"    pm.expect(self).to.eql(`${protocol}${URL}/flock/${flock_id}`);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const host_url = pm.environment.get('URL');",
+							"const flock_id = pm.environment.get('flock_id');",
+							"",
+							"const options = (restaurant_i, user_i, vote) => {",
+							"    let user_id;",
+							"    if (user_i === 0) {",
+							"        user_id = pm.environment.get(`host_id`);",
+							"    } else {",
+							"        user_id = pm.environment.get(`user${user_i}_id`);",
+							"    }",
+							"    const restaurant_id = pm.environment.get(`restaurant${restaurant_i}`);",
+							"    const url = `${host_url}/flock/${flock_id}/restaurant/${restaurant_id}/user/${user_id}`;",
+							"",
+							"    return {",
+							"    url: `${url}?vote=${vote}`,",
+							"    method: 'POST',",
+							"    headers: {",
+							"        'Accept': '*/*',",
+							"        'Content-Type': 'application/json'",
+							"    }",
+							"}}",
+							"",
+							"pm.sendRequest(options(1, 1, 1), (err, res) => {",
+							"pm.sendRequest(options(2, 1, 1), (err, res) => {",
+							"pm.sendRequest(options(3, 1, 1), (err, res) => {",
+							"pm.sendRequest(options(4, 1, 1), (err, res) => {",
+							"pm.sendRequest(options(5, 1, 2), (err, res) => {",
+							"pm.sendRequest(options(6, 1, 2), (err, res) => {",
+							"pm.sendRequest(options(7, 1, 2), (err, res) => {",
+							"pm.sendRequest(options(8, 1, 2), (err, res) => {",
+							"pm.sendRequest(options(9, 1, 2), (err, res) => {",
+							"",
+							"pm.sendRequest(options(0, 0, 2), (err, res) => {",
+							"pm.sendRequest(options(1, 0, 2), (err, res) => {",
+							"pm.sendRequest(options(2, 0, 2), (err, res) => {",
+							"pm.sendRequest(options(3, 0, 2), (err, res) => {",
+							"pm.sendRequest(options(4, 0, 2), (err, res) => {",
+							"pm.sendRequest(options(5, 0, 2), (err, res) => {",
+							"pm.sendRequest(options(6, 0, 1), (err, res) => {",
+							"pm.sendRequest(options(7, 0, 1), (err, res) => {",
+							"pm.sendRequest(options(8, 0, 1), (err, res) => {",
+							"pm.sendRequest(options(9, 0, 1), (err, res) => {      ",
+							"})})})})})})})})})})})})})})})})})})})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}/status",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a flock",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 204', () => {",
+							"    pm.response.to.have.status(204);",
+							"})",
+							"",
+							"for (let i = 0; i < pm.environment.get(\"num_restaurant\"); i++) {",
+							"    pm.environment.unset(`restaurant${i}`);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a flock with invalid id Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{invalid_flock_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{invalid_flock_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Confirm flock is deleted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Correct error message\", () => {",
+							"    const { Error } = pm.response.json();",
+							"    pm.expect(Error).to.eql(pm.environment.get(\"invalid_id_error\"));",
+							"})",
+							"",
+							"pm.environment.unset(\"flock_id\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/flock/{{flock_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"flock",
+						"{{flock_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete host user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 204', () => {",
+							"    pm.response.to.have.status(204);",
+							"})",
+							"",
+							"pm.environment.unset(\"host_id\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/{{host_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"{{host_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 204', () => {",
+							"    pm.response.to.have.status(204);",
+							"})",
+							"",
+							"pm.environment.unset(\"user1_id\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/{{user1_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"{{user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 204', () => {",
+							"    pm.response.to.have.status(204);",
+							"})",
+							"",
+							"pm.environment.unset(\"user2_id\")"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/{{user2_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"{{user2_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

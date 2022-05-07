@@ -8,9 +8,7 @@ const router = express.Router();
 router.post('/', async (request, response, next) => {
 
   try {
-    validate_create_request(request.body);
-    const { flock_name, host_id, location } = request.body;
-    const new_flock = await flock.create_flock(flock_name, host_id, location);
+    const new_flock = await flock.create_flock(request);
     response.status(201).json(new_flock);
 
   } catch (error) {
@@ -22,8 +20,7 @@ router.post('/', async (request, response, next) => {
 router.get('/:flock_id', async (request, response, next) => {
 
   try {
-    const flock_id = request.params.flock_id;
-    const found_flock = await flock.view_flock(flock_id);
+    const found_flock = await flock.view_flock(request);
     response.status(200).json(found_flock);
 
   } catch (error) {
@@ -31,16 +28,37 @@ router.get('/:flock_id', async (request, response, next) => {
   }
 })
 
-// Join a flock
-router.put('/:flock_id', async (request, response, next) => {
+// Check the status of a flock
+router.get('/:flock_id/status', async (request, response, next) => {
 
   try {
-    const flock_id = request.params.flock_id;
-    validate_join_request(request.body);
+    const flock_status = await flock.check_flock(request);
+    response.status(200).json(flock_status);
 
-    const { user_id } = request.body;
-    await flock.join_flock(flock_id, user_id);
-    response.status(200).send();
+  } catch (error) {
+    next(error);
+  }
+})
+
+
+// Join a flock
+router.post('/:flock_id/user/:user_id', async (request, response, next) => {
+
+  try {
+    const updated_flock = await flock.join_flock(request);
+    response.status(200).json(updated_flock);
+
+  } catch (error) {
+    next(error);
+  }
+})
+
+// Vote for a restaurant
+router.post('/:flock_id/restaurant/:restaurant_id/user/:user_id', async (request, response, next) => {
+
+  try {
+    await flock.vote_restaurant(request);
+    response.status(204).send();
 
   } catch (error) {
     next(error);
@@ -51,32 +69,12 @@ router.put('/:flock_id', async (request, response, next) => {
 router.delete('/:flock_id', async (request, response, next) => {
 
   try {
-    const flock_id = request.params.flock_id;
-    await flock.delete_flock(flock_id);
-    response.status(200).send();
+    await flock.delete_flock(request);
+    response.status(204).send();
 
   } catch (error) {
     next(error);
   }
 })
-
-// Validate the body of the create flock request
-const validate_create_request = (request_body) => {
-
-  const { flock_name, host_id, location } = request_body;
-  if (!flock_name || !host_id || !location)
-    throw custom_error.missing_request_body_data;
-
-  const { longitude, latitude } = location;
-  if (!longitude || !latitude) 
-    throw custom_error.missing_request_body_data;
-}
-
-// Validate the body of the join flock request
-const validate_join_request = (request_body) => {
-
-  const { user_id } = request_body;
-  if (!user_id) throw custom_error.missing_request_body_data;
-}
 
 module.exports = router;

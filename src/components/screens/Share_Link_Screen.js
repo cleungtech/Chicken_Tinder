@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { 
   Text,
+  TextInput,
   SafeAreaView,
 } from 'react-native';
 
@@ -66,7 +67,11 @@ export function Share_Link_Screen({ route }) {
         <StatusBar style="auto" />
         <Text style={styles.title_text}>{user_info.flock_name}</Text>
         <QRCode value={flock_url} />
-        <Text>{flock_url}</Text>
+        <Text>Copy Link:</Text>
+        <TextInput
+          style={styles.credentials}
+          value={flock_url}
+        />
         <Nav_Button
           button_name="Go See Restaurants" 
           route="Restaurants"
