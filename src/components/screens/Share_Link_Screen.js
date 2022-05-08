@@ -6,6 +6,7 @@ import {
   TextInput,
   SafeAreaView,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 
 import { Nav_Button } from "../models/Buttons.js";
@@ -62,6 +63,7 @@ export function Share_Link_Screen({ route }) {
         set_flock_res(json_res);
       } catch (error) {
         console.error(error);
+        alert("Network Error!");
       } finally {
         set_url_loading(false);
         fade_in();
