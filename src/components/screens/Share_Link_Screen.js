@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
+  Animated,
   Text,
   TextInput,
   SafeAreaView,
@@ -28,6 +29,16 @@ export function Share_Link_Screen({ route }) {
     });
     const [url_is_loading, set_url_loading] = useState(true);
 
+    const fade_anim = useRef(new Animated.Value(0)).current;
+
+    const fade_in = () => {
+      Animated.timing(fade_anim, {
+        useNativeDriver: true,
+        toValue: 1,
+        duration: 2000,
+      }).start();
+    }
+
     const create_flock = async () => {
       try {
         const response = await fetch(
@@ -53,15 +64,24 @@ export function Share_Link_Screen({ route }) {
         console.error(error);
       } finally {
         set_url_loading(false);
+        fade_in();
       }
     };
 
     useEffect(() => {
-      create_flock();
+      setTimeout(() => {
+        create_flock();
+      }, 0);
 
       // clean the state
       return () => {
-        set_flock_res({});
+        set_flock_res({
+          flock_id: user_info.user_id,
+          host: user_info.user_id,
+          flock_name: user_info.flock_name,
+          location: {},
+          users: []
+        });
       }
     }, []);
 
@@ -82,40 +102,36 @@ export function Share_Link_Screen({ route }) {
             style={styles.credentials}
             value={flock_url}
           />
-          <Nav_Button
-            is_disabled={true}
-            button_name="Go See Restaurants" 
-            route="Restaurants"
-            nav_params={{
-              flock_name: flock_res.flock_name,
-              flock_id: flock_res.flock_id,
-              host: flock_res.host,
-              restaurants: flock_res.restaurants,
-            }}
-          />
         </SafeAreaView>
       );
     } else {
       return (
         <SafeAreaView style={{alignItems: "center", marginTop: 50}}>
           <StatusBar style="auto" />
-          <Text style={{color: 'black'}}>Flock name: {user_info.flock_name}</Text>
+          <Text style={{color: 'black'}}>Flock Name: </Text>
+          <Text style={{color: 'black'}}>{user_info.flock_name}</Text>
           <QRCode value={flock_url} />
           <Text>Copy Link:</Text>
           <TextInput
             style={styles.credentials}
             value={flock_url}
           />
-          <Nav_Button
-            button_name="Go See Restaurants" 
-            route="Restaurants"
-            nav_params={{
-              flock_name: flock_res.flock_name,
-              flock_id: flock_res.flock_id,
-              host: flock_res.host,
-              restaurants: flock_res.restaurants,
-            }}
-          />
+          <Animated.View style={
+            [
+              {opacity: fade_anim}
+            ]
+          }>
+            <Nav_Button
+              button_name="Go See Restaurants" 
+              route="Restaurants"
+              nav_params={{
+                flock_name: flock_res.flock_name,
+                flock_id: flock_res.flock_id,
+                host: flock_res.host,
+                restaurants: flock_res.restaurants,
+              }}
+            />
+          </Animated.View>
         </SafeAreaView>
       );
     }

@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
+  Text,
+  Animated,
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
@@ -19,6 +21,16 @@ export function Flock_Screen({ route }) {
       num_votes: -1,
     });
     const [is_loading, set_loading] = useState(true);
+
+    const fade_anim = useRef(new Animated.Value(0)).current;
+
+    const fade_in = () => {
+      Animated.timing(fade_anim, {
+        useNativeDriver: true,
+        toValue: 1,
+        duration: 1000,
+      }).start();
+    }
 
     const create_user = async () => {
       try {
@@ -40,14 +52,22 @@ export function Flock_Screen({ route }) {
         console.error(error);
       } finally {
         set_loading(false);
+        fade_in();
       }
     };
 
     useEffect(() => {
-      create_user();
+      setTimeout(() => {
+        create_user();
+      }, 0);
+
       // clean the state
       return () => {
-        set_user_res({});
+        set_user_res({ 
+          user_id: "",
+          user_name: "",
+          num_votes: -1,
+        });
       }
     }, []);
 
@@ -55,59 +75,43 @@ export function Flock_Screen({ route }) {
       return (
         <SafeAreaView style={styles.container}>
         <StatusBar style="auto" />
+        <Text>Creating User...</Text>
         <ActivityIndicator 
           size="large" 
           color={chicken_colors.yellow}>
         </ActivityIndicator>
-        <Nav_Button 
-          is_disabled={true}
-          button_name="Create a Flock" 
-          route="Select"
-          nav_params={{
-            user_name: user_info.user_name, 
-            user_type: "host",
-            user_id: user_res.user_id
-          }}
-        />
-        <Nav_Button
-          is_disabled={true}
-          button_name="Join a Flock" 
-          route="Join"
-          nav_params={{
-            user_name: user_info.user_name,
-            user_type: "member",
-            user_id: user_res.user_id
-          }}
-        />
-        <Useless_Button button_name="I'm Flying Solo" />
       </SafeAreaView>
       );
     } else {
       return (
         <SafeAreaView style={styles.container}>
           <StatusBar style="auto" />
-          <Nav_Button 
-            button_name="Create a Flock" 
-            route="Select"
-            nav_params={{
-              user_name: user_info.user_name, 
-              user_type: "host",
-              user_id: user_res.user_id
-            }}
-          />
-          <Nav_Button
-            button_name="Join a Flock" 
-            route="Join"
-            nav_params={{
-              user_name: user_info.user_name,
-              user_type: "member",
-              user_id: user_res.user_id
-            }}
-          />
-          <Useless_Button button_name="I'm Flying Solo" />
+          <Animated.View style={
+            [
+              {opacity: fade_anim}
+            ]
+          }>
+            <Nav_Button 
+              button_name="Create a Flock" 
+              route="Select"
+              nav_params={{
+                user_name: user_info.user_name, 
+                user_type: "host",
+                user_id: user_res.user_id
+              }}
+            />
+            <Nav_Button
+              button_name="Join a Flock" 
+              route="Join"
+              nav_params={{
+                user_name: user_info.user_name,
+                user_type: "member",
+                user_id: user_res.user_id
+              }}
+            />
+            <Useless_Button button_name="I'm Flying Solo" />
+          </Animated.View>
         </SafeAreaView>
       );
-    }
-
-    
+    }  
 }
