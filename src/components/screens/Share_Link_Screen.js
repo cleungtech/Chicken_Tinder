@@ -9,9 +9,7 @@ import {
 import Clipboard from '@react-native-clipboard/clipboard';
 import { Nav_Button } from "../models/Buttons.js";
 import QRCode from "react-qr-code";
-
 import styles from "../../styles/css.js";
-import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from 'react-dom';
 
 export function Share_Link_Screen({ route }) {
 
