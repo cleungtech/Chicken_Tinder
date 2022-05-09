@@ -14,11 +14,11 @@ import styles from "../../styles/css.js";
 export function Join_Screen({ route }) {
 
   const default_url = "https://chicken-tinder-347213.uk.r.appspot.com/api/";
-  
+
   const { user_info, flock_info } = route.params;
   const invited = flock_info !== null;
 
-  const [flock_id, set_flock_id] = useState();
+  const [flock_id, set_flock_id] = useState(0);
   const [flock_res, set_flock_res] = useState({});
   const [joined, set_joined] = useState(false);
   const [error, set_error] = useState("");
@@ -51,9 +51,9 @@ export function Join_Screen({ route }) {
         set_joined(true);
         set_error("");
       } else if (response.status === 400) {
-        set_error("Provided Flock ID is invalid! Try again.");
+        if (!joined) set_error("Provided Flock ID is invalid! Try again.");
       } else {
-        set_error("Unable to join flock due to server error");
+        if (!joined) set_error("Unable to join flock due to server error");
       }
     } catch (error) {
       console.error(error);
@@ -63,31 +63,30 @@ export function Join_Screen({ route }) {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
-      {joined 
-        ? <Text>Successfully joined {flock_res.flock_name}</Text>
-        : null
-      }
-      {error
-        ? <Text>{error}</Text>
-        : null
-      }
-      <Credentials
-        inputfield={
-          invited
-          ? flock_id
-          : "Enter Flock ID Here"
-        }
-        change_function={flock_id => set_flock_id(flock_id)}
-      />
+      {joined ? <Text>Successfully joined {flock_res.flock_name}</Text> : null}
+      {error ? <Text>{error}</Text> : null}
       {joined
-        ? <Nav_Button
-            button_name="Go See Restaurants"
-            route="Restaurants"
-            nav_params={flock_res}
+        ?
+        <Nav_Button
+          button_name="Go See Restaurants"
+          route="Restaurants"
+          nav_params={flock_res}
+        />
+        :
+        <>
+          <Credentials
+            inputfield="Enter Flock ID Here"
+            value={flock_id ? flock_id : ""}
+            change_function={flock_id => set_flock_id(flock_id)}
           />
-        : <TouchableOpacity style={styles.button} onPress={join_flock}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={join_flock}
+            disabled={!flock_id}
+          >
             <Text>Click here to join</Text>
           </TouchableOpacity>
+        </>
       }
     </SafeAreaView>
   )

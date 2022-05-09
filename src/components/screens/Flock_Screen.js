@@ -11,11 +11,12 @@ import styles from "../../styles/css.js";
 
 export function Flock_Screen({ route }) {
 
-  const {user_name, flock_info} = route.params;
+  const { user_name, flock_info } = route.params;
   const invited = flock_info !== null;
 
   const [user_res, set_user_res] = useState({});
   const [is_loading, set_loading] = useState(true);
+  const [error, set_error] = useState("");
 
   const create_user = async () => {
     try {
@@ -30,8 +31,15 @@ export function Flock_Screen({ route }) {
           "user_name": user_name,
         })
       });
-      const json_res = await response.json();
-      set_user_res(json_res);
+      if (response.status === 201) {
+        const json_res = await response.json();
+        set_user_res(json_res);
+        set_error("");
+      } else if (response.status === 400) {
+        set_error("Unable to create a new user due to invalid form");
+      } else {
+        set_error("Unable to create user due to server error");
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -46,31 +54,35 @@ export function Flock_Screen({ route }) {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
+      {error ? <Text>{error}</Text> : null}
       {is_loading
-        ? <Text>Creating user...</Text>
-        : <>
-            <Text>User {user_res.user_name} created!</Text>
-            {invited
-              ? null
-              : <Nav_Button
-                button_name="Create a Flock"
-                route="Select"
-                nav_params={user_res}
-                />}
+        ?
+        <Text>Creating user...</Text>
+        :
+        <>
+          <Text>User {user_res.user_name} created!</Text>
+          {invited
+            ? null
+            :
             <Nav_Button
-              button_name={
-                invited
-                  ? `Join ${flock_info.flock_name} hosted by ${flock_info.host_name}`
-                  : "Join a Flock"
-              }
-              route="Join"
-              nav_params={{
-                user_info: user_res,
-                flock_info: flock_info
-                }}
-            />            
-            {/* <Useless_Button button_name="I'm Flying Solo" /> */}
-          </>}
+              button_name="Create a Flock"
+              route="Select"
+              nav_params={user_res}
+            />}
+          <Nav_Button
+            button_name={
+              invited
+                ? `Join ${flock_info.flock_name} hosted by ${flock_info.host_name}`
+                : "Join a Flock"
+            }
+            route="Join"
+            nav_params={{
+              user_info: user_res,
+              flock_info: flock_info
+            }}
+          />
+          {/* <Useless_Button button_name="I'm Flying Solo" /> */}
+        </>}
     </SafeAreaView>
   );
 }
