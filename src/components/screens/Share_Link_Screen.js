@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   TouchableOpacity
 } from 'react-native';
-import Clipboard from '@react-native-clipboard/clipboard';
+import * as Clipboard from 'expo-clipboard';
 import { Nav_Button } from "../models/Buttons.js";
 import QRCode from "react-qr-code";
 import styles from "../../styles/css.js";
@@ -15,7 +15,7 @@ export function Share_Link_Screen({ route }) {
 
   const { user_info, flock_name } = route.params;
   const default_url = "https://chicken-tinder-347213.uk.r.appspot.com/api/";
-  const app_url = window.location.href;
+  // const app_url = window.location.href;
 
   const [join_url, set_join_url] = useState("");
   const [flock_res, set_flock_res] = useState({});
@@ -82,15 +82,15 @@ export function Share_Link_Screen({ route }) {
     create_flock();
   }, []);
 
-  useEffect(() => {
-    if (Object.keys(flock_res).length) {
-      let join_url = app_url;
-      join_url += `?flock_id=${flock_res.flock_id}`;
-      join_url += `&flock_name=${flock_res.flock_name}`
-      join_url += `&host_name=${user_info.user_name}`
-      set_join_url(join_url);
-    }
-  }, [flock_res]);
+  // useEffect(() => {
+  //   if (Object.keys(flock_res).length) {
+  //     let join_url = app_url;
+  //     join_url += `?flock_id=${flock_res.flock_id}`;
+  //     join_url += `&flock_name=${flock_res.flock_name}`
+  //     join_url += `&host_name=${user_info.user_name}`
+  //     set_join_url(join_url);
+  //   }
+  // }, [flock_res]);
 
   return (
     <SafeAreaView style={{ alignItems: "center", marginTop: 50 }}>

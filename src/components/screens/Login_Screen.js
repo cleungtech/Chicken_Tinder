@@ -13,11 +13,12 @@ import styles from "../../styles/css.js";
 
 export function Login_Screen() {
 
-  const query_params = new URLSearchParams(window.location.search);
-  const flock_id = query_params.get("flock_id");
-  const flock_name = query_params.get("flock_name");
-  const host_name = query_params.get("host_name");
-  const invited = flock_id && flock_name && host_name;
+  // const query_params = new URLSearchParams(window.location.search);
+  // const flock_id = query_params.get("flock_id");
+  // const flock_name = query_params.get("flock_name");
+  // const host_name = query_params.get("host_name");
+  // const invited = flock_id && flock_name && host_name;
+  const invited = false;
   const [user_name, set_user_name] = useState("");
 
   return (
