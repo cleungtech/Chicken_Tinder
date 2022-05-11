@@ -53,8 +53,8 @@ export function Share_Link_Screen({ route }) {
             "host_id": user_info.user_id,
             "flock_name": user_info.flock_name,
             "location": {
-              "longitude": 40.4406,
-              "latitude": -79.9959,
+              "longitude": 40.760232,
+              "latitude": -73.769283,
             }
           })
           }

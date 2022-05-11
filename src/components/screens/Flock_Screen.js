@@ -77,7 +77,6 @@ export function Flock_Screen({ route }) {
       return (
         <SafeAreaView style={styles.container}>
         <StatusBar style="auto" />
-        <Text>Creating User...</Text>
         <ActivityIndicator 
           size="large" 
           color={chicken_colors.yellow}>
