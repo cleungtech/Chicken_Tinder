@@ -1,5 +1,5 @@
-import { 
-    TextInput,  
+import {
+  TextInput,
 } from 'react-native';
 
 import styles from "../../styles/css.js";
@@ -8,11 +8,12 @@ import styles from "../../styles/css.js";
 // re-rendered when the user types into the textinput
 
 export const Credentials = (props) => {
-    return (
-      <TextInput
-        style={styles.credentials}
-        placeholder={props.inputfield}
-        onChangeText={props.change_function}
-      />
-    );
+  return (
+    <TextInput
+      style={styles.credentials}
+      value={props.value}
+      placeholder={props.inputfield}
+      onChangeText={props.change_function}
+    />
+  );
 }
