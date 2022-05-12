@@ -8,12 +8,12 @@ import {
 import { Nav_Button } from "../models/Buttons.js";
 // import { Useless_Button } from "../models/Buttons.js";
 import styles from "../../styles/css.js";
+const backend_api = "https://chicken-tinder-347213.uk.r.appspot.com/api/";
 
 export function Flock_Screen({ route }) {
 
   const { user_name, flock_info } = route.params;
   const invited = flock_info !== null;
-
   const [user_res, set_user_res] = useState({});
   const [is_loading, set_loading] = useState(true);
   const [error, set_error] = useState("");
@@ -21,7 +21,7 @@ export function Flock_Screen({ route }) {
   const create_user = async () => {
     try {
       const response = await fetch(
-        "https://chicken-tinder-347213.uk.r.appspot.com/api/user", {
+        `${backend_api}user`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -41,6 +41,7 @@ export function Flock_Screen({ route }) {
         set_error("Unable to create user due to server error");
       }
     } catch (error) {
+      set_error("Fetch request failed. Check your CORS setting.");
       console.error(error);
     } finally {
       set_loading(false);
@@ -55,10 +56,9 @@ export function Flock_Screen({ route }) {
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
       {error ? <Text>{error}</Text> : null}
-      {is_loading
+      {is_loading ? <Text>Creating user...</Text> : null}
+      {!is_loading && !error
         ?
-        <Text>Creating user...</Text>
-        :
         <>
           <Text>User {user_res.user_name} created!</Text>
           {invited
@@ -82,7 +82,9 @@ export function Flock_Screen({ route }) {
             }}
           />
           {/* <Useless_Button button_name="I'm Flying Solo" /> */}
-        </>}
+        </>
+        : null
+      }
     </SafeAreaView>
   );
 }

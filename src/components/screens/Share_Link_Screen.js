@@ -6,33 +6,39 @@ import {
   SafeAreaView,
   TouchableOpacity
 } from 'react-native';
-import * as Clipboard from 'expo-clipboard';
+import { setString } from 'expo-clipboard';
 import { Nav_Button } from "../models/Buttons.js";
 import QRCode from "react-qr-code";
 import styles from "../../styles/css.js";
+import * as Linking from 'expo-linking';
+
+const backend_api = "https://chicken-tinder-347213.uk.r.appspot.com/api/";
+const web_app_url = "http://192.168.1.106:19006/"
 
 export function Share_Link_Screen({ route }) {
-
   const { user_info, flock_name } = route.params;
-  const default_url = "https://chicken-tinder-347213.uk.r.appspot.com/api/";
-  // const app_url = window.location.href;
-
   const [join_url, set_join_url] = useState("");
-  const [flock_res, set_flock_res] = useState({});
-
+  const [flock_res, set_flock_res] = useState({
+    flock_id: 0,
+    host: 0,
+    flock_name: "",
+    location: {},
+    restaurants: [],
+    self: ""
+  });
   const [url_is_loading, set_url_loading] = useState(true);
   const [error, set_error] = useState("");
   const [has_copied_url, set_has_copied_url] = useState(false);
   const [has_copied_flock_id, set_has_copied_flock_id] = useState(false);
 
-  const copy_url_to_clipboard = () => {
-    Clipboard.setString(join_url);
+  function copy_url_to_clipboard() {
+    setString(join_url);
     set_has_copied_flock_id(false);
     set_has_copied_url(true);
   }
 
-  const copy_flock_id_to_clipboard = () => {
-    Clipboard.setString(flock_res.flock_id);
+  function copy_flock_id_to_clipboard() {
+    setString(String(flock_res.flock_id));
     set_has_copied_url(false);
     set_has_copied_flock_id(true);
   }
@@ -40,7 +46,7 @@ export function Share_Link_Screen({ route }) {
   const create_flock = async () => {
     try {
       const response = await fetch(
-        `${default_url}flock`, {
+        `${backend_api}flock`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -72,6 +78,7 @@ export function Share_Link_Screen({ route }) {
         set_error("Unable to create user due to server error");
       }
     } catch (error) {
+      set_error("Fetch request failed. Check your CORS setting.");
       console.error(error);
     } finally {
       set_url_loading(false);
@@ -82,48 +89,43 @@ export function Share_Link_Screen({ route }) {
     create_flock();
   }, []);
 
-  // useEffect(() => {
-  //   if (Object.keys(flock_res).length) {
-  //     let join_url = app_url;
-  //     join_url += `?flock_id=${flock_res.flock_id}`;
-  //     join_url += `&flock_name=${flock_res.flock_name}`
-  //     join_url += `&host_name=${user_info.user_name}`
-  //     set_join_url(join_url);
-  //   }
-  // }, [flock_res]);
+  useEffect(() => {
+    let url = web_app_url;
+    url = `${url}?flock_id=${flock_res.flock_id}`;
+    url = `${url}&flock_name=${flock_name}`;
+    url = `${url}&host_name=${user_info.user_name}`;
+    set_join_url(url);
+  }, [flock_res]);
 
   return (
     <SafeAreaView style={{ alignItems: "center", marginTop: 50 }}>
       <StatusBar style="auto" />
       {error ? <Text>{error}</Text> : null}
       {url_is_loading ? <Text>Loading...</Text> : null}
-      {join_url
+      {join_url && flock_res.flock_id
         ?
         <>
-          <Text>Flock Name: {user_info.flock_name}</Text>
+          <Text>Flock Name: {flock_name}</Text>
           <Text>3 Different ways to join</Text>
           <Text>1. Scan QR code:</Text>
           <QRCode value={join_url} />
-
-          <Text>2. Share Link:</Text>
-          <TouchableOpacity onPress={() =>
-            copy_url_to_clipboard()}>
-            <TextInput
-              style={styles.credentials}
-              value={has_copied_url ? "Copied!" : join_url}
-            />
+          <TouchableOpacity onPress={copy_url_to_clipboard}>
+            <Text>2. Share Link: {has_copied_url ? "Copied!" : "Copy"}</Text>
           </TouchableOpacity>
-
-          <Text>3. Share Flock ID:</Text>
-          <TouchableOpacity onPress={() =>
-            copy_flock_id_to_clipboard(flock_res.flock_id)}>
-            <TextInput
-              style={styles.credentials}
-              value={has_copied_flock_id
-                ? "Copied!"
-                : flock_res.flock_id}
-            />
+          <TextInput
+            style={styles.credentials}
+            value={join_url}
+          />
+          <TouchableOpacity onPress={copy_flock_id_to_clipboard}>
+            <Text>3. Share Flock ID: {has_copied_flock_id
+              ? "Copied!"
+              : "Copy"}
+            </Text>
           </TouchableOpacity>
+          <TextInput
+            style={styles.credentials}
+            value={String(flock_res.flock_id)}
+          />
           <Nav_Button
             button_name="Go See Restaurants"
             route="Restaurants"

@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import {
   Text,
-  SafeAreaView,
+  SafeAreaView
 } from 'react-native';
 
 import { Nav_Button } from "../models/Buttons.js";
