@@ -4,7 +4,6 @@ import {
   Animated,
   ActivityIndicator,
   Text,
-  TextInput,
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
@@ -141,13 +140,13 @@ export function Share_Link_Screen({ route }) {
               {opacity: fade_anim}
             ]
           }>
-            <Text style={{color: 'black'}}>Flock Name: {flock_name}</Text>
-            <Text style={{color: 'black'}}>3 Different ways to join</Text>
+            <Text>Flock Name: {flock_name}</Text>
+            <Text>3 Different ways to join</Text>
             
-            <Text style={{color: 'black'}}>1. Scan QR code:</Text>
+            <Text>1. Scan QR code:</Text>
             <QRCode value={join_url} />
 
-            <Text style={{color: 'black'}}>2. Share Link:</Text>
+            <Text>2. Share Link:</Text>
             <TouchableOpacity onPress={() =>
               copy_url_to_clipboard()}>
               <Text>
@@ -155,7 +154,7 @@ export function Share_Link_Screen({ route }) {
               </Text>
             </TouchableOpacity>
 
-            <Text style={{color: 'black'}}>3. Share Flock ID:</Text>
+            <Text>3. Share Flock ID:</Text>
             <TouchableOpacity onPress={() =>
               copy_flock_id_to_clipboard(flock_res.flock_id)}>
               <Text>
