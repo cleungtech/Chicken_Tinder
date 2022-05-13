@@ -26,7 +26,6 @@ export function Select_Screen({ route }) {
       <Nav_Button
         button_name="We're Hungry NOW!"
         route="Share Link"
-        disabled={!flock_name}
         nav_params={{
           user_info: user_info,
           flock_name: flock_name

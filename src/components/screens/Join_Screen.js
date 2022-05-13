@@ -23,12 +23,7 @@ export function Join_Screen({ route }) {
   const [joined, set_joined] = useState(false);
   const [error, set_error] = useState("");
 
-  useEffect(() => {
-    if (invited) set_flock_id(flock_info.flock_id);
-  }, []);
-
   const join_flock = async () => {
-
     try {
       const response = await fetch(
         `${default_url}flock/${flock_id}/user/${user_info.user_id}`, {
@@ -59,6 +54,10 @@ export function Join_Screen({ route }) {
       console.error(error);
     }
   };
+
+  // useEffect(() => {
+  //   if (invited) set_flock_id(flock_info.flock_id);
+  // }, []);
 
   return (
     <SafeAreaView style={styles.container}>

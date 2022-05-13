@@ -13,11 +13,6 @@ import styles from "../../styles/css.js";
 
 export function Login_Screen() {
 
-  const query_params = new URLSearchParams(window.location.search);
-  const flock_id = query_params.get("flock_id");
-  const flock_name = query_params.get("flock_name");
-  const host_name = query_params.get("host_name");
-  const invited = flock_id && flock_name && host_name;
   const [user_name, set_user_name] = useState("");
 
   return (
@@ -27,13 +22,6 @@ export function Login_Screen() {
         style={styles.placeholder}
         source={require("../../../assets/chicken_tinder_outline_white.png")}
       />
-      {invited
-        ?
-        <Text>
-          You have been invited by {host_name} to join {flock_name}!
-        </Text>
-        :
-        null}
       <Credentials
         inputfield="Username"
         change_function={new_name => set_user_name(new_name)}
@@ -44,14 +32,6 @@ export function Login_Screen() {
         route="Flock"
         nav_params={{
           user_name: user_name,
-          flock_info: invited
-            ?
-            {
-              flock_id: flock_id,
-              flock_name: flock_name,
-              host_name: host_name
-            }
-            : null
         }}
       />
     </SafeAreaView>
