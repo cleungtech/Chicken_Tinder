@@ -1,18 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import * as Clipboard from 'expo-clipboard';
+import { Nav_Button } from "../models/Buttons.js";
+import QRCode from "react-qr-code";
+import styles from "../../styles/css.js";
+import * as Linking from "expo-linking";
+import { Loading } from "../models/Loading"
+import { backend_api } from '../constants.js';
 import {
+  Animated,
   Text,
   TextInput,
   SafeAreaView,
   TouchableOpacity
 } from 'react-native';
-import * as Clipboard from 'expo-clipboard';
-import { Nav_Button } from "../models/Buttons.js";
-import QRCode from "react-qr-code";
-import styles from "../../styles/css.js";
-import * as Linking from 'expo-linking';
-
-const backend_api = "https://chicken-tinder-347213.uk.r.appspot.com/api/";
 
 export const Share_Link_Screen = ({ route }) => {
 
@@ -74,68 +75,74 @@ export const Share_Link_Screen = ({ route }) => {
       console.error(error);
     } finally {
       set_url_loading(false);
+      fade_in();
     }
   };
+
+  const fade_anim = useRef(new Animated.Value(0)).current;
+
+  const fade_in = () => {
+    Animated.timing(fade_anim, {
+      useNativeDriver: true,
+      toValue: 1,
+      duration: 1000,
+    }).start();
+  }
 
   useEffect(() => {
     create_flock();
   }, []);
 
   useEffect(() => {
-    Linking.getInitialURL().then(url => {
-      const { hostname } = Linking.parse(url);
-      let join_url = `http://${hostname}:19006`;
-      join_url = `${join_url}?flock_id=${flock_res.flock_id}`;
-      join_url = `${join_url}&flock_name=${flock_name}`;
-      join_url = `${join_url}&host_name=${user_info.user_name}`;
-      set_join_url(join_url);
+    Linking.parseInitialURLAsync().then(parsedURL => {
+      if (parsedURL) {
+        let join_url = `http://${parsedURL.hostname}:19006`;
+        join_url = `${join_url}?flock_id=${flock_res.flock_id}`;
+        join_url = `${join_url}&flock_name=${flock_name}`;
+        join_url = `${join_url}&host_name=${user_info.user_name}`;
+        set_join_url(join_url);
+      }
     })
   }, [flock_res]);
 
+  if (url_is_loading) return <Loading />
   return (
     <SafeAreaView style={{ alignItems: "center", marginTop: 50 }}>
       <StatusBar style="auto" />
-      <Alert_Message
-        network_error={network_error}
-        url_is_loading={url_is_loading}
-        flock_name={flock_name}
-      />
-      <Share_QR_Code
-        join_url={join_url}
-        flock_res={flock_res}
-      />
-      <Share_Flock_Link
-        join_url={join_url}
-        flock_res={flock_res}
-        has_copied={has_copied}
-        copy_join_url={copy_join_url}
-      />
-      <Share_Flock_ID
-        join_url={join_url}
-        flock_res={flock_res}
-        has_copied={has_copied}
-        copy_flock_id={copy_flock_id}
-      />
-      <View_Restaurant_Button
-        join_url={join_url}
-        flock_res={flock_res}
-      />
+      <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
+        <Report_Status
+          network_error={network_error}
+          flock_name={flock_name}
+        />
+        <Share_QR_Code
+          join_url={join_url}
+          flock_res={flock_res}
+        />
+        <Share_Flock_Link
+          join_url={join_url}
+          flock_res={flock_res}
+          has_copied={has_copied}
+          copy_join_url={copy_join_url}
+        />
+        <Share_Flock_ID
+          join_url={join_url}
+          flock_res={flock_res}
+          has_copied={has_copied}
+          copy_flock_id={copy_flock_id}
+        />
+        <View_Restaurant_Button
+          join_url={join_url}
+          flock_res={flock_res}
+        />
+      </Animated.View>
     </SafeAreaView>
   );
+
 }
 
-const Alert_Message = ({ network_error, url_is_loading, flock_name }) => {
-  if (network_error) {
-    return <Text>{network_error}</Text>
-  } else if (url_is_loading) {
-    return <Text>Loading...</Text>
-  } else {
-    return (
-      <>
-        <Text>{flock_name} has been created successfully!</Text>
-      </>
-    )
-  }
+const Report_Status = ({ network_error, flock_name }) => {
+  if (network_error) return <Text>{network_error}</Text>
+  return <Text>{flock_name} has been created successfully!</Text>
 }
 
 const Share_QR_Code = ({ join_url, flock_res }) => {

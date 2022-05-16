@@ -1,14 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Nav_Button } from "../models/Buttons.js";
 // import { Useless_Button } from "../models/Buttons.js";
 import styles from "../../styles/css.js";
+import { Loading } from "../models/Loading"
+import { backend_api } from '../constants.js';
 import {
-  Text,
+  Animated,
   SafeAreaView,
+  Text,
+  Image,
 } from 'react-native';
-
-const backend_api = "https://chicken-tinder-347213.uk.r.appspot.com/api/";
 
 export const Flock_Screen = ({ route }) => {
 
@@ -44,44 +46,61 @@ export const Flock_Screen = ({ route }) => {
       console.error(error);
     } finally {
       set_loading(false);
+      fade_in();
     }
   };
+
+  const fade_anim = useRef(new Animated.Value(0)).current;
+
+  const fade_in = () => {
+    Animated.timing(fade_anim, {
+      useNativeDriver: true,
+      toValue: 1,
+      duration: 1000,
+    }).start();
+  }
 
   useEffect(() => {
     create_user();
   }, []);
 
+  if (is_loading) return <Loading />
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
-      <Alert_Message
-        network_error={network_error}
-        is_loading={is_loading}
-        user_res={user_res}
-      />
-      <Create_Flock_Button
-        show_button={!network_error}
-        invited={invited}
-        user_res={user_res}
-      />
-      <Join_Flock_Button
-        show_button={!network_error}
-        invited={invited}
-        user_res={user_res}
-        flock_info={flock_info}
-      />
+      <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
+        <Report_Status
+          network_error={network_error}
+          user_res={user_res}
+        />
+        <Create_Flock_Button
+          show_button={!network_error && !is_loading}
+          invited={invited}
+          user_res={user_res}
+        />
+        <Join_Flock_Button
+          show_button={!network_error && !is_loading}
+          invited={invited}
+          user_res={user_res}
+          flock_info={flock_info}
+        />
+      </Animated.View>
     </SafeAreaView>
   );
 }
 
-const Alert_Message = ({ network_error, is_loading, user_res }) => {
-  if (network_error) {
-    return <Text>{network_error}</Text>
-  } else if (is_loading) {
-    return <Text>Creating user...</Text>
-  } else {
-    return <Text>User {user_res.user_name} created!</Text>;
-  }
+const Report_Status = ({ network_error, user_res }) => {
+  if (!network_error) return <Text>User {user_res.user_name} created!</Text>;
+  return (
+    <>
+      {/* replace this with an icon or something later */}
+      <Image
+        style={styles.placeholder}
+        source={require("../../../assets/tender.jpg")}
+      />
+      <Text>{network_error}</Text>
+    </>
+  )
 }
 
 const Create_Flock_Button = ({ show_button, invited, user_res }) => {

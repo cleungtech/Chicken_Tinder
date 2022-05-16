@@ -1,15 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Nav_Button } from "../models/Buttons.js";
 import { Credentials } from "../models/TextFields.js";
 import styles from "../../styles/css.js";
+import { Loading } from "../models/Loading"
+import { backend_api } from '../constants.js';
 import {
+  Animated,
   Text,
   SafeAreaView,
   TouchableOpacity
 } from 'react-native';
-
-const backend_api = "https://chicken-tinder-347213.uk.r.appspot.com/api/";
 
 export const Join_Screen = ({ route }) => {
 
@@ -20,13 +21,11 @@ export const Join_Screen = ({ route }) => {
   const [flock_res, set_flock_res] = useState({});
   const [joined, set_joined] = useState(false);
   const [network_error, set_network_error] = useState("");
-
-  useEffect(() => {
-    if (invited) set_flock_id(flock_info.flock_id);
-  }, []);
+  const [is_loading, set_loading] = useState(false);
 
   const join_flock = async () => {
     try {
+      set_loading(true);
       const response = await fetch(
         `${backend_api}flock/${flock_id}/user/${user_info.user_id}`, {
         method: 'POST',
@@ -54,13 +53,32 @@ export const Join_Screen = ({ route }) => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      set_loading(false);
     }
   };
 
+  const fade_anim = useRef(new Animated.Value(0)).current;
+
+  const fade_in = () => {
+    Animated.timing(fade_anim, {
+      useNativeDriver: true,
+      toValue: 1,
+      duration: 1000,
+    }).start();
+  }
+
+  useEffect(() => {
+    if (invited) set_flock_id(flock_info.flock_id);
+    fade_in();
+  }, []);
+  
+  if (is_loading) return <Loading />
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
-      <Alert_Message
+      <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
+      <Report_Status
         network_error={network_error}
         joined={joined}
         flock_res={flock_res}
@@ -75,11 +93,12 @@ export const Join_Screen = ({ route }) => {
         joined={joined}
         flock_res={flock_res}
       />
+      </Animated.View>
     </SafeAreaView>
   )
 }
 
-const Alert_Message = ({ network_error, joined, flock_res }) => {
+const Report_Status = ({ network_error, joined, flock_res }) => {
   if (network_error) {
     return <Text>{network_error}</Text>
   } else if (joined) {
