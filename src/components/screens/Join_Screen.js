@@ -5,13 +5,13 @@ import {
   SafeAreaView,
   TouchableOpacity
 } from 'react-native';
-
 import { Nav_Button } from "../models/Buttons.js";
 import { Credentials } from "../models/TextFields.js";
+import { Error_Banner } from '../models/ErrorBanner.js';
 
 import styles from "../../styles/css.js";
 
-export function Join_Screen({ route }) {
+export const Join_Screen = ({ route }) => {
 
   const default_url = "https://chicken-tinder-347213.uk.r.appspot.com/api/";
 

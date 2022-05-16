@@ -13,22 +13,23 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-const app_url = "exp://192.168.1.106:19000";
+export const Login_Screen = () => {
 
-export function Login_Screen() {
-  const [redirect_url, set_redirect_url] = useState(app_url);
-  const [is_invited, set_is_invited] = useState(false);
-  const [invitation, set_invitation] = useState({});
   const [user_name, set_user_name] = useState("");
-
-  function redirect_to_mobile() {
-    return Linking.openURL(redirect_url);
-  }
-
+  const [redirect_url, set_redirect_url] = useState("");
+  const [is_invited, set_is_invited] = useState(false);
+  const [invitation, set_invitation] = useState({
+    flock_id: 0,
+    flock_name: "",
+    host_name: ""
+  });
+  
   useEffect(() => {
     Linking.getInitialURL()
       .then(url => {
-        const { flock_id, flock_name, host_name } = Linking.parse(url).queryParams;
+        const initial_url = Linking.parse(url);
+        set_redirect_url(`exp://${initial_url.hostname}:19000`);
+        const { flock_id, flock_name, host_name } = initial_url.queryParams;
         if (flock_id && flock_name && host_name) {
           set_invitation({
             flock_id: flock_id,
@@ -42,7 +43,7 @@ export function Login_Screen() {
 
   useEffect(() => {
     if (is_invited) {
-      let url = redirect_url
+      let url = redirect_url;
       url = `${url}?flock_id=${invitation.flock_id}`;
       url = `${url}&flock_name=${invitation.flock_name}`;
       url = `${url}&host_name=${invitation.host_name}`;
@@ -57,13 +58,11 @@ export function Login_Screen() {
         style={styles.placeholder}
         source={require("../../../assets/chicken_tinder_outline_white.png")}
       />
-      {is_invited
-        ?
-        <Text>
-          You have been invited by {invitation.host_name} to join {invitation.flock_name}!
-        </Text>
-        : null
-      }
+      <Invited_Message
+        is_invited={is_invited}
+        host_name={invitation.host_name}
+        flock_name={invitation.flock_name}
+      />
       <Credentials
         inputfield="Username"
         change_function={new_name => set_user_name(new_name)}
@@ -74,24 +73,37 @@ export function Login_Screen() {
         route="Flock"
         nav_params={{
           user_name: user_name,
-          flock_info: is_invited
-            ? invitation
-            : null
+          flock_info: is_invited ? invitation : null
         }}
       />
-      {isMobile
-        ?
-        <>
-          <TouchableOpacity
-            onPress={redirect_to_mobile}
-            activeOpacity={0.5}
-            style={styles.button}
-          >
-            <Text>Open Mobile App</Text>
-          </TouchableOpacity>
-        </>
-        : null
-      }
+      <Mobile_Redirection_Button
+        is_mobile={isMobile}
+        handler={() => Linking.openURL(redirect_url)}
+      />
     </SafeAreaView>
   );
+}
+
+const Invited_Message = (props) => {
+  const { is_invited, host_name, flock_name } = props;
+  if (!is_invited) return null;
+  return (
+    <Text>
+      You have been invited by {host_name} to join {flock_name}!
+    </Text>
+  )
+}
+
+const Mobile_Redirection_Button = (props) => {
+  const { is_mobile, handler } = props;
+  if (!is_mobile) return null;
+  return (
+    <TouchableOpacity
+      onPress={handler}
+      activeOpacity={0.5}
+      style={styles.button}
+    >
+      <Text>Open Mobile App</Text>
+    </TouchableOpacity>
+  )
 }
