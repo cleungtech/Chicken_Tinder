@@ -60,8 +60,6 @@ export default StyleSheet.create({
         resizeMode: 'contain',
         borderRadius: 10,
     },
-
-
     welcome_header: {
         flex: 1,
         backgroundColor: chicken_red,
@@ -134,5 +132,12 @@ export default StyleSheet.create({
         height: 100,
         resizeMode: 'contain',
         borderRadius: 10,
+    },
+    error_text: {
+        height: 40,
+        margin: 10,
+        borderWidth: 1,
+        padding: 10,
+        backgroundColor: 'white',
     },
 });
