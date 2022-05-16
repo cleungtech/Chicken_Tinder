@@ -21,20 +21,19 @@ export const Login_Screen = () => {
   const [invitation, set_invitation] = useState({});
 
   useEffect(() => {
-    Linking.getInitialURL()
-      .then(url => {
-        const initial_url = Linking.parse(url);
-        set_redirect_url(`exp://${initial_url.hostname}:19000`);
-        const { flock_id, flock_name, host_name } = initial_url.queryParams;
-        if (flock_id && flock_name && host_name) {
-          set_invitation({
-            flock_id: flock_id,
-            flock_name: flock_name,
-            host_name: host_name
-          });
-          set_is_invited(true);
-        }
-      });
+    Linking.getInitialURL().then(url => {
+      const initial_url = Linking.parse(url);
+      set_redirect_url(`exp://${initial_url.hostname}:19000`);
+      const { flock_id, flock_name, host_name } = initial_url.queryParams;
+      if (flock_id && flock_name && host_name) {
+        set_invitation({
+          flock_id: flock_id,
+          flock_name: flock_name,
+          host_name: host_name
+        });
+        set_is_invited(true);
+      }
+    });
   }, [])
 
   useEffect(() => {
