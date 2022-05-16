@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   TouchableOpacity
 } from 'react-native';
+
 const app_url = "exp://192.168.1.106:19000";
 
 export function Login_Screen() {
