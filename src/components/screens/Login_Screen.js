@@ -23,7 +23,7 @@ export const Login_Screen = () => {
     flock_name: "",
     host_name: ""
   });
-  
+
   useEffect(() => {
     Linking.getInitialURL()
       .then(url => {
@@ -67,14 +67,10 @@ export const Login_Screen = () => {
         inputfield="Username"
         change_function={new_name => set_user_name(new_name)}
       />
-      <Nav_Button
-        disabled={!user_name}
-        button_name="Get Started"
-        route="Flock"
-        nav_params={{
-          user_name: user_name,
-          flock_info: is_invited ? invitation : null
-        }}
+      <Get_Started_Button
+        user_name={user_name}
+        is_invited={is_invited}
+        invitation={invitation}
       />
       <Mobile_Redirection_Button
         is_mobile={isMobile}
@@ -82,6 +78,21 @@ export const Login_Screen = () => {
       />
     </SafeAreaView>
   );
+}
+
+const Get_Started_Button = (props) => {
+  const { user_name, is_invited, invitation } = props;
+  return (
+    <Nav_Button
+      disabled={!user_name}
+      button_name="Get Started"
+      route="Flock"
+      nav_params={{
+        user_name: user_name,
+        flock_info: is_invited ? invitation : null
+      }}
+    />
+  )
 }
 
 const Invited_Message = (props) => {

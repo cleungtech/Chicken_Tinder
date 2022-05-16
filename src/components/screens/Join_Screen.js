@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 import { Nav_Button } from "../models/Buttons.js";
 import { Credentials } from "../models/TextFields.js";
-import { Error_Banner } from '../models/ErrorBanner.js';
 
 import styles from "../../styles/css.js";
 

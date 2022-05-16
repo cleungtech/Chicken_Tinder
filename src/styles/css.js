@@ -133,11 +133,4 @@ export default StyleSheet.create({
         resizeMode: 'contain',
         borderRadius: 10,
     },
-    error_text: {
-        height: 40,
-        margin: 10,
-        borderWidth: 1,
-        padding: 10,
-        backgroundColor: 'white',
-    },
 });
