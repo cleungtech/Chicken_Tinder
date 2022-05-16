@@ -10,7 +10,7 @@ import {
 
 const backend_api = "https://chicken-tinder-347213.uk.r.appspot.com/api/";
 
-export function Flock_Screen({ route }) {
+export const Flock_Screen = ({ route }) => {
 
   const { user_name, flock_info } = route.params;
   const invited = flock_info !== null;
