@@ -17,12 +17,12 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.chickentinder",
+      "bundleIdentifier": "com.chickentinder.cleungtech",
       "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
-      "package": "com.chickentinder",
+      "package": "com.chickentinder.cleungtech",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
