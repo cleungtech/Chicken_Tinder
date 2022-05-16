@@ -35,8 +35,7 @@ export const Select_Screen = ({ route }) => {
   )
 }
 
-const Create_Flock_Button = (props) => {
-  const { button_name, user_info, flock_name } = props;
+const Create_Flock_Button = ({ button_name, user_info, flock_name }) => {
   return (
     <Nav_Button
       button_name={button_name}

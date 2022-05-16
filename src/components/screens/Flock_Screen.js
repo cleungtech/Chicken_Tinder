@@ -74,8 +74,7 @@ export const Flock_Screen = ({ route }) => {
   );
 }
 
-const Alert_Message = (props) => {
-  const { network_error, is_loading, user_res } = props;
+const Alert_Message = ({ network_error, is_loading, user_res }) => {
   if (network_error) {
     return <Text>{network_error}</Text>
   } else if (is_loading) {
@@ -85,8 +84,7 @@ const Alert_Message = (props) => {
   }
 }
 
-const Create_Flock_Button = (props) => {
-  const { show_button, invited, user_res } = props;
+const Create_Flock_Button = ({ show_button, invited, user_res }) => {
   if (invited || !show_button) return null;
   return (
     <Nav_Button
@@ -97,8 +95,7 @@ const Create_Flock_Button = (props) => {
   );
 }
 
-const Join_Flock_Button = (props) => {
-  const { show_button, invited, user_res, flock_info } = props; 
+const Join_Flock_Button = ({ show_button, invited, user_res, flock_info }) => {
   if (!show_button) return null;
   let button_name = "Join a Flock";
   if (invited) {

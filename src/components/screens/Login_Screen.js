@@ -18,11 +18,7 @@ export const Login_Screen = () => {
   const [user_name, set_user_name] = useState("");
   const [redirect_url, set_redirect_url] = useState("");
   const [is_invited, set_is_invited] = useState(false);
-  const [invitation, set_invitation] = useState({
-    flock_id: 0,
-    flock_name: "",
-    host_name: ""
-  });
+  const [invitation, set_invitation] = useState({});
 
   useEffect(() => {
     Linking.getInitialURL()
@@ -80,8 +76,7 @@ export const Login_Screen = () => {
   );
 }
 
-const Get_Started_Button = (props) => {
-  const { user_name, is_invited, invitation } = props;
+const Get_Started_Button = ({ user_name, is_invited, invitation }) => {
   return (
     <Nav_Button
       disabled={!user_name}
@@ -95,8 +90,7 @@ const Get_Started_Button = (props) => {
   )
 }
 
-const Invited_Message = (props) => {
-  const { is_invited, host_name, flock_name } = props;
+const Invited_Message = ({ is_invited, host_name, flock_name }) => {
   if (!is_invited) return null;
   return (
     <Text>
@@ -105,8 +99,7 @@ const Invited_Message = (props) => {
   )
 }
 
-const Mobile_Redirection_Button = (props) => {
-  const { is_mobile, handler } = props;
+const Mobile_Redirection_Button = ({ is_mobile, handler }) => {
   if (!is_mobile) return null;
   return (
     <TouchableOpacity
