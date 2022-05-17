@@ -6,7 +6,7 @@ import {
 
 import styles from "../../styles/css.js";
 
-export function Nav_Button({ button_name, route, nav_params, disabled }) {
+export const Nav_Button = ({ button_name, route, nav_params, disabled }) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -20,7 +20,7 @@ export function Nav_Button({ button_name, route, nav_params, disabled }) {
   );
 }
 
-export function Useless_Button({ button_name }) {
+export const Useless_Button = ({ button_name }) => {
   return (
     <TouchableOpacity
       onPress={() => alert("Not Implemented Yet!")}

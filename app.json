@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "chicken_tinder",
-    "slug": "chicken_tinder",
+    "name": "Chicken Tinder",
+    "slug": "chicken-tinder",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,17 +17,23 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.chickentinder.cleungtech",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.chickentinder.cleungtech",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      },
-      "package": "com.chickentinder"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "scheme": "chicken-tinder",
+    "description": "ChickenTinder will allow users to form groups and then show group members a series of nearby restaurants. Users will be able to vote on a restaurant by swiping left or right on a restaurant tile, similar to swiping for likes in the Tinder app.",
+    "githubUrl": "https://github.com/cleungtech/Chicken_Tinder"
   }
 }
