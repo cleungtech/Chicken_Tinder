@@ -1,14 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Text,
   Animated,
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
 
 import { Nav_Button } from "../models/Buttons.js";
-import { Useless_Button } from "../models/Buttons.js";
+// import { Useless_Button } from "../models/Buttons.js";
 import styles from "../../styles/css.js";
 import { chicken_colors } from "../../styles/css.js";
 
