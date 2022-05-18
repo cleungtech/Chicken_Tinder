@@ -62,8 +62,6 @@ export default StyleSheet.create({
         resizeMode: 'contain',
         borderRadius: 10,
     },
-
-
     welcome_header: {
         flex: 1,
         backgroundColor: chicken_colors.red,

@@ -1,0 +1,1 @@
+export const backend_api = "https://chicken-tinder-347213.uk.r.appspot.com/api/";

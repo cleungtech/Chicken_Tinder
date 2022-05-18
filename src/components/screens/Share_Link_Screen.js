@@ -1,40 +1,39 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  Animated,
-  ActivityIndicator,
-  Text,
-  SafeAreaView,
-  TouchableOpacity,
-} from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { Nav_Button } from "../models/Buttons.js";
 import QRCode from "react-qr-code";
 import styles from "../../styles/css.js";
-import { chicken_colors } from "../../styles/css.js";
+import * as Linking from "expo-linking";
+import { Loading } from "../models/Loading"
+import { backend_api } from '../constants.js';
+import {
+  Animated,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 
-export function Share_Link_Screen({ route }) {
+export const Share_Link_Screen = ({ route }) => {
+
   const { user_info, flock_name } = route.params;
-
-  const default_url = "https://chicken-tinder-347213.uk.r.appspot.com/api/";
-
   const [join_url, set_join_url] = useState("");
   const [flock_res, set_flock_res] = useState({});
   const [url_is_loading, set_url_loading] = useState(true);
   const [network_error, set_network_error] = useState("");
-  const [has_copied_url, set_has_copied_url] = useState(false);
-  const [has_copied_flock_id, set_has_copied_flock_id] = useState(false);
+  const [has_copied, set_has_copied] = useState({
+    join_url: false,
+    flock_id: false
+  });
 
-  const copy_url_to_clipboard = () => {
+  const copy_join_url = () => {
     Clipboard.setString(join_url);
-    set_has_copied_flock_id(false);
-    set_has_copied_url(true);
+    set_has_copied({ join_url: true, flock_id: false });
   }
 
-  const copy_flock_id_to_clipboard = () => {
-    Clipboard.setString(flock_res.flock_id);
-    set_has_copied_url(false);
-    set_has_copied_flock_id(true);
+  const copy_flock_id = () => {
+    Clipboard.setString(String(flock_res.flock_id));
+    set_has_copied({ join_url: false, flock_id: true });
   }
 
   const fade_anim = useRef(new Animated.Value(0)).current;
@@ -50,7 +49,7 @@ export function Share_Link_Screen({ route }) {
   const create_flock = async () => {
     try {
       const response = await fetch(
-        `${default_url}flock`, {
+        `${backend_api}flock`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -77,12 +76,11 @@ export function Share_Link_Screen({ route }) {
         });
       } else if (response.status === 400) {
         set_network_error("Unable to create a new flock due to invalid form");
-        alert(network_error);
       } else {
         set_network_error("Unable to create user due to server error");
-        alert(network_error);
       }
     } catch (error) {
+      set_network_error("Fetch request failed. Check your CORS setting.");
       console.error(error);
       alert(error.toString());
     } finally {
@@ -91,6 +89,16 @@ export function Share_Link_Screen({ route }) {
     }
   };
 
+  const fade_anim = useRef(new Animated.Value(0)).current;
+
+  const fade_in = () => {
+    Animated.timing(fade_anim, {
+      useNativeDriver: true,
+      toValue: 1,
+      duration: 1000,
+    }).start();
+  }
+
   useEffect(() => {
     setTimeout(() => {
       create_flock();
@@ -98,78 +106,104 @@ export function Share_Link_Screen({ route }) {
   }, []);
 
   useEffect(() => {
-    if (Object.keys(flock_res).length) {
-      let join_url = default_url;
-      join_url += 'flock';
-      join_url += `?flock_id=${flock_res.flock_id}`;
-      join_url += `&flock_name=${flock_res.flock_name}`;
-      join_url += `&host_name=${user_info.user_name}`;
-      set_join_url(join_url);
-    }
+    Linking.parseInitialURLAsync().then(parsedURL => {
+      if (parsedURL) {
+        let join_url = `http://${parsedURL.hostname}:19006`;
+        join_url = `${join_url}?flock_id=${flock_res.flock_id}`;
+        join_url = `${join_url}&flock_name=${flock_name}`;
+        join_url = `${join_url}&host_name=${user_info.user_name}`;
+        set_join_url(join_url);
+      }
+    })
   }, [flock_res]);
 
-  if (url_is_loading) {
-    return (
-      <SafeAreaView style={{alignItems: "center", marginTop: 50}}>
-        <StatusBar style="auto" />
-        <ActivityIndicator 
-          size="large" 
-          color={chicken_colors.yellow}>
-        </ActivityIndicator>
-      </SafeAreaView>
-    );
-  } else {
-    if (network_error) {
-      return (
-        <SafeAreaView style={styles.container}>
-          <StatusBar style="auto" />
-          {/* replace this with an icon or something later */}
-          <Image
-            style={styles.placeholder}
-            source={require("../../../assets/tender.jpg")}
-          />
-          <Text>{network_error}</Text>
-        </SafeAreaView>
-      );
-    } else {
-      return (
-        <SafeAreaView style={{alignItems: "center", marginTop: 50}}>
-          <StatusBar style="auto" />
-          <Animated.View style={
-            [
-              {opacity: fade_anim}
-            ]
-          }>
-            <Text>Flock Name: {flock_name}</Text>
-            <Text>3 Different ways to join</Text>
-            
-            <Text>1. Scan QR code:</Text>
-            <QRCode value={join_url} />
+  if (url_is_loading) return <Loading />
+  return (
+    <SafeAreaView style={{ alignItems: "center", marginTop: 50 }}>
+      <StatusBar style="auto" />
+      <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
+        <Report_Status
+          network_error={network_error}
+          flock_name={flock_name}
+        />
+        <Share_QR_Code
+          join_url={join_url}
+          flock_res={flock_res}
+        />
+        <Share_Flock_Link
+          join_url={join_url}
+          flock_res={flock_res}
+          has_copied={has_copied}
+          copy_join_url={copy_join_url}
+        />
+        <Share_Flock_ID
+          join_url={join_url}
+          flock_res={flock_res}
+          has_copied={has_copied}
+          copy_flock_id={copy_flock_id}
+        />
+        <View_Restaurant_Button
+          join_url={join_url}
+          flock_res={flock_res}
+        />
+      </Animated.View>
+    </SafeAreaView>
+  );
 
-            <Text>2. Share Link:</Text>
-            <TouchableOpacity onPress={() =>
-              copy_url_to_clipboard()}>
-              <Text>
-                {has_copied_url ? "Copied!" : join_url}
-              </Text>
-            </TouchableOpacity>
+}
 
-            <Text>3. Share Flock ID:</Text>
-            <TouchableOpacity onPress={() =>
-              copy_flock_id_to_clipboard(flock_res.flock_id)}>
-              <Text>
-                {has_copied_flock_id ? "Copied!" : flock_res.flock_id}
-              </Text>
-            </TouchableOpacity>
+const Report_Status = ({ network_error, flock_name }) => {
+  if (network_error) return <Text>{network_error}</Text>
+  return <Text>{flock_name} has been created successfully!</Text>
+}
 
-            <Nav_Button
-              button_name="Go See Restaurants" 
-              route="Restaurants"
-              nav_params={flock_res}
-            />
-          </Animated.View>
-        </SafeAreaView>
-      );
-    }
-  }
+const Share_QR_Code = ({ join_url, flock_res }) => {
+  if (!join_url || !flock_res.flock_id) return null;
+  return (
+    <>
+      <Text>Scan QR code:</Text>
+      <QRCode value={join_url} />
+    </>
+  )
+}
+
+const Share_Flock_Link = ({ join_url, flock_res, has_copied, copy_join_url }) => {
+  if (!join_url || !flock_res.flock_id) return null;
+  return (
+    <>
+      <TouchableOpacity onPress={copy_join_url}>
+        <Text>Share Link: {has_copied.join_url ? "Copied!" : "Copy"}</Text>
+      </TouchableOpacity>
+      <TextInput
+        style={styles.credentials}
+        value={join_url}
+      />
+    </>
+  )
+}
+
+const Share_Flock_ID = ({ join_url, flock_res, has_copied, copy_flock_id }) => {
+  if (!join_url || !flock_res.flock_id) return null;
+  return (
+    <>
+      <TouchableOpacity onPress={copy_flock_id}>
+        <Text>Share Flock ID: {has_copied.flock_id ? "Copied!" : "Copy"}</Text>
+      </TouchableOpacity>
+      <TextInput
+        style={styles.credentials}
+        value={String(flock_res.flock_id)}
+      />
+    </>
+  )
+}
+
+const View_Restaurant_Button = ({ join_url, flock_res }) => {
+  if (!join_url || !flock_res.flock_id) return null;
+  return (
+    <Nav_Button
+      button_name="Go See Restaurants"
+      route="Restaurants"
+      nav_params={flock_res}
+    />
+  )
 }
