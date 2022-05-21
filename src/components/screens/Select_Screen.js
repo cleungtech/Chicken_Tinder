@@ -27,6 +27,10 @@ export const Select_Screen = ({ route }) => {
     fade_in();
   }, []);
 
+  console.log("");
+  console.log("*********************************************");
+  console.log("SELECT_SCREEN");
+  console.log("*********************************************");
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
@@ -36,10 +40,15 @@ export const Select_Screen = ({ route }) => {
           inputfield="Enter a flock name here"
           change_function={new_flock => set_flock_name(new_flock)}
         />
+        <Text style={styles.note_text_black}>
+          If left empty, one will be chosen for you
+        </Text>
         <Create_Flock_Button
           button_name="We're Hungry NOW!"
           user_info={user_info}
           flock_name={flock_name}
+          auto_name_1={auto_name_1}
+          auto_name_2={auto_name_2}
         />
         {/* <Create_Flock_Button
         button_name="We're Hungry Later..."
@@ -51,12 +60,18 @@ export const Select_Screen = ({ route }) => {
   )
 }
 
+const auto_name_1 = ["rutabaga", "pasticcio", "biryani", "tonkatsu", "tofu", "gruyere", "zongzi", "kimbap", "bratwurst", "potato"];
+const auto_name_2 = ["farmers", "grocers", "chefs", "munchers", "eaters", "sellers", "crunchers", "friends", "family", "platoon"];
+
 const Create_Flock_Button = ({ button_name, user_info, flock_name }) => {
+  if (!flock_name) {
+    flock_name = "the_" + auto_name_1[Math.floor(Math.random() * auto_name_1.length)] + "_" + auto_name_2[Math.floor(Math.random() * auto_name_2.length)]
+  }
+
   return (
     <Nav_Button
       button_name={button_name}
       route="Share Link"
-      disabled={!flock_name}
       nav_params={{
         user_info: user_info,
         flock_name: flock_name
