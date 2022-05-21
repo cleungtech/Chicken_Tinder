@@ -6,7 +6,7 @@ import QRCode from "react-qr-code";
 import styles from "../../styles/css.js";
 import * as Linking from "expo-linking";
 import { Loading } from "../models/Loading"
-import { backend_api } from '../constants.js';
+import { backend_api, frontend_url } from '../../constants';
 import {
   Animated,
   Text,
@@ -94,16 +94,12 @@ export const Share_Link_Screen = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    Linking.parseInitialURLAsync().then(parsedURL => {
-      if (parsedURL) {
-        let join_url = `http://${parsedURL.hostname}:19006`;
-        join_url = `${join_url}?flock_id=${flock_res.flock_id}`;
-        join_url = `${join_url}&flock_name=${flock_name}`;
-        join_url = `${join_url}&host_name=${user_info.user_name}`;
-        set_join_url(join_url);
-      }
-    })
-  }, [flock_res]);
+      let join_url = frontend_url;
+      join_url = `${join_url}?flock_id=${flock_res.flock_id}`;
+      join_url = `${join_url}&flock_name=${flock_name}`;
+      join_url = `${join_url}&host_name=${user_info.user_name}`;
+      set_join_url(join_url);
+    }, [flock_res]);
 
   if (url_is_loading) return <Loading />
   return (
@@ -137,7 +133,6 @@ export const Share_Link_Screen = ({ route }) => {
       </Animated.View>
     </SafeAreaView>
   );
-
 }
 
 const Report_Status = ({ network_error, flock_name }) => {
