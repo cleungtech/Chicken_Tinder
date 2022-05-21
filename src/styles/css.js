@@ -135,4 +135,11 @@ export default StyleSheet.create({
         resizeMode: 'contain',
         borderRadius: 10,
     },
+
+    result_container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+    }
 });

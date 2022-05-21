@@ -89,16 +89,6 @@ export const Share_Link_Screen = ({ route }) => {
     }
   };
 
-  const fade_anim = useRef(new Animated.Value(0)).current;
-
-  const fade_in = () => {
-    Animated.timing(fade_anim, {
-      useNativeDriver: true,
-      toValue: 1,
-      duration: 1000,
-    }).start();
-  }
-
   useEffect(() => {
     setTimeout(() => {
       create_flock();
