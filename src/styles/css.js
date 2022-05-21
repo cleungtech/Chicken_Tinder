@@ -109,6 +109,18 @@ export default StyleSheet.create({
         letterSpacing: 0.25,
         color: 'black',
     },
+    note_text_white: {
+        fontSize: 8,
+        lineHeight: 12,
+        letterSpacing: 0,
+        color: 'white',
+    },
+    note_text_black: {
+        fontSize: 8,
+        lineHeight: 12,
+        letterSpacing: 0,
+        color: 'black',
+    },
     title_text: {
         fontSize: 20,
         lineHeight: 21,

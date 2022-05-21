@@ -59,6 +59,10 @@ export const Login_Screen = () => {
     }).start();
   }
 
+  console.log("");
+  console.log("*********************************************");
+  console.log("LOGIN_SCREEN");
+  console.log("*********************************************");
   return (
     <SafeAreaView style={styles.welcome_container}>
       <StatusBar style="auto" />
@@ -73,13 +77,18 @@ export const Login_Screen = () => {
           flock_name={invitation.flock_name}
         />
         <Credentials
-          inputfield="Username"
+          inputfield="Choose a one-time screen name"
           change_function={new_name => set_user_name(new_name)}
         />
+        <Text style={styles.note_text_white}>
+          If left empty, one will be chosen for you
+        </Text>
         <Get_Started_Button
           user_name={user_name}
           is_invited={is_invited}
           invitation={invitation}
+          auto_name_1={auto_name_1}
+          auto_name_2={auto_name_2}
         />
         <Mobile_Redirection_Button
           is_mobile={isMobile}
@@ -90,10 +99,16 @@ export const Login_Screen = () => {
   );
 }
 
+const auto_name_1 = ["chicken", "bread", "food", "cheese", "rice", "ramen", "chocolate", "pizza", "pasta", "potato"];
+const auto_name_2 = ["lover", "kid", "fan", "hoarder", "enthusiast", "connoisseur", "professor", "whiz", "geek", "nerd"];
+
 const Get_Started_Button = ({ user_name, is_invited, invitation }) => {
+  if (!user_name) {
+    user_name = "random_" + auto_name_1[Math.floor(Math.random() * auto_name_1.length)] + "_" + auto_name_2[Math.floor(Math.random() * auto_name_2.length)]
+  }
+
   return (
     <Nav_Button
-      disabled={!user_name}
       button_name="Get Started"
       route="Flock"
       nav_params={{
