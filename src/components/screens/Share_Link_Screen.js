@@ -101,6 +101,8 @@ export const Share_Link_Screen = ({ route }) => {
       set_join_url(join_url);
     }, [flock_res]);
 
+
+    console.log(user_info)
   if (url_is_loading) return <Loading />
   return (
     <SafeAreaView style={{ alignItems: "center", marginTop: 50 }}>
@@ -129,6 +131,7 @@ export const Share_Link_Screen = ({ route }) => {
         <View_Restaurant_Button
           join_url={join_url}
           flock_res={flock_res}
+          user_info={user_info}
         />
       </Animated.View>
     </SafeAreaView>
@@ -180,13 +183,16 @@ const Share_Flock_ID = ({ join_url, flock_res, has_copied, copy_flock_id }) => {
   )
 }
 
-const View_Restaurant_Button = ({ join_url, flock_res }) => {
+const View_Restaurant_Button = ({ join_url, flock_res, user_info }) => {
   if (!join_url || !flock_res.flock_id) return null;
   return (
     <Nav_Button
       button_name="Go See Restaurants"
       route="Restaurants"
-      nav_params={flock_res}
+      nav_params={{
+        user_info: user_info,
+        flock_info: flock_res
+      }}
     />
   )
 }
