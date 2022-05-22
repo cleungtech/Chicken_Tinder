@@ -35,12 +35,12 @@ export function Restaurants_Screen({ route }) {
   const like_id = "1";
   const dislike_id = "0";
 
-  function advance_list() {
+  function advance_list(vote_id) {
     const vote_restaurant = async () => {
       try {
         // set_loading(true);
         const response = await fetch(
-          `${backend_api}flock/${flock_info.flock_id}/restaurant/${current_shop.id}/user/${user_info.user_id}?vote=1`, {
+          `${backend_api}flock/${flock_info.flock_id}/restaurant/${current_shop.id}/user/${user_info.user_id}?vote=${vote_id}`, {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -111,15 +111,16 @@ export function Restaurants_Screen({ route }) {
       <View style={styles.row}>
         <Vote_Button
           button_name="Dislike"
+          vote_id = "0"
           press_function={advance_list}
           image_path={image_paths.dislike}
-          // vote_id = "0"
         />
         <Vote_Button
           button_name="Like"
+          vote_id = "1"
           press_function={advance_list}
           image_path={image_paths.like}
-          // vote_id = "1"
+          
         />
       </View>
     </SafeAreaView>
@@ -144,11 +145,10 @@ function Vote_Button({ button_name, press_function, image_path, vote_id }) {
   // let vote_id = {vote_id};
   return (
     <TouchableOpacity
-      vote_id={vote_id} 
       // onPress={() => this.advance_list(vote_id)}
       // onPress={function(){ return press_function(vote_id); }}
-      // onPress={press_function(vote_id)}
-      onPress={press_function}
+      onPress={() => press_function(vote_id)}
+      // onPress={press_function}
       style={styles.vote_button}
       activeOpacity={0.5}
     >
