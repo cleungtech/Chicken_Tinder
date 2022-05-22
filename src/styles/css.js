@@ -110,13 +110,13 @@ export default StyleSheet.create({
         color: 'black',
     },
     note_text_white: {
-        fontSize: 8,
+        fontSize: 10,
         lineHeight: 12,
         letterSpacing: 0,
         color: 'white',
     },
     note_text_black: {
-        fontSize: 8,
+        fontSize: 10,
         lineHeight: 12,
         letterSpacing: 0,
         color: 'black',
