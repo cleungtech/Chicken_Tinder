@@ -50,9 +50,8 @@ export const Share_Link_Screen = ({ route }) => {
           "host_id": user_info.user_id,
           "flock_name": flock_name,
           "location": {
-            "latitude": latitude,
-            "longitude": longitude,
-            
+            "latitude": parseFloat(latitude),
+            "longitude": parseFloat(longitude),
           }
         })
       });
@@ -118,6 +117,9 @@ export const Share_Link_Screen = ({ route }) => {
   }
 
   useEffect(() => {
+    console.log(latitude);
+    console.log(longitude);
+
     create_flock();
   }, []);
 

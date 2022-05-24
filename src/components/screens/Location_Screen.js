@@ -19,13 +19,18 @@ import { Ionicons } from '@expo/vector-icons';
 export const Location_Screen = ({ route }) => {
 
     const { user_info, flock_name } = route.params;
-    const [loc, setLoc] = useState(null);
-    const [errorMsg, setErrorMsg] = useState(null);
+    const [loc, setLoc] = useState({coords: {latitude: "", longitude: ""}});
+    const [errorMsg, setErrorMsg] = useState("");
 
-    const [reverseLoc, setReverseLoc] = useState(null);
-    const [geocodeLoc, setGeocodeLoc] = useState(null);
+    const [reverseLoc, setReverseLoc] = useState("");
+    const [geocodeLoc, setGeocodeLoc] = useState("");
 
-    const [searchInput, setSearchInput] = useState(null);
+    const [searchInput, setSearchInput] = useState("");
+
+    const [network_error, set_network_error] = useState("");
+
+    const [display_lat, set_display_lat] = useState("");
+    const [display_long, set_display_long] = useState("");
   
     function Reverse_Geocode({location}) {
         (async () => {
@@ -50,12 +55,22 @@ export const Location_Screen = ({ route }) => {
         if (errorMsg) {
             set_network_error("Unable to find location due to server error");
         } else if (geocodeLoc) {
-            return(
-                latitude = geocodeLoc.coords.latitude,
-                longitude = geocodeLoc.coords.longitude
-                // latitude = JSON.stringify(geocodeLoc.coords.latitude),
-                // longitude = JSON.stringify(geocodeLoc.coords.longitude)
-            )
+
+            // console.log(geocodeLoc);
+            // console.log(geocodeLoc[0]);
+
+            const new_lat = geocodeLoc[0].latitude;
+            const new_long = geocodeLoc[0].longitude;
+
+            set_display_lat(new_lat);
+            set_display_long(new_long);
+
+            // return(
+            //     latitude = geocodeLoc.coords.latitude,
+            //     longitude = geocodeLoc.coords.longitude
+            //     // latitude = JSON.stringify(geocodeLoc.coords.latitude),
+            //     // longitude = JSON.stringify(geocodeLoc.coords.longitude)
+            // )
         }
     };
 
@@ -77,7 +92,7 @@ export const Location_Screen = ({ route }) => {
                 <Search_Location_Button
                   button_name="Search"
                   press_function={Geocode_Search}
-                  search_input={search_input}
+                  search_input={searchInput}
                 />
               </Animated.View>
             </SafeAreaView>
@@ -86,23 +101,30 @@ export const Location_Screen = ({ route }) => {
   
         let loc = await Location.getCurrentPositionAsync({});
         setLoc(loc);
+        set_display_lat(loc.coords.latitude);
+        set_display_long(loc.coords.longitude);
+
+        console.log(typeof(loc.coords.latitude));
+        console.log(typeof(loc.coords.longitude));
       })();
     }, []);
   
-    let latitude = 40.4406;
-    let longitude = -79.9959; // Manhattan as default
-    if (errorMsg) {
-      set_network_error("Unable to find location due to server error");
-    } else if (loc) {
-      latitude = loc.coords.latitude;
-      longitude = loc.coords.longitude;
-    }
+
+    // let latitude = 40.4406;
+    // let longitude = -79.9959; // Manhattan as default
+
+    // if (errorMsg) {
+    //   set_network_error("Unable to find location due to server error");
+    // } else if (loc) {
+    //   latitude = loc.coords.latitude;
+    //   longitude = loc.coords.longitude;
+    // }
     
-    console.log("");
-    console.log("---------------------------------------------");
-    console.log("location: ", loc);
-    console.log("coordinates:", latitude, ",", longitude);
-    console.log("---------------------------------------------");
+    // console.log("");
+    // console.log("---------------------------------------------");
+    // console.log("location: ", loc);
+    // console.log("coordinates:", latitude, ",", longitude);
+    // console.log("---------------------------------------------");
   
     const fade_anim = useRef(new Animated.Value(0)).current;
     const fade_in = () => {
@@ -117,10 +139,10 @@ export const Location_Screen = ({ route }) => {
       fade_in();
     }, []);
   
-    console.log("");
-    console.log("*********************************************");
-    console.log("LOCATION_SCREEN");
-    console.log("*********************************************");
+    // console.log("");
+    // console.log("*********************************************");
+    // console.log("LOCATION_SCREEN");
+    // console.log("*********************************************");
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar style="auto" />
@@ -134,9 +156,11 @@ export const Location_Screen = ({ route }) => {
             
                 <View style={{
                     flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     }}>
                     <Text>Your location is:</Text>
-                    <Text>{latitude}, {longitude}</Text>
+                    <Text>{display_lat}, {display_long}</Text>
                 </View>
                 
                 {/* <View style={{ */}
@@ -185,8 +209,8 @@ export const Location_Screen = ({ route }) => {
                         button_name="See restaurants"
                         user_info={user_info}
                         flock_name={flock_name}
-                        latitude= {latitude}
-                        longitude= {longitude}
+                        latitude= {display_lat}
+                        longitude= {display_long}
                     />
                 </View>
 
