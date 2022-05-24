@@ -50,8 +50,8 @@ export const Share_Link_Screen = ({ route }) => {
           "host_id": user_info.user_id,
           "flock_name": flock_name,
           "location": {
-            "longitude": 40.4406,
-            "latitude": -79.9959,
+            "longitude": -79.995888,
+            "latitude": 40.440624,
           }
         })
       });
