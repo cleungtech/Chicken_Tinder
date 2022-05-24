@@ -8,8 +8,8 @@ const get_resterants = async (longitude, latitude) => {
 
   const response = await client.search({
     term: "restaurants",
-    latitude: longitude,
-    longitude: latitude,
+    latitude: latitude,
+    longitude: longitude,
     limit: NUM_RESTAURANT
   })
   return response.jsonBody.businesses;;
