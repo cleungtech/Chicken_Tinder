@@ -60,6 +60,14 @@ export default StyleSheet.create({
         resizeMode: 'contain',
         borderRadius: 10,
     },
+    search_icon: {
+        width: 32,
+        height: 32,
+        backgroundColor: chicken_red,
+        color: 'white',
+        borderRadius: 12,
+        justifyContent: 'center',
+    },
     welcome_header: {
         flex: 1,
         backgroundColor: chicken_red,

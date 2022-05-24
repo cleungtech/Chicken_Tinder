@@ -7,7 +7,9 @@ import { Select_Screen } from "./src/components/screens/Select_Screen.js";
 import { Flock_Screen } from "./src/components/screens/Flock_Screen.js";
 import { Restaurants_Screen } from "./src/components/screens/Restaurants_Screen.js";
 import { Share_Link_Screen } from "./src/components/screens/Share_Link_Screen.js";
+import { Location_Screen } from "./src/components/screens/Location_Screen.js";
 import { Join_Screen } from "./src/components/screens/Join_Screen.js";
+import { Results_Screen } from "./src/components/screens/Results_Screen.js";
 import * as Linking from 'expo-linking';
 
 const prefix = Linking.createURL('/');
@@ -32,7 +34,9 @@ export default function App() {
         <Stack.Screen name="Flock" component={Flock_Screen} />
         <Stack.Screen name="Restaurants" component={Restaurants_Screen} />
         <Stack.Screen name="Share Link" component={Share_Link_Screen} />
+        <Stack.Screen name="Request Location" component={Location_Screen} />
         <Stack.Screen name="Join" component={Join_Screen} />
+        <Stack.Screen name="View Results" component={Results_Screen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

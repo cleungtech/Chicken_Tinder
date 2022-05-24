@@ -17,7 +17,7 @@ import {
 
 export const Share_Link_Screen = ({ route }) => {
 
-  const { user_info, flock_name } = route.params;
+  const { user_info, flock_name, latitude, longitude } = route.params;
   const [join_url, set_join_url] = useState("");
   const [flock_res, set_flock_res] = useState({});
   const [url_is_loading, set_url_loading] = useState(true);
@@ -50,8 +50,9 @@ export const Share_Link_Screen = ({ route }) => {
           "host_id": user_info.user_id,
           "flock_name": flock_name,
           "location": {
-            "longitude": 40.4406,
-            "latitude": -79.9959,
+            "latitude": latitude,
+            "longitude": longitude,
+            
           }
         })
       });
@@ -65,10 +66,37 @@ export const Share_Link_Screen = ({ route }) => {
           restaurants: json_res.restaurants,
           self: json_res.self
         });
+        console.log("");
+        console.log("---------------------------------------------");
+        console.log("POST request successful: ", response.status);
+        console.log("URL:", response.url);
+        console.log("flock_res: ", flock_res);
+        console.log("response.method: ", response.method);
+        console.log("response.headers: ", response.headers);
+        console.log("response.body: ", response.body);
+        console.log("---------------------------------------------");
       } else if (response.status === 400) {
         set_network_error("Unable to create a new flock due to invalid form");
+        console.log("");
+        console.log("---------------------------------------------");
+        console.log("Bad response:", response.status);
+        console.log("URL:", response.url);
+        console.log("flock_res: ", flock_res);
+        console.log("response.method: ", response.method);
+        console.log("response.headers: ", response.headers);
+        console.log("response.body: ", response.body);
+        console.log("---------------------------------------------");
       } else {
         set_network_error("Unable to create user due to server error");
+        console.log("");
+        console.log("---------------------------------------------");
+        console.log("Bad response:", response.status);
+        console.log("URL:", response.url);
+        console.log("flock_res: ", flock_res);
+        console.log("response.method: ", response.method);
+        console.log("response.headers: ", response.headers);
+        console.log("response.body: ", response.body);
+        console.log("---------------------------------------------");
       }
     } catch (error) {
       set_network_error("Fetch request failed. Check your CORS setting.");
@@ -101,8 +129,6 @@ export const Share_Link_Screen = ({ route }) => {
       set_join_url(join_url);
     }, [flock_res]);
 
-
-    console.log(user_info)
   if (url_is_loading) return <Loading />
   return (
     <SafeAreaView style={{ alignItems: "center", marginTop: 50 }}>

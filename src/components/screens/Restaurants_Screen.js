@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { backend_api, frontend_url } from '../../constants';
-// import { useNavigation } from '@react-navigation/native';
+import { Nav_Button } from "../models/Buttons.js";
 import {
   Image,
   SafeAreaView,
@@ -16,8 +16,6 @@ const image_paths = {
   dislike: require("../../../assets/dislike_icon.png"),
   like: require("../../../assets/like_icon.png")
 }
-
-// const navigation = useNavigation();
 
 export function Restaurants_Screen({ route }) {
   const { user_info, flock_info } = route.params;
@@ -92,9 +90,14 @@ export function Restaurants_Screen({ route }) {
     vote_restaurant()
 
     if (current_index == 9) {
-      // logic for determining winner goes here
-      set_current_index(0);
-      // navigation.navigate(route, {{user_info: user_info, flock_info: flock_info}});
+      return(
+        <View_Results_Button
+          button_name="View Results"
+          user_info={user_info}
+          flock_name={flock_name}
+        />
+      )
+      // set_current_index(0);
     } else {
       set_current_index(current_index => current_index + 1);
     }
@@ -145,10 +148,7 @@ function Vote_Button({ button_name, press_function, image_path, vote_id }) {
   // let vote_id = {vote_id};
   return (
     <TouchableOpacity
-      // onPress={() => this.advance_list(vote_id)}
-      // onPress={function(){ return press_function(vote_id); }}
       onPress={() => press_function(vote_id)}
-      // onPress={press_function}
       style={styles.vote_button}
       activeOpacity={0.5}
     >
@@ -161,3 +161,15 @@ function Vote_Button({ button_name, press_function, image_path, vote_id }) {
   );
 }
 
+const View_Results_Button = ({ button_name, user_info, flock_info }) => {
+  return (
+    <Nav_Button
+      button_name={button_name}
+      route="View Results"
+      nav_params={{
+        user_info: user_info,
+        flock_info: flock_info
+      }}
+    />
+  )
+}
