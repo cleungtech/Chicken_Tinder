@@ -35,7 +35,7 @@ export const Login_Screen = () => {
             host_name: host_name
           });
           set_is_invited(true);
-      }
+        }
       }
     })
     fade_in();
