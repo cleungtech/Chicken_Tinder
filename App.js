@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Login_Screen } from "./src/components/screens/Login_Screen.js"
@@ -10,21 +9,11 @@ import { Share_Link_Screen } from "./src/components/screens/Share_Link_Screen.js
 import { Join_Screen } from "./src/components/screens/Join_Screen.js";
 import * as Linking from 'expo-linking';
 
-const prefix = Linking.createURL('/');
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const linking = {
-    prefixes: [prefix],
-    config: {
-      screens: {
-        Login_Screen: "login",
-      }
-    }
-  }
 
   return (
-    // <NavigationContainer linking={linking}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={Login_Screen} />
