@@ -90,14 +90,14 @@ export function Restaurants_Screen({ route }) {
     vote_restaurant()
 
     if (current_index == 9) {
-      return(
-        <View_Results_Button
-          button_name="View Results"
-          user_info={user_info}
-          flock_name={flock_name}
-        />
-      )
-      // set_current_index(0);
+      // return(
+      //   <View_Results_Button
+      //     button_name="View Results"
+      //     user_info={user_info}
+      //     flock_name={flock_name}
+      //   />
+      // )
+      set_current_index(0);
     } else {
       set_current_index(current_index => current_index + 1);
     }

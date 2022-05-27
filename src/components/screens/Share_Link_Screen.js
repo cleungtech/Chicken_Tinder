@@ -112,7 +112,7 @@ export const Share_Link_Screen = ({ route }) => {
     Animated.timing(fade_anim, {
       useNativeDriver: true,
       toValue: 1,
-      duration: 1000,
+      duration: 500,
     }).start();
   }
 
