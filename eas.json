@@ -19,6 +19,16 @@
     "production": {}
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./pc-api-5727760800932222854-915-324419e6d9ba.json",
+        "track": "internal"
+      },
+      "ios": {
+        "appleId": "leung.chi.hang.eric@gmail.com",
+        "ascAppId": "1626238467",
+        "appleTeamId": "8A3VA952RZ"
+      }
+    }
   }
 }

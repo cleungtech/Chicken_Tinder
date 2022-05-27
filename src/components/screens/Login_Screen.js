@@ -6,6 +6,7 @@ import { Credentials } from "../models/TextFields.js";
 import styles from "../../styles/css.js";
 import * as Linking from 'expo-linking';
 import { isMobile } from 'react-device-detect';
+import { mobile_url } from '../../constants.js';
 import {
   Animated,
   Image,
@@ -23,7 +24,8 @@ export const Login_Screen = () => {
 
   useEffect(() => {
     Linking.parseInitialURLAsync().then(parsedURL => {
-      set_redirect_url(`exp://${parsedURL.hostname}:19000`);
+      set_redirect_url(`${mobile_url}Login`);
+
       if (parsedURL.queryParams) {
         const { flock_id, flock_name, host_name } = parsedURL.queryParams;
         if (flock_id && flock_name && host_name) {
@@ -33,7 +35,7 @@ export const Login_Screen = () => {
             host_name: host_name
           });
           set_is_invited(true);
-      }
+        }
       }
     })
     fade_in();

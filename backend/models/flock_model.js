@@ -1,7 +1,7 @@
 const database = require('../database.js');
 const custom_error = require('../custom_errors.js');
 const model_helpers = require('./model_helpers.js');
-const restaurant = require('./resterants_model.js');
+const restaurant = require('./restaurants_model.js');
 
 const FLOCK = 'flock';
 const USER = 'user';
@@ -16,7 +16,7 @@ const create_flock = async (request) => {
   if (!longitude || !latitude) throw custom_error.missing_data;
   
   await database.view(USER, host_id);
-  const restaurants = await restaurant.get_resterants(longitude, latitude);
+  const restaurants = await restaurant.get_restaurants(longitude, latitude);
 
   const flock_data = {
     flock_name: flock_name,

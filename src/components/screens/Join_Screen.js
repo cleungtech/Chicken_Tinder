@@ -92,7 +92,7 @@ export const Join_Screen = ({ route }) => {
       <View_Restaurant_Button
         joined={joined}
         flock_res={flock_res}
-        user_info = {user_info}
+        user_info={user_info}
       />
       </Animated.View>
     </SafeAreaView>
