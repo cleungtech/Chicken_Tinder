@@ -19,7 +19,7 @@ export const Select_Screen = ({ route }) => {
     Animated.timing(fade_anim, {
       useNativeDriver: true,
       toValue: 1,
-      duration: 1000,
+      duration: 500,
     }).start();
   }
 
@@ -71,7 +71,7 @@ const Create_Flock_Button = ({ button_name, user_info, flock_name }) => {
   return (
     <Nav_Button
       button_name={button_name}
-      route="Share Link"
+      route="Request Location"
       nav_params={{
         user_info: user_info,
         flock_name: flock_name

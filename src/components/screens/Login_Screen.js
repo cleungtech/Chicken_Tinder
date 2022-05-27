@@ -57,7 +57,7 @@ export const Login_Screen = () => {
     Animated.timing(fade_anim, {
       useNativeDriver: true,
       toValue: 1,
-      duration: 1000,
+      duration: 500,
     }).start();
   }
 
