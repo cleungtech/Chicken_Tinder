@@ -7,11 +7,11 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native';
-
-import { MaterialIcons } from '@expo/vector-icons'; 
+import { Display_Error } from "../models/Network_Error";
+import { Star_Rating } from "../models/Star_Rating";
 import * as Linking from 'expo-linking';
-
 import styles from "../../styles/css.js";
+import { backend_api } from '../constants.js';
 
 const fake_data = {
   "id":"woXlprCuowrLJswWere3TQ",
@@ -61,6 +61,47 @@ const fake_data = {
 export function Result_Screen({ route }) {
   const flock_info = route.params;
 
+  const get_result = async () => {
+    try {
+      const response = await fetch(
+        `${backend_api}flock/`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.status === 201) {
+        const json_res = await response.json();
+        set_flock_res({
+          flock_id: json_res.flock_id,
+          host: json_res.host,
+          flock_name: json_res.flock_name,
+          location: json_res.location,
+          restaurants: json_res.restaurants,
+          self: json_res.self
+        });
+      } else if (response.status === 400) {
+        set_network_error("Unable to create a new flock due to invalid form");
+      } else {
+        set_network_error("Unable to create user due to server error");
+      }
+    } catch (error) {
+      set_network_error("Fetch request failed. Check your CORS setting.");
+      console.error(error);
+      alert(error.toString());
+    } finally {
+      set_url_loading(false);
+      fade_in();
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      get_result();
+    }, 0);
+  }, []);
+
   return (
     <SafeAreaView style={styles.result_container}>
       <StatusBar style="auto" />
@@ -87,31 +128,32 @@ function Winning_Card({ shop_data }) {
 
   return (
     <View style={styles.card}>
-      <Text>WINNER</Text>
-      <Text>{shop_data.name}</Text>
+      <Text style={styles.winner_name}>{shop_data.name}</Text>
       <Image
         style={styles.image_rounded}
         source={{ uri: shop_data.image_url }}
       />
-      <Text>Rating: {shop_data.rating}</Text>
-      <Text>Review Count: {shop_data.review_count}</Text>
+      <Star_Rating star_num={shop_data.rating}></Star_Rating>
+      <Text style={styles.winner_button_header}>
+        Review Count: {shop_data.review_count}
+      </Text>
 
       <TouchableOpacity
         onPress={() => go_to_maps(shop_data.coordinates)}
-        style={styles.vote_button}
+        style={styles.maps_button}
         activeOpacity={0.5}
       >
-        <Text>Get Directions: </Text>
+        <Text style={styles.winner_button_header}>Get Directions: </Text>
         <Text>{shop_data.location.display_address[0]}</Text>
         <Text>{shop_data.location.display_address[1]}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         onPress={() => go_to_phone(shop_data.phone)}
-        style={styles.vote_button}
+        style={styles.contact_button}
         activeOpacity={0.5}
       >
-        <Text>Contact: </Text>
+        <Text style={styles.winner_button_header}>Contact: </Text>
         <Text>{shop_data.display_phone}</Text>
       </TouchableOpacity>
 
