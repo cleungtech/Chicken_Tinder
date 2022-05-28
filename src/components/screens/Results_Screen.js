@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
+  Animated,
   Image,
   SafeAreaView,
   View,
@@ -58,13 +59,38 @@ const fake_data = {
   "distance":545.8436859188364
 }
 
+
 export function Result_Screen({ route }) {
   const flock_info = route.params;
+  const restaurants = flock_info.restaurants;
 
+  const [winner, set_winner] = useState("");
+  const [winner_data, set_winner_data] = useState({});
+  const [url_is_loading, set_url_loading] = useState(true);
+  const [network_error, set_network_error] = useState("");
+
+  const fade_anim = useRef(new Animated.Value(0)).current;
+
+  const fade_in = () => {
+    Animated.timing(fade_anim, {
+      useNativeDriver: true,
+      toValue: 1,
+      duration: 2000,
+    }).start();
+  }
+
+  const find_winner = () => {
+    for(const shop of restaurants) {
+      if (shop.id == winner) {
+        set_winner_data(shop);
+      }
+    }
+  }
+  
   const get_result = async () => {
     try {
       const response = await fetch(
-        `${backend_api}flock/`, {
+        `${backend_api}flock/${flock_info.flock_id}/status`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -73,14 +99,8 @@ export function Result_Screen({ route }) {
       });
       if (response.status === 201) {
         const json_res = await response.json();
-        set_flock_res({
-          flock_id: json_res.flock_id,
-          host: json_res.host,
-          flock_name: json_res.flock_name,
-          location: json_res.location,
-          restaurants: json_res.restaurants,
-          self: json_res.self
-        });
+        set_winner(json_res.most_voted_restaurants[0]);
+        find_winner();
       } else if (response.status === 400) {
         set_network_error("Unable to create a new flock due to invalid form");
       } else {
@@ -102,10 +122,11 @@ export function Result_Screen({ route }) {
     }, 0);
   }, []);
 
+  if (url_is_loading) return <Loading />
   return (
     <SafeAreaView style={styles.result_container}>
       <StatusBar style="auto" />
-      <Winning_Card shop_data={fake_data} />
+      <Winning_Card shop_data={winner_data} />
     </SafeAreaView>
   )
 }
