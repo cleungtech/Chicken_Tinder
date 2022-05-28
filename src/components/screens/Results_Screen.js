@@ -1,5 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
+import { Nav_Button } from "../models/Buttons.js";
+import { backend_api, frontend_url } from '../../constants';
+// import { useNavigation } from '@react-navigation/native';
 import {
   Animated,
   Image,
@@ -177,7 +180,7 @@ function Winning_Card({ shop_data }) {
         <Text style={styles.winner_button_header}>Contact: </Text>
         <Text>{shop_data.display_phone}</Text>
       </TouchableOpacity>
-
     </View>
   );
 }
+

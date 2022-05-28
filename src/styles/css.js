@@ -62,6 +62,14 @@ export default StyleSheet.create({
         resizeMode: 'contain',
         borderRadius: 10,
     },
+    search_icon: {
+        width: 24,
+        height: 24,
+        opacity: 0.8,
+        resizeMode: 'contain',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     welcome_header: {
         flex: 1,
         backgroundColor: chicken_colors.red,
@@ -110,6 +118,18 @@ export default StyleSheet.create({
         lineHeight: 21,
         letterSpacing: 0.25,
         color: 'black',
+    },
+    bold_text_yellow: {
+        fontSize: 16,
+        lineHeight: 21,
+        letterSpacing: 0.25,
+        color: chicken_yellow,
+    },
+    normal_text_yellow: {
+        fontSize: 12,
+        lineHeight: 21,
+        letterSpacing: 0.25,
+        color: chicken_yellow,
     },
     note_text_white: {
         fontSize: 10,
