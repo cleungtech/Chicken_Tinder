@@ -6,7 +6,7 @@ import QRCode from "react-qr-code";
 import styles from "../../styles/css.js";
 import * as Linking from "expo-linking";
 import { Loading } from "../models/Loading"
-import { backend_api } from '../constants.js';
+import { backend_api, frontend_url } from '../../constants';
 import {
   Animated,
   Text,
@@ -59,8 +59,8 @@ export const Share_Link_Screen = ({ route }) => {
           "host_id": user_info.user_id,
           "flock_name": flock_name,
           "location": {
-            "longitude": 40.4406,
-            "latitude": -79.9959,
+            "longitude": -79.995888,
+            "latitude": 40.440624,
           }
         })
       });
@@ -96,17 +96,15 @@ export const Share_Link_Screen = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    Linking.parseInitialURLAsync().then(parsedURL => {
-      if (parsedURL) {
-        let join_url = `http://${parsedURL.hostname}:19006`;
-        join_url = `${join_url}?flock_id=${flock_res.flock_id}`;
-        join_url = `${join_url}&flock_name=${flock_name}`;
-        join_url = `${join_url}&host_name=${user_info.user_name}`;
-        set_join_url(join_url);
-      }
-    })
-  }, [flock_res]);
+      let join_url = frontend_url;
+      join_url = `${join_url}?flock_id=${flock_res.flock_id}`;
+      join_url = `${join_url}&flock_name=${flock_name}`;
+      join_url = `${join_url}&host_name=${user_info.user_name}`;
+      set_join_url(join_url);
+    }, [flock_res]);
 
+
+    console.log(user_info)
   if (url_is_loading) return <Loading />
   return (
     <SafeAreaView style={{ alignItems: "center", marginTop: 50 }}>
@@ -135,11 +133,11 @@ export const Share_Link_Screen = ({ route }) => {
         <View_Restaurant_Button
           join_url={join_url}
           flock_res={flock_res}
+          user_info={user_info}
         />
       </Animated.View>
     </SafeAreaView>
   );
-
 }
 
 const Report_Status = ({ network_error, flock_name }) => {
@@ -187,13 +185,16 @@ const Share_Flock_ID = ({ join_url, flock_res, has_copied, copy_flock_id }) => {
   )
 }
 
-const View_Restaurant_Button = ({ join_url, flock_res }) => {
+const View_Restaurant_Button = ({ join_url, flock_res, user_info }) => {
   if (!join_url || !flock_res.flock_id) return null;
   return (
     <Nav_Button
       button_name="Go See Restaurants"
       route="Restaurants"
-      nav_params={flock_res}
+      nav_params={{
+        user_info: user_info,
+        flock_info: flock_res
+      }}
     />
   )
 }

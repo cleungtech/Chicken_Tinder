@@ -4,7 +4,7 @@ import { Nav_Button } from "../models/Buttons.js";
 // import { Useless_Button } from "../models/Buttons.js";
 import styles from "../../styles/css.js";
 import { Loading } from "../models/Loading"
-import { backend_api } from '../constants.js';
+import { backend_api } from '../../constants.js';
 import {
   Animated,
   SafeAreaView,

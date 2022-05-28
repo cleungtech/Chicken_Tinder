@@ -4,7 +4,7 @@ import { Nav_Button } from "../models/Buttons.js";
 import { Credentials } from "../models/TextFields.js";
 import styles from "../../styles/css.js";
 import { Loading } from "../models/Loading"
-import { backend_api } from '../constants.js';
+import { backend_api } from '../../constants.js';
 import {
   Animated,
   Text,
@@ -92,6 +92,7 @@ export const Join_Screen = ({ route }) => {
       <View_Restaurant_Button
         joined={joined}
         flock_res={flock_res}
+        user_info={user_info}
       />
       </Animated.View>
     </SafeAreaView>
@@ -128,13 +129,16 @@ const Join_Flock_Form = ({ joined, flock_id, set_flock_id, join_flock }) => {
   )
 }
 
-const View_Restaurant_Button = ({ joined, flock_res }) => {
+const View_Restaurant_Button = ({ joined, flock_res, user_info }) => {
   if (!joined) return null;
   return (
     <Nav_Button
       button_name="Go See Restaurants"
       route="Restaurants"
-      nav_params={flock_res}
+      nav_params={{
+        user_info: user_info,
+        flock_info: flock_res
+      }}
     />
   )
 }
