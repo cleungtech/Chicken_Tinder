@@ -10,6 +10,7 @@ import { backend_api, frontend_url } from '../../constants';
 import {
   Animated,
   Text,
+  TextInput,
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
@@ -34,16 +35,6 @@ export const Share_Link_Screen = ({ route }) => {
   const copy_flock_id = () => {
     Clipboard.setString(String(flock_res.flock_id));
     set_has_copied({ join_url: false, flock_id: true });
-  }
-
-  const fade_anim = useRef(new Animated.Value(0)).current;
-
-  const fade_in = () => {
-    Animated.timing(fade_anim, {
-      useNativeDriver: true,
-      toValue: 1,
-      duration: 2000,
-    }).start();
   }
 
   const create_flock = async () => {

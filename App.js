@@ -8,7 +8,7 @@ import { Restaurants_Screen } from "./src/components/screens/Restaurants_Screen.
 import { Share_Link_Screen } from "./src/components/screens/Share_Link_Screen.js";
 import { Location_Screen } from "./src/components/screens/Location_Screen.js";
 import { Join_Screen } from "./src/components/screens/Join_Screen.js";
-import { Results_Screen } from "./src/components/screens/Results_Screen.js";
+import { Result_Screen } from "./src/components/screens/Results_Screen.js";
 
 import * as Linking from 'expo-linking';
 
@@ -26,7 +26,7 @@ export default function App() {
         <Stack.Screen name="Share Link" component={Share_Link_Screen} />
         <Stack.Screen name="Request Location" component={Location_Screen} />
         <Stack.Screen name="Join" component={Join_Screen} />
-        <Stack.Screen name="Result" component={Results_Screen} />
+        <Stack.Screen name="Result" component={Result_Screen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

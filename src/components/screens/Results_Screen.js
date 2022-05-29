@@ -15,7 +15,6 @@ import { Display_Error } from "../models/Network_Error";
 import { Star_Rating } from "../models/Star_Rating";
 import * as Linking from 'expo-linking';
 import styles from "../../styles/css.js";
-import { backend_api } from '../constants.js';
 
 const fake_data = {
   "id":"woXlprCuowrLJswWere3TQ",
