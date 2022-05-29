@@ -44,6 +44,7 @@ export const Flock_Screen = ({ route }) => {
     } catch (error) {
       set_network_error("Fetch request failed. Check your CORS setting.");
       console.error(error);
+      alert(error.toString())
     } finally {
       set_loading(false);
       fade_in();
@@ -61,7 +62,14 @@ export const Flock_Screen = ({ route }) => {
   }
 
   useEffect(() => {
-    create_user();
+    setTimeout(() => {
+      create_user();
+    }, 0);
+
+    // clean the state
+    return () => {
+      set_user_res({});
+    }
   }, []);
 
   if (is_loading) return <Loading />

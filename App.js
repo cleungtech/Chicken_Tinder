@@ -9,6 +9,7 @@ import { Share_Link_Screen } from "./src/components/screens/Share_Link_Screen.js
 import { Location_Screen } from "./src/components/screens/Location_Screen.js";
 import { Join_Screen } from "./src/components/screens/Join_Screen.js";
 import { Results_Screen } from "./src/components/screens/Results_Screen.js";
+
 import * as Linking from 'expo-linking';
 
 const Stack = createNativeStackNavigator();
@@ -25,7 +26,7 @@ export default function App() {
         <Stack.Screen name="Share Link" component={Share_Link_Screen} />
         <Stack.Screen name="Request Location" component={Location_Screen} />
         <Stack.Screen name="Join" component={Join_Screen} />
-        <Stack.Screen name="View Results" component={Results_Screen} />
+        <Stack.Screen name="Result" component={Results_Screen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
