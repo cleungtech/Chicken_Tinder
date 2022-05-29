@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { backend_api, frontend_url } from '../../constants';
-import { Nav_Button } from "../models/Buttons.js";
+import { Nav_Button } from "../widgets/Buttons.js";
 import {
   Image,
   SafeAreaView,
@@ -9,7 +9,7 @@ import {
   View,
   Text,
 } from 'react-native';
-
+import { Star_Rating } from "../widgets/Star_Rating";
 import styles from "../../styles/css.js";
 
 const image_paths = {
@@ -26,6 +26,9 @@ export function Restaurants_Screen({ route }) {
 
   const [current_vote, set_current_vote] = useState(0);
 
+  const [network_error, set_network_error] = useState();
+  const [still_voting, set_still_voting] = useState(true);
+
   useEffect(() => {
     set_current_shop(restaurants[current_index]);
   }, [current_index]);
@@ -36,7 +39,6 @@ export function Restaurants_Screen({ route }) {
   function advance_list(vote_id) {
     const vote_restaurant = async () => {
       try {
-        // set_loading(true);
         const response = await fetch(
           `${backend_api}flock/${flock_info.flock_id}/restaurant/${current_shop.id}/user/${user_info.user_id}?vote=${vote_id}`, {
           method: 'POST',
@@ -46,45 +48,42 @@ export function Restaurants_Screen({ route }) {
           }
         });
         if (response.status === 204) {
-          console.log("");
-          console.log("---------------------------------------------");
-          console.log("POST request successful: ", response.status);
-          console.log("URL:", response.url);
-          console.log("flock_info: ", flock_info.flock_name);
-          console.log("response.method: ", response.method);
-          console.log("response.headers: ", response.headers);
-          console.log("response.body: ", response.body);
-          console.log("---------------------------------------------");
+          // console.log("");
+          // console.log("---------------------------------------------");
+          // console.log("POST request successful: ", response.status);
+          // console.log("URL:", response.url);
+          // console.log("flock_info: ", flock_info.flock_name);
+          // console.log("response.method: ", response.method);
+          // console.log("response.headers: ", response.headers);
+          // console.log("response.body: ", response.body);
+          // console.log("---------------------------------------------");
           // const json_res = await response.json();
         } else if (response.status === 400) {
-          // set_network_error("Provided vote info is invalid! Try again.");
-          console.log("");
-          console.log("---------------------------------------------");
-          console.log("Bad response:", response.status);
-          console.log("URL:", response.url);
-          console.log("flock_info: ", flock_info.flock_name);
-          console.log("response.method: ", response.method);
-          console.log("response.headers: ", response.headers);
-          console.log("response.body: ", response.body);
-          console.log("---------------------------------------------");
+          set_network_error("Provided vote info is invalid! Try again.");
+          // console.log("");
+          // console.log("---------------------------------------------");
+          // console.log("Bad response:", response.status);
+          // console.log("URL:", response.url);
+          // console.log("flock_info: ", flock_info.flock_name);
+          // console.log("response.method: ", response.method);
+          // console.log("response.headers: ", response.headers);
+          // console.log("response.body: ", response.body);
+          // console.log("---------------------------------------------");
         } else {
-          // set_network_error("Unable to process vote due to server error");
-          console.log("");
-          console.log("---------------------------------------------");
-          console.log("Bad response:", response.status);
-          console.log("URL:", response.url);
-          console.log("flock_info: ", flock_info);
-          console.log("response.method: ", response.method);
-          console.log("response.headers: ", response.headers);
-          console.log("response.body: ", response.body);
-          console.log("---------------------------------------------");
+          set_network_error("Unable to process vote due to server error");
+          // console.log("");
+          // console.log("---------------------------------------------");
+          // console.log("Bad response:", response.status);
+          // console.log("URL:", response.url);
+          // console.log("flock_info: ", flock_info);
+          // console.log("response.method: ", response.method);
+          // console.log("response.headers: ", response.headers);
+          // console.log("response.body: ", response.body);
+          // console.log("---------------------------------------------");
         }
       } catch (error) {
         console.error(error);
-      } finally {
-        // set_loading(false);
-        // fade_in();
-      }
+      } 
     };
 
     vote_restaurant()
@@ -97,37 +96,47 @@ export function Restaurants_Screen({ route }) {
       //     flock_name={flock_name}
       //   />
       // )
-      set_current_index(0);
+      set_still_voting(false);
     } else {
       set_current_index(current_index => current_index + 1);
     }
   }
 
-  console.log("");
-  console.log("*********************************************");
-  console.log("RESTAURANTS_SCREEN");
-  console.log("*********************************************");
-  return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="auto" />
-      <Restaurant_Card shop_data={current_shop} />
-      <View style={styles.row}>
-        <Vote_Button
-          button_name="Dislike"
-          vote_id = "0"
-          press_function={advance_list}
-          image_path={image_paths.dislike}
+  if (still_voting) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar style="auto" />
+        <Restaurant_Card shop_data={current_shop} />
+        <View style={styles.row}>
+          <Vote_Button
+            button_name="Dislike"
+            vote_id = "0"
+            press_function={advance_list}
+            image_path={image_paths.dislike}
+          />
+          <Vote_Button
+            button_name="Like"
+            vote_id = "1"
+            press_function={advance_list}
+            image_path={image_paths.like}
+          />
+        </View>
+      </SafeAreaView>
+    )
+  } else {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar style="auto" />
+        <View_Results_Button 
+          button_name = 'View Winner!'
+          user_info = {user_info}
+          flock_info = {flock_info}
         />
-        <Vote_Button
-          button_name="Like"
-          vote_id = "1"
-          press_function={advance_list}
-          image_path={image_paths.like}
-          
-        />
-      </View>
-    </SafeAreaView>
-  )
+        
+      </SafeAreaView>
+    );
+  }
+  
 }
 
 function Restaurant_Card({ shop_data }) {
@@ -138,7 +147,7 @@ function Restaurant_Card({ shop_data }) {
         source={{ uri: shop_data.image_url }}
       />
       <Text>{shop_data.name}</Text>
-      <Text>Rating: {shop_data.rating}</Text>
+      <Star_Rating star_num={shop_data.rating} shop_id={shop_data.id}></Star_Rating>
       <Text>Review Count: {shop_data.review_count}</Text>
     </View>
   );
@@ -165,7 +174,7 @@ const View_Results_Button = ({ button_name, user_info, flock_info }) => {
   return (
     <Nav_Button
       button_name={button_name}
-      route="View Results"
+      route="Result"
       nav_params={{
         user_info: user_info,
         flock_info: flock_info

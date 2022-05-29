@@ -1,8 +1,8 @@
 
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../models/Buttons.js";
-import { Credentials } from "../models/TextFields.js";
+import { Nav_Button } from "../widgets/Buttons.js";
+import { Credentials } from "../widgets/TextFields.js";
 import styles from "../../styles/css.js";
 import * as Linking from 'expo-linking';
 import { isMobile } from 'react-device-detect';
@@ -61,10 +61,6 @@ export const Login_Screen = () => {
     }).start();
   }
 
-  console.log("");
-  console.log("*********************************************");
-  console.log("LOGIN_SCREEN");
-  console.log("*********************************************");
   return (
     <SafeAreaView style={styles.welcome_container}>
       <StatusBar style="auto" />

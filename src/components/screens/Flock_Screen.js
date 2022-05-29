@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../models/Buttons.js";
+import { Nav_Button } from "../widgets/Buttons.js";
 // import { Useless_Button } from "../models/Buttons.js";
 import styles from "../../styles/css.js";
-import { Loading } from "../models/Loading"
+import { Loading } from "../widgets/Loading"
 import { backend_api } from '../../constants.js';
 import {
   Animated,

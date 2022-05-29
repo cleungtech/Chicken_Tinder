@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../models/Buttons.js";
-import { Credentials } from "../models/TextFields.js";
+import { Nav_Button } from "../widgets/Buttons.js";
+import { Credentials } from "../widgets/TextFields.js";
 import styles from "../../styles/css.js";
 import {
     Image,
@@ -166,11 +166,6 @@ export const Location_Screen = ({ route }) => {
       fade_in();
     }, []);
   
-    console.log("");
-    console.log("*********************************************");
-    console.log("LOCATION_SCREEN");
-    console.log("*********************************************");
-
     return(
         Render_Screen({
             fade_anim, 
