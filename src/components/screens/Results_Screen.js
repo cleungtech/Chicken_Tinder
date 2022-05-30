@@ -1,8 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../models/Buttons.js";
+import { Nav_Button } from "../widgets/Buttons.js";
 import { backend_api, frontend_url } from '../../constants';
-// import { useNavigation } from '@react-navigation/native';
+import { Loading } from "../widgets/Loading";
+import { Star_Rating } from "../widgets/Star_Rating";
+import { Display_Error } from "../widgets/Display_Error";
+import * as Linking from 'expo-linking';
+import styles from "../../styles/css.js";
 import {
   Animated,
   Image,
@@ -11,65 +15,16 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native';
-import { Display_Error } from "../models/Network_Error";
-import { Star_Rating } from "../models/Star_Rating";
-import * as Linking from 'expo-linking';
-import styles from "../../styles/css.js";
-
-const fake_data = {
-  "id":"woXlprCuowrLJswWere3TQ",
-  "alias":"täkō-pittsburgh-4",
-  "name":"täkō",
-  "image_url":"https://s3-media1.fl.yelpcdn.com/bphoto/W2J52omHmHj54VA4aZffZw/o.jpg",
-  "is_closed":false,
-  "url":"https://www.yelp.com/biz/t%C3%A4k%C5%8D-pittsburgh-4?adjust_creative=4NyEZ_ADjDEi-lQ7QpfThw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=4NyEZ_ADjDEi-lQ7QpfThw",
-  "review_count":1726,
-  "categories":[
-      {
-          "alias":"newamerican",
-          "title":"American (New)"
-      },
-      {
-          "alias":"mexican",
-          "title":"Mexican"
-      }
-  ],
-  "rating":4.5,
-  "coordinates":{
-      "latitude":40.4422285652929,
-      "longitude":-80.0019846968895
-  },
-  "transactions":[
-      "restaurant_reservation"
-  ],
-  "price":"$$",
-  "location":{
-      "address1":"214 6th St",
-      "address2":"",
-      "address3":"",
-      "city":"Pittsburgh",
-      "zip_code":"15222",
-      "country":"US",
-      "state":"PA",
-      "display_address":[
-          "214 6th St",
-          "Pittsburgh, PA 15222"
-      ]
-  },
-  "phone":"+14124718256",
-  "display_phone":"(412) 471-8256",
-  "distance":545.8436859188364
-}
-
 
 export function Result_Screen({ route }) {
-  const flock_info = route.params;
+
+  const { user_info, flock_info } = route.params;
   const restaurants = flock_info.restaurants;
 
-  const [winner, set_winner] = useState("");
-  const [winner_data, set_winner_data] = useState({});
-  const [url_is_loading, set_url_loading] = useState(true);
+  const [interval_id, set_interval_id] = useState(null);
+  const [is_waiting, set_is_waiting] = useState(true);
   const [network_error, set_network_error] = useState("");
+  const [winner_data, set_winner_data] = useState({});
 
   const fade_anim = useRef(new Animated.Value(0)).current;
 
@@ -81,14 +36,21 @@ export function Result_Screen({ route }) {
     }).start();
   }
 
-  const find_winner = () => {
-    for(const shop of restaurants) {
-      if (shop.id == winner) {
-        set_winner_data(shop);
+  const find_winner = (most_voted_restaurants) => {
+    const restaurant_ratings = Object.fromEntries(restaurants.map(r => {
+      return [r.id, r];
+    }));
+    let highest_rated_restaurant = null;
+    let highest_rating = 0;
+    for (const id of most_voted_restaurants) {
+      if (restaurant_ratings[id].rating > highest_rating) {
+        highest_rated_restaurant = restaurant_ratings[id];
+        highest_rating = restaurant_ratings[id].rating;
       }
     }
+    set_winner_data(highest_rated_restaurant)
   }
-  
+
   const get_result = async () => {
     try {
       const response = await fetch(
@@ -99,32 +61,39 @@ export function Result_Screen({ route }) {
           'Content-Type': 'application/json'
         }
       });
-      if (response.status === 201) {
+      if (response.status === 200) {
         const json_res = await response.json();
-        set_winner(json_res.most_voted_restaurants[0]);
-        find_winner();
+        if (json_res.remaining_votes === 0) {
+          find_winner(json_res.most_voted_restaurants);
+          set_is_waiting(false);
+        }
       } else if (response.status === 400) {
         set_network_error("Unable to create a new flock due to invalid form");
       } else {
         set_network_error("Unable to create user due to server error");
       }
     } catch (error) {
-      set_network_error("Fetch request failed. Check your CORS setting.");
+      set_network_error("Fetch request failed.");
       console.error(error);
       alert(error.toString());
     } finally {
-      set_url_loading(false);
       fade_in();
     }
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      get_result();
-    }, 0);
-  }, []);
+    if (is_waiting) {
+      const interval_id = setInterval(get_result, 2000);
+      set_interval_id(interval_id);
+    } else {
+      clearInterval(interval_id);
+    }
+  }, [is_waiting]);
 
-  if (url_is_loading) return <Loading />
+  if (network_error) return <Display_Error network_error={network_error} />
+  if (is_waiting) return <Loading message="Waiting for others..." />
+
+  clearInterval(interval_id);
   return (
     <SafeAreaView style={styles.result_container}>
       <StatusBar style="auto" />
@@ -134,14 +103,14 @@ export function Result_Screen({ route }) {
 }
 
 function Winning_Card({ shop_data }) {
-  
+
   function go_to_maps(coords) {
-    const map_url = 
-        "https://www.google.com/maps/dir/?api=1" + 
-        "&destination=" + 
-        coords.latitude + 
-        "," + 
-        coords.longitude;
+    const map_url =
+      "https://www.google.com/maps/dir/?api=1" +
+      "&destination=" +
+      coords.latitude +
+      "," +
+      coords.longitude;
     Linking.openURL(map_url);
   }
 
@@ -156,11 +125,10 @@ function Winning_Card({ shop_data }) {
         style={styles.image_rounded}
         source={{ uri: shop_data.image_url }}
       />
-      <Star_Rating star_num={shop_data.rating}></Star_Rating>
+      <Star_Rating star_num={shop_data.rating} shop_id={shop_data.id}></Star_Rating>
       <Text style={styles.winner_button_header}>
         Review Count: {shop_data.review_count}
       </Text>
-
       <TouchableOpacity
         onPress={() => go_to_maps(shop_data.coordinates)}
         style={styles.maps_button}
@@ -170,7 +138,6 @@ function Winning_Card({ shop_data }) {
         <Text>{shop_data.location.display_address[0]}</Text>
         <Text>{shop_data.location.display_address[1]}</Text>
       </TouchableOpacity>
-
       <TouchableOpacity
         onPress={() => go_to_phone(shop_data.phone)}
         style={styles.contact_button}
@@ -179,6 +146,10 @@ function Winning_Card({ shop_data }) {
         <Text style={styles.winner_button_header}>Contact: </Text>
         <Text>{shop_data.display_phone}</Text>
       </TouchableOpacity>
+      <Nav_Button
+        button_name="Try again"
+        route="Login"
+      />
     </View>
   );
 }

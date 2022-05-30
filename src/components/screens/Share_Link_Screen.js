@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
 import * as Clipboard from 'expo-clipboard';
-import { Nav_Button } from "../models/Buttons.js";
+import { Nav_Button } from "../widgets/Buttons.js";
 import QRCode from "react-qr-code";
 import styles from "../../styles/css.js";
 import * as Linking from "expo-linking";
-import { Loading } from "../models/Loading"
+import { Loading } from "../widgets/Loading";
 import { backend_api, frontend_url } from '../../constants';
 import {
   Animated,
@@ -55,6 +55,7 @@ export const Share_Link_Screen = ({ route }) => {
           }
         })
       });
+
       if (response.status === 201) {
         const json_res = await response.json();
         set_flock_res({
@@ -65,40 +66,15 @@ export const Share_Link_Screen = ({ route }) => {
           restaurants: json_res.restaurants,
           self: json_res.self
         });
-        console.log("");
-        console.log("---------------------------------------------");
-        console.log("POST request successful: ", response.status);
-        console.log("URL:", response.url);
-        console.log("flock_res: ", flock_res);
-        console.log("response.method: ", response.method);
-        console.log("response.headers: ", response.headers);
-        console.log("response.body: ", response.body);
-        console.log("---------------------------------------------");
+
       } else if (response.status === 400) {
         set_network_error("Unable to create a new flock due to invalid form");
-        console.log("");
-        console.log("---------------------------------------------");
-        console.log("Bad response:", response.status);
-        console.log("URL:", response.url);
-        console.log("flock_res: ", flock_res);
-        console.log("response.method: ", response.method);
-        console.log("response.headers: ", response.headers);
-        console.log("response.body: ", response.body);
-        console.log("---------------------------------------------");
+
       } else {
         set_network_error("Unable to create user due to server error");
-        console.log("");
-        console.log("---------------------------------------------");
-        console.log("Bad response:", response.status);
-        console.log("URL:", response.url);
-        console.log("flock_res: ", flock_res);
-        console.log("response.method: ", response.method);
-        console.log("response.headers: ", response.headers);
-        console.log("response.body: ", response.body);
-        console.log("---------------------------------------------");
       }
     } catch (error) {
-      set_network_error("Fetch request failed. Check your CORS setting.");
+      set_network_error("Fetch request failed.");
       console.error(error);
       alert(error.toString());
     } finally {
@@ -118,9 +94,6 @@ export const Share_Link_Screen = ({ route }) => {
   }
 
   useEffect(() => {
-    console.log(latitude);
-    console.log(longitude);
-
     create_flock();
   }, []);
 

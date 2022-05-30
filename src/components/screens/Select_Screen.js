@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../models/Buttons.js";
-import { Credentials } from "../models/TextFields.js";
+import { Nav_Button } from "../widgets/Buttons.js";
+import { Credentials } from "../widgets/TextFields.js";
 import styles from "../../styles/css.js";
 import {
   Animated,
@@ -27,10 +27,6 @@ export const Select_Screen = ({ route }) => {
     fade_in();
   }, []);
 
-  console.log("");
-  console.log("*********************************************");
-  console.log("SELECT_SCREEN");
-  console.log("*********************************************");
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
@@ -44,17 +40,12 @@ export const Select_Screen = ({ route }) => {
           If left empty, one will be chosen for you
         </Text>
         <Create_Flock_Button
-          button_name="We're Hungry NOW!"
+          button_name="Create Flock"
           user_info={user_info}
           flock_name={flock_name}
           auto_name_1={auto_name_1}
           auto_name_2={auto_name_2}
         />
-        {/* <Create_Flock_Button
-        button_name="We're Hungry Later..."
-        user_info={user_info}
-        flock_name={flock_name}
-      /> */}
       </Animated.View>
     </SafeAreaView>
   )
