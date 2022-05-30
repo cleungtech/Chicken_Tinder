@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../widgets/Buttons.js";
+import { Nav_Button, Landing_Banner } from "../widgets/Buttons.js";
 import { Credentials } from "../widgets/TextFields.js";
 import styles from "../../styles/css.js";
 import {
   Animated,
   Text,
-  SafeAreaView
+  SafeAreaView,
+  View
 } from 'react-native';
 
 export const Select_Screen = ({ route }) => {
@@ -28,24 +29,27 @@ export const Select_Screen = ({ route }) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.header_container}>
       <StatusBar style="auto" />
+      <Landing_Banner/>
       <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
-        <Text>Flock Name:</Text>
-        <Credentials
-          inputfield="Enter a flock name here"
-          change_function={new_flock => set_flock_name(new_flock)}
-        />
-        <Text style={styles.note_text_black}>
-          If left empty, one will be chosen for you
-        </Text>
-        <Create_Flock_Button
-          button_name="Create Flock"
-          user_info={user_info}
-          flock_name={flock_name}
-          auto_name_1={auto_name_1}
-          auto_name_2={auto_name_2}
-        />
+        <View style={styles.container}>
+          <Text>Flock Name:</Text>
+          <Credentials
+            inputfield="Enter a flock name here"
+            change_function={new_flock => set_flock_name(new_flock)}
+          />
+          <Text style={styles.note_text_black}>
+            If left empty, one will be chosen for you
+          </Text>
+          <Create_Flock_Button
+            button_name="Create Flock"
+            user_info={user_info}
+            flock_name={flock_name}
+            auto_name_1={auto_name_1}
+            auto_name_2={auto_name_2}
+          />
+        </View>
       </Animated.View>
     </SafeAreaView>
   )

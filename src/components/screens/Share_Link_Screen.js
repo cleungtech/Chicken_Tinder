@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
 import * as Clipboard from 'expo-clipboard';
-import { Nav_Button } from "../widgets/Buttons.js";
+import { Nav_Button, Landing_Banner } from "../widgets/Buttons.js";
 import QRCode from "react-qr-code";
 import styles from "../../styles/css.js";
 import { Loading } from "../widgets/Loading"
@@ -13,6 +13,7 @@ import {
   TextInput,
   SafeAreaView,
   TouchableOpacity,
+  View
 } from 'react-native';
 
 export const Share_Link_Screen = ({ route }) => {
@@ -106,33 +107,36 @@ export const Share_Link_Screen = ({ route }) => {
   if (url_is_loading) return <Loading />
   if (network_error) return <Display_Error network_error={network_error}/>
   return (
-    <SafeAreaView style={{ alignItems: "center", marginTop: 50 }}>
+    <SafeAreaView style={styles.header_container}>
       <StatusBar style="auto" />
+      <Landing_Banner/>
       <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
-        <Report_Status
-          flock_name={flock_name}
-        />
-        <Share_QR_Code
-          join_url={join_url}
-          flock_res={flock_res}
-        />
-        <Share_Flock_Link
-          join_url={join_url}
-          flock_res={flock_res}
-          has_copied={has_copied}
-          copy_join_url={copy_join_url}
-        />
-        <Share_Flock_ID
-          join_url={join_url}
-          flock_res={flock_res}
-          has_copied={has_copied}
-          copy_flock_id={copy_flock_id}
-        />
-        <View_Restaurant_Button
-          join_url={join_url}
-          flock_res={flock_res}
-          user_info={user_info}
-        />
+        <View style={styles.container}>
+          <Report_Status
+            flock_name={flock_name}
+          />
+          <Share_QR_Code
+            join_url={join_url}
+            flock_res={flock_res}
+          />
+          <Share_Flock_Link
+            join_url={join_url}
+            flock_res={flock_res}
+            has_copied={has_copied}
+            copy_join_url={copy_join_url}
+          />
+          <Share_Flock_ID
+            join_url={join_url}
+            flock_res={flock_res}
+            has_copied={has_copied}
+            copy_flock_id={copy_flock_id}
+          />
+          <View_Restaurant_Button
+            join_url={join_url}
+            flock_res={flock_res}
+            user_info={user_info}
+          />
+        </View>
       </Animated.View>
     </SafeAreaView>
   );

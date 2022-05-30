@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../widgets/Buttons.js";
+import { Nav_Button, Landing_Banner } from "../widgets/Buttons.js";
 import { Credentials } from "../widgets/TextFields.js";
 import styles from "../../styles/css.js";
 import { Loading } from "../widgets/Loading";
@@ -10,7 +10,8 @@ import {
   Animated,
   Text,
   SafeAreaView,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 export const Join_Screen = ({ route }) => {
@@ -77,24 +78,27 @@ export const Join_Screen = ({ route }) => {
   if (is_loading) return <Loading />
   if (network_error) return <Display_Error network_error={network_error}/>
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.header_container}>
       <StatusBar style="auto" />
+      <Landing_Banner/>
       <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
-      <Report_Status
-        joined={joined}
-        flock_res={flock_res}
-      />
-      <Join_Flock_Form
-        joined={joined}
-        flock_id={flock_id}
-        set_flock_id={set_flock_id}
-        join_flock={join_flock}
-      />
-      <View_Restaurant_Button
-        joined={joined}
-        flock_res={flock_res}
-        user_info={user_info}
-      />
+        <View style={styles.container}>
+          <Report_Status
+            joined={joined}
+            flock_res={flock_res}
+          />
+          <Join_Flock_Form
+            joined={joined}
+            flock_id={flock_id}
+            set_flock_id={set_flock_id}
+            join_flock={join_flock}
+          />
+          <View_Restaurant_Button
+            joined={joined}
+            flock_res={flock_res}
+            user_info={user_info}
+          />
+        </View>
       </Animated.View>
     </SafeAreaView>
   )

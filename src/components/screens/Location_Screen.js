@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../widgets/Buttons.js";
+import { Nav_Button, Landing_Banner } from "../widgets/Buttons.js";
 import { Credentials } from "../widgets/TextFields.js";
 import styles from "../../styles/css.js";
 import {
@@ -123,9 +123,10 @@ export const Location_Screen = ({ route }) => {
     )
   }
   
-  const Send_Location_Button = ({ button_name, user_info, flock_name, latitude, longitude }) => {
+  const Send_Location_Button = ({ button_name, user_info, flock_name, latitude, longitude, city, region }) => {
     return (
       <Nav_Button
+        disabled={!latitude||!longitude||!city||!region}
         button_name={button_name}
         route="Share Link"
         nav_params={{
@@ -166,10 +167,11 @@ function Render_Screen({
     Search_Location_Button}) {
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.header_container}>
             <StatusBar style="auto" />
-  
+            <Landing_Banner/>
             <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
+              <View style={styles.container}>
                 <View style={{
                     flexDirection: 'column',
                     // flex:1,
@@ -233,11 +235,13 @@ function Render_Screen({
                             flock_name={flock_name}
                             latitude= {display_lat}
                             longitude= {display_long}
+                            city= {display_city}
+                            region= {display_region}
                         />
                     </View>
 
                 </View>
-
+              </View>
             </Animated.View>
 
         </SafeAreaView>

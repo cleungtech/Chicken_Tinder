@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Nav_Button } from "../widgets/Buttons.js";
+import { Nav_Button, Landing_Banner } from "../widgets/Buttons.js";
 import { backend_api } from '../../constants';
 import { useNavigation } from '@react-navigation/native';
 import { Star_Rating } from "../widgets/Star_Rating";
@@ -76,20 +76,23 @@ export function Restaurants_Screen({ route }) {
 
   if (still_voting) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.header_container}>
         <StatusBar style="auto" />
-        <Restaurant_Card shop_data={current_shop} />
-        <View style={styles.row}>
-          <Vote_Button
-            button_name="Dislike"
-            press_function={() => advance_list("0")}
-            image_path={image_paths.dislike}
-          />
-          <Vote_Button
-            button_name="Like"
-            press_function={() => advance_list("1")}
-            image_path={image_paths.like}
-          />
+        <Landing_Banner/>
+        <View style={styles.container}>
+          <Restaurant_Card shop_data={current_shop} />
+          <View style={styles.row}>
+            <Vote_Button
+              button_name="Dislike"
+              press_function={() => advance_list("0")}
+              image_path={image_paths.dislike}
+            />
+            <Vote_Button
+              button_name="Like"
+              press_function={() => advance_list("1")}
+              image_path={image_paths.like}
+            />
+          </View>
         </View>
       </SafeAreaView>
     )

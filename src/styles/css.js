@@ -13,7 +13,6 @@ export const chicken_colors = {
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -43,7 +42,7 @@ export default StyleSheet.create({
         justifyContent: 'center'
     },
     row: {
-        flex: 2,
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -77,16 +76,29 @@ export default StyleSheet.create({
         justifyContent: 'center',
       },
     header: {
-        flex: 1,
-        backgroundColor: '#fff',
+        position: 'absolute',
+        width: '50%',
+        height: 100,
         alignItems: 'center',
         justifyContent: 'center',
+        resizeMode: 'contain',
+    },
+    header_container: {
+        flexDirection: 'column',
+        flex: 1,
+        alignItems: 'center',
+        position: 'relative',
+        resizeMode: 'contain',
+        backgroundColor: '#fff',
     },
     welcome_container: {
+        flexDirection: 'column',
         flex: 1,
-        backgroundColor: chicken_colors.red,
         alignItems: 'center',
         justifyContent: 'center',
+        position: 'relative',
+        resizeMode: 'contain',
+        backgroundColor: chicken_colors.red,
     },
     container_horizontal: {
         flexDirection: 'row',
