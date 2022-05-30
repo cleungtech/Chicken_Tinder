@@ -1,8 +1,8 @@
 
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../models/Buttons.js";
-import { Credentials } from "../models/TextFields.js";
+import { Nav_Button } from "../widgets/Buttons.js";
+import { Credentials } from "../widgets/TextFields.js";
 import styles from "../../styles/css.js";
 import * as Linking from 'expo-linking';
 import { isMobile } from 'react-device-detect';
@@ -61,10 +61,6 @@ export const Login_Screen = () => {
     }).start();
   }
 
-  console.log("");
-  console.log("*********************************************");
-  console.log("LOGIN_SCREEN");
-  console.log("*********************************************");
   return (
     <SafeAreaView style={styles.welcome_container}>
       <StatusBar style="auto" />
@@ -106,7 +102,7 @@ const auto_name_2 = ["lover", "kid", "fan", "hoarder", "enthusiast", "connoisseu
 
 const Get_Started_Button = ({ user_name, is_invited, invitation }) => {
   if (!user_name) {
-    user_name = "random_" + auto_name_1[Math.floor(Math.random() * auto_name_1.length)] + "_" + auto_name_2[Math.floor(Math.random() * auto_name_2.length)]
+    user_name = auto_name_1[Math.floor(Math.random() * auto_name_1.length)] + "_" + auto_name_2[Math.floor(Math.random() * auto_name_2.length)]
   }
 
   return (
