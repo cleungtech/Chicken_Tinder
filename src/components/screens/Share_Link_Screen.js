@@ -13,7 +13,6 @@ import {
   TextInput,
   SafeAreaView,
   TouchableOpacity,
-  TextInput
 } from 'react-native';
 
 export const Share_Link_Screen = ({ route }) => {

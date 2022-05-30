@@ -4,7 +4,6 @@ import { Nav_Button } from "../widgets/Buttons.js";
 import { backend_api } from '../../constants';
 import { useNavigation } from '@react-navigation/native';
 import { Star_Rating } from "../widgets/Star_Rating";
-import styles from "../../styles/css.js";
 import {
   Image,
   SafeAreaView,
@@ -12,9 +11,7 @@ import {
   View,
   Text,
 } from 'react-native';
-import { Star_Rating } from "../widgets/Star_Rating";
 import styles from "../../styles/css.js";
-import { Display_Error } from "../widgets/Display_Error";
 
 const image_paths = {
   dislike: require("../../../assets/dislike_icon.png"),
@@ -60,11 +57,6 @@ export function Restaurants_Screen({ route }) {
         if (response.status === 204) {
         } else if (response.status === 400) {
           set_network_error("Provided vote info is invalid! Try again.");
-          set_current_index(current_index => current_index + 1);
-
-        } else if (response.status === 400) {
-          set_network_error("Provided vote info is invalid! Try again.");
-
         } else {
           set_network_error("Unable to process vote due to server error");
         }
@@ -90,14 +82,12 @@ export function Restaurants_Screen({ route }) {
         <View style={styles.row}>
           <Vote_Button
             button_name="Dislike"
-            vote_id = "0"
-            press_function={advance_list}
+            press_function={() => advance_list("0")}
             image_path={image_paths.dislike}
           />
           <Vote_Button
             button_name="Like"
-            vote_id = "1"
-            press_function={advance_list}
+            press_function={() => advance_list("1")}
             image_path={image_paths.like}
           />
         </View>
