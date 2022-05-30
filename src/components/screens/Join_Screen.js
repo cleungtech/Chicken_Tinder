@@ -5,6 +5,7 @@ import { Credentials } from "../widgets/TextFields.js";
 import styles from "../../styles/css.js";
 import { Loading } from "../widgets/Loading"
 import { backend_api } from '../../constants.js';
+import { Display_Error } from "../widgets/Display_Error";
 import {
   Animated,
   Text,
@@ -74,12 +75,12 @@ export const Join_Screen = ({ route }) => {
   }, []);
   
   if (is_loading) return <Loading />
+  if (network_error) return <Display_Error network_error={network_error}/>
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
       <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
       <Report_Status
-        network_error={network_error}
         joined={joined}
         flock_res={flock_res}
       />
@@ -99,10 +100,8 @@ export const Join_Screen = ({ route }) => {
   )
 }
 
-const Report_Status = ({ network_error, joined, flock_res }) => {
-  if (network_error) {
-    return <Text>{network_error}</Text>
-  } else if (joined) {
+const Report_Status = ({ joined, flock_res }) => {
+  if (joined) {
     return <Text>Successfully joined {flock_res.flock_name}</Text>
   } else {
     return <Text>Flock ID:</Text>;

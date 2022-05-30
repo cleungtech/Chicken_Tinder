@@ -4,9 +4,9 @@ import * as Clipboard from 'expo-clipboard';
 import { Nav_Button } from "../widgets/Buttons.js";
 import QRCode from "react-qr-code";
 import styles from "../../styles/css.js";
-import * as Linking from "expo-linking";
 import { Loading } from "../widgets/Loading"
 import { backend_api, frontend_url } from '../../constants';
+import { Display_Error } from "../widgets/Display_Error";
 import {
   Animated,
   Text,
@@ -75,37 +75,10 @@ export const Share_Link_Screen = ({ route }) => {
           restaurants: json_res.restaurants,
           self: json_res.self
         });
-        // console.log("");
-        // console.log("---------------------------------------------");
-        // console.log("POST request successful: ", response.status);
-        // console.log("URL:", response.url);
-        // console.log("flock_res: ", flock_res);
-        // console.log("response.method: ", response.method);
-        // console.log("response.headers: ", response.headers);
-        // console.log("response.body: ", response.body);
-        // console.log("---------------------------------------------");
       } else if (response.status === 400) {
         set_network_error("Unable to create a new flock due to invalid form");
-        // console.log("");
-        // console.log("---------------------------------------------");
-        // console.log("Bad response:", response.status);
-        // console.log("URL:", response.url);
-        // console.log("flock_res: ", flock_res);
-        // console.log("response.method: ", response.method);
-        // console.log("response.headers: ", response.headers);
-        // console.log("response.body: ", response.body);
-        // console.log("---------------------------------------------");
       } else {
         set_network_error("Unable to create user due to server error");
-        // console.log("");
-        // console.log("---------------------------------------------");
-        // console.log("Bad response:", response.status);
-        // console.log("URL:", response.url);
-        // console.log("flock_res: ", flock_res);
-        // console.log("response.method: ", response.method);
-        // console.log("response.headers: ", response.headers);
-        // console.log("response.body: ", response.body);
-        // console.log("---------------------------------------------");
       }
     } catch (error) {
       set_network_error("Fetch request failed. Check your CORS setting.");
@@ -133,12 +106,12 @@ export const Share_Link_Screen = ({ route }) => {
     }, [flock_res]);
 
   if (url_is_loading) return <Loading />
+  if (network_error) return <Display_Error network_error={network_error}/>
   return (
     <SafeAreaView style={{ alignItems: "center", marginTop: 50 }}>
       <StatusBar style="auto" />
       <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
         <Report_Status
-          network_error={network_error}
           flock_name={flock_name}
         />
         <Share_QR_Code
@@ -167,8 +140,7 @@ export const Share_Link_Screen = ({ route }) => {
   );
 }
 
-const Report_Status = ({ network_error, flock_name }) => {
-  if (network_error) return <Text>{network_error}</Text>
+const Report_Status = ({ flock_name }) => {
   return <Text>{flock_name} has been created successfully!</Text>
 }
 

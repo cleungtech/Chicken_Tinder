@@ -16,52 +16,6 @@ import { Display_Error } from "../widgets/Display_Error";
 import * as Linking from 'expo-linking';
 import styles from "../../styles/css.js";
 
-const fake_data = {
-  "id":"woXlprCuowrLJswWere3TQ",
-  "alias":"täkō-pittsburgh-4",
-  "name":"täkō",
-  "image_url":"https://s3-media1.fl.yelpcdn.com/bphoto/W2J52omHmHj54VA4aZffZw/o.jpg",
-  "is_closed":false,
-  "url":"https://www.yelp.com/biz/t%C3%A4k%C5%8D-pittsburgh-4?adjust_creative=4NyEZ_ADjDEi-lQ7QpfThw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=4NyEZ_ADjDEi-lQ7QpfThw",
-  "review_count":1726,
-  "categories":[
-      {
-          "alias":"newamerican",
-          "title":"American (New)"
-      },
-      {
-          "alias":"mexican",
-          "title":"Mexican"
-      }
-  ],
-  "rating":4.5,
-  "coordinates":{
-      "latitude":40.4422285652929,
-      "longitude":-80.0019846968895
-  },
-  "transactions":[
-      "restaurant_reservation"
-  ],
-  "price":"$$",
-  "location":{
-      "address1":"214 6th St",
-      "address2":"",
-      "address3":"",
-      "city":"Pittsburgh",
-      "zip_code":"15222",
-      "country":"US",
-      "state":"PA",
-      "display_address":[
-          "214 6th St",
-          "Pittsburgh, PA 15222"
-      ]
-  },
-  "phone":"+14124718256",
-  "display_phone":"(412) 471-8256",
-  "distance":545.8436859188364
-}
-
-
 export function Result_Screen({ route }) {
   const { user_info, flock_info } = route.params;
   const restaurants = flock_info.restaurants;

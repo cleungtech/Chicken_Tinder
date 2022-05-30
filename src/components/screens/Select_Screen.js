@@ -46,11 +46,6 @@ export const Select_Screen = ({ route }) => {
           auto_name_1={auto_name_1}
           auto_name_2={auto_name_2}
         />
-        {/* <Create_Flock_Button
-        button_name="We're Hungry Later..."
-        user_info={user_info}
-        flock_name={flock_name}
-      /> */}
       </Animated.View>
     </SafeAreaView>
   )

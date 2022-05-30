@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Star_Rating } from "../widgets/Star_Rating";
 import styles from "../../styles/css.js";
+import { Display_Error } from "../widgets/Display_Error";
 
 const image_paths = {
   dislike: require("../../../assets/dislike_icon.png"),
@@ -23,8 +24,6 @@ export function Restaurants_Screen({ route }) {
 
   const [current_index, set_current_index] = useState(0);
   const [current_shop, set_current_shop] = useState(restaurants[0]);
-
-  const [current_vote, set_current_vote] = useState(0);
 
   const [network_error, set_network_error] = useState();
   const [still_voting, set_still_voting] = useState(true);
@@ -48,38 +47,10 @@ export function Restaurants_Screen({ route }) {
           }
         });
         if (response.status === 204) {
-          // console.log("");
-          // console.log("---------------------------------------------");
-          // console.log("POST request successful: ", response.status);
-          // console.log("URL:", response.url);
-          // console.log("flock_info: ", flock_info.flock_name);
-          // console.log("response.method: ", response.method);
-          // console.log("response.headers: ", response.headers);
-          // console.log("response.body: ", response.body);
-          // console.log("---------------------------------------------");
-          // const json_res = await response.json();
         } else if (response.status === 400) {
           set_network_error("Provided vote info is invalid! Try again.");
-          // console.log("");
-          // console.log("---------------------------------------------");
-          // console.log("Bad response:", response.status);
-          // console.log("URL:", response.url);
-          // console.log("flock_info: ", flock_info.flock_name);
-          // console.log("response.method: ", response.method);
-          // console.log("response.headers: ", response.headers);
-          // console.log("response.body: ", response.body);
-          // console.log("---------------------------------------------");
         } else {
           set_network_error("Unable to process vote due to server error");
-          // console.log("");
-          // console.log("---------------------------------------------");
-          // console.log("Bad response:", response.status);
-          // console.log("URL:", response.url);
-          // console.log("flock_info: ", flock_info);
-          // console.log("response.method: ", response.method);
-          // console.log("response.headers: ", response.headers);
-          // console.log("response.body: ", response.body);
-          // console.log("---------------------------------------------");
         }
       } catch (error) {
         console.error(error);
@@ -89,13 +60,6 @@ export function Restaurants_Screen({ route }) {
     vote_restaurant()
 
     if (current_index == 9) {
-      // return(
-      //   <View_Results_Button
-      //     button_name="View Results"
-      //     user_info={user_info}
-      //     flock_name={flock_name}
-      //   />
-      // )
       set_still_voting(false);
     } else {
       set_current_index(current_index => current_index + 1);
@@ -136,7 +100,6 @@ export function Restaurants_Screen({ route }) {
       </SafeAreaView>
     );
   }
-  
 }
 
 function Restaurant_Card({ shop_data }) {
