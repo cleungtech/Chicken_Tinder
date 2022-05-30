@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../models/Buttons.js";
-import { backend_api, frontend_url } from '../../constants';
+import { backend_api } from '../../constants';
 // import { useNavigation } from '@react-navigation/native';
 import {
   Animated,
@@ -11,11 +10,11 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native';
-import { Display_Error } from "../models/Network_Error";
-import { Star_Rating } from "../models/Star_Rating";
+import { Loading } from "../widgets/Loading";
+import { Star_Rating } from "../widgets/Star_Rating";
+import { Display_Error } from "../widgets/Display_Error";
 import * as Linking from 'expo-linking';
 import styles from "../../styles/css.js";
-import { backend_api } from '../constants.js';
 
 const fake_data = {
   "id":"woXlprCuowrLJswWere3TQ",
@@ -64,13 +63,13 @@ const fake_data = {
 
 
 export function Result_Screen({ route }) {
-  const flock_info = route.params;
+  const { user_info, flock_info } = route.params;
   const restaurants = flock_info.restaurants;
 
-  const [winner, set_winner] = useState("");
+  const [winner_id, set_winner_id] = useState("no winner");
   const [winner_data, set_winner_data] = useState({});
   const [url_is_loading, set_url_loading] = useState(true);
-  const [network_error, set_network_error] = useState("");
+  const [network_error, set_network_error] = useState();
 
   const fade_anim = useRef(new Animated.Value(0)).current;
 
@@ -84,7 +83,8 @@ export function Result_Screen({ route }) {
 
   const find_winner = () => {
     for(const shop of restaurants) {
-      if (shop.id == winner) {
+      if (shop.id == winner_id) {
+
         set_winner_data(shop);
       }
     }
@@ -95,24 +95,19 @@ export function Result_Screen({ route }) {
       const response = await fetch(
         `${backend_api}flock/${flock_info.flock_id}/status`, {
         method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
       });
-      if (response.status === 201) {
+      if (response.status === 200) {
         const json_res = await response.json();
-        set_winner(json_res.most_voted_restaurants[0]);
+        set_winner_id(json_res.most_voted_restaurants[0]);
         find_winner();
       } else if (response.status === 400) {
-        set_network_error("Unable to create a new flock due to invalid form");
+        set_network_error("Unable to obtain winner due to invalid form");
       } else {
-        set_network_error("Unable to create user due to server error");
+        set_network_error("Unable to obtain winner due to server error");
       }
     } catch (error) {
-      set_network_error("Fetch request failed. Check your CORS setting.");
+      set_network_error("Fetch request failed");
       console.error(error);
-      alert(error.toString());
     } finally {
       set_url_loading(false);
       fade_in();
@@ -125,13 +120,20 @@ export function Result_Screen({ route }) {
     }, 0);
   }, []);
 
+  useEffect(() => {
+    find_winner();
+  }, [winner_id]);
+
   if (url_is_loading) return <Loading />
-  return (
-    <SafeAreaView style={styles.result_container}>
-      <StatusBar style="auto" />
-      <Winning_Card shop_data={winner_data} />
-    </SafeAreaView>
-  )
+  if (network_error) return <Display_Error network_error={network_error}/>
+  else {
+    return (
+      <SafeAreaView style={styles.result_container}>
+        <StatusBar style="auto" />
+        <Winning_Card shop_data={winner_data} />
+      </SafeAreaView>
+    )
+  }
 }
 
 function Winning_Card({ shop_data }) {
@@ -157,7 +159,7 @@ function Winning_Card({ shop_data }) {
         style={styles.image_rounded}
         source={{ uri: shop_data.image_url }}
       />
-      <Star_Rating star_num={shop_data.rating}></Star_Rating>
+      <Star_Rating star_num={shop_data.rating} shop_id={shop_data.id}></Star_Rating>
       <Text style={styles.winner_button_header}>
         Review Count: {shop_data.review_count}
       </Text>

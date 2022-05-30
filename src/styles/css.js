@@ -123,13 +123,13 @@ export default StyleSheet.create({
         fontSize: 16,
         lineHeight: 21,
         letterSpacing: 0.25,
-        color: chicken_yellow,
+        color: chicken_colors.yellow,
     },
     normal_text_yellow: {
         fontSize: 12,
         lineHeight: 21,
         letterSpacing: 0.25,
-        color: chicken_yellow,
+        color: chicken_colors.yellow,
     },
     note_text_white: {
         fontSize: 10,
