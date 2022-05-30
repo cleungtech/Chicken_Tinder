@@ -52,10 +52,7 @@ export function Result_Screen({ route }) {
   }
 
   const get_result = async () => {
-    console.log({ is_waiting })
-    console.log({ interval_id })
     try {
-      console.log("Fetching");
       const response = await fetch(
         `${backend_api}flock/${flock_info.flock_id}/status`, {
         method: 'GET',
@@ -118,7 +115,6 @@ function Winning_Card({ shop_data }) {
   }
 
   function go_to_phone(telnum) {
-    console.log({ telnum });
     Linking.openURL('tel:' + telnum);
   }
 
