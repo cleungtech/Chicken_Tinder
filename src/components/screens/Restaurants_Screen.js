@@ -1,7 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { backend_api, frontend_url } from '../../constants';
 import { Nav_Button } from "../widgets/Buttons.js";
+import { backend_api } from '../../constants';
+import { useNavigation } from '@react-navigation/native';
+import { Star_Rating } from "../widgets/Star_Rating";
+import styles from "../../styles/css.js";
 import {
   Image,
   SafeAreaView,
@@ -15,10 +18,14 @@ import { Display_Error } from "../widgets/Display_Error";
 
 const image_paths = {
   dislike: require("../../../assets/dislike_icon.png"),
-  like: require("../../../assets/like_icon.png")
+  like: require("../../../assets/like_icon.png"),
+  unavailable: require("../../../assets/image_unavailable.png")
 }
 
 export function Restaurants_Screen({ route }) {
+
+  const navigation = useNavigation();
+
   const { user_info, flock_info } = route.params;
   const restaurants = flock_info.restaurants;
 
@@ -29,11 +36,15 @@ export function Restaurants_Screen({ route }) {
   const [still_voting, set_still_voting] = useState(true);
 
   useEffect(() => {
-    set_current_shop(restaurants[current_index]);
+    if (current_index < restaurants.length) {
+      set_current_shop(restaurants[current_index]);
+    } else {
+      navigation.navigate("Result", {
+        user_info: user_info,
+        flock_info: flock_info
+      })
+    }
   }, [current_index]);
-
-  const like_id = "1";
-  const dislike_id = "0";
 
   function advance_list(vote_id) {
     const vote_restaurant = async () => {
@@ -49,6 +60,11 @@ export function Restaurants_Screen({ route }) {
         if (response.status === 204) {
         } else if (response.status === 400) {
           set_network_error("Provided vote info is invalid! Try again.");
+          set_current_index(current_index => current_index + 1);
+
+        } else if (response.status === 400) {
+          set_network_error("Provided vote info is invalid! Try again.");
+
         } else {
           set_network_error("Unable to process vote due to server error");
         }
@@ -103,11 +119,14 @@ export function Restaurants_Screen({ route }) {
 }
 
 function Restaurant_Card({ shop_data }) {
+  const image_source = shop_data.image_url
+    ? { uri: shop_data.image_url }
+    : image_paths.unavailable;
   return (
     <View style={styles.card}>
       <Image
         style={styles.image_rounded}
-        source={{ uri: shop_data.image_url }}
+        source={image_source}
       />
       <Text>{shop_data.name}</Text>
       <Star_Rating star_num={shop_data.rating} shop_id={shop_data.id}></Star_Rating>
@@ -116,11 +135,10 @@ function Restaurant_Card({ shop_data }) {
   );
 }
 
-function Vote_Button({ button_name, press_function, image_path, vote_id }) {
-  // let vote_id = {vote_id};
+function Vote_Button({ button_name, press_function, image_path }) {
   return (
     <TouchableOpacity
-      onPress={() => press_function(vote_id)}
+      onPress={press_function}
       style={styles.vote_button}
       activeOpacity={0.5}
     >

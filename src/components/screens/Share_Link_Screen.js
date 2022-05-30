@@ -10,6 +10,7 @@ import { Display_Error } from "../widgets/Display_Error";
 import {
   Animated,
   Text,
+  TextInput,
   SafeAreaView,
   TouchableOpacity,
   TextInput
@@ -65,6 +66,7 @@ export const Share_Link_Screen = ({ route }) => {
           }
         })
       });
+
       if (response.status === 201) {
         const json_res = await response.json();
         set_flock_res({
@@ -81,7 +83,7 @@ export const Share_Link_Screen = ({ route }) => {
         set_network_error("Unable to create user due to server error");
       }
     } catch (error) {
-      set_network_error("Fetch request failed. Check your CORS setting.");
+      set_network_error("Fetch request failed.");
       console.error(error);
       alert(error.toString());
     } finally {
@@ -91,9 +93,6 @@ export const Share_Link_Screen = ({ route }) => {
   };
 
   useEffect(() => {
-    console.log(latitude);
-    console.log(longitude);
-
     create_flock();
   }, []);
 

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Nav_Button } from "../widgets/Buttons.js";
 import { Credentials } from "../widgets/TextFields.js";
 import styles from "../../styles/css.js";
-import { Loading } from "../widgets/Loading"
+import { Loading } from "../widgets/Loading";
 import { backend_api } from '../../constants.js';
 import { Display_Error } from "../widgets/Display_Error";
 import {

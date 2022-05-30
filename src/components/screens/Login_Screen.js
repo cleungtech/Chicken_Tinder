@@ -102,7 +102,7 @@ const auto_name_2 = ["lover", "kid", "fan", "hoarder", "enthusiast", "connoisseu
 
 const Get_Started_Button = ({ user_name, is_invited, invitation }) => {
   if (!user_name) {
-    user_name = "random_" + auto_name_1[Math.floor(Math.random() * auto_name_1.length)] + "_" + auto_name_2[Math.floor(Math.random() * auto_name_2.length)]
+    user_name = auto_name_1[Math.floor(Math.random() * auto_name_1.length)] + "_" + auto_name_2[Math.floor(Math.random() * auto_name_2.length)]
   }
 
   return (

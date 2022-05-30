@@ -235,11 +235,11 @@ function Render_Screen({
                             longitude= {display_long}
                         />
                     </View>
-  
+
                 </View>
-  
+
             </Animated.View>
-  
+
         </SafeAreaView>
       )
   }

@@ -40,7 +40,7 @@ export const Select_Screen = ({ route }) => {
           If left empty, one will be chosen for you
         </Text>
         <Create_Flock_Button
-          button_name="We're Hungry NOW!"
+          button_name="Create Flock"
           user_info={user_info}
           flock_name={flock_name}
           auto_name_1={auto_name_1}

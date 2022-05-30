@@ -19,15 +19,3 @@ export const Nav_Button = ({ button_name, route, nav_params, disabled }) => {
     </TouchableOpacity>
   );
 }
-
-export const Useless_Button = ({ button_name }) => {
-  return (
-    <TouchableOpacity
-      onPress={() => alert("Not Implemented Yet!")}
-      style={styles.button}
-      activeOpacity={0.5}
-    >
-      <Text style={styles.button_text}>{button_name}</Text>
-    </TouchableOpacity>
-  );
-}
