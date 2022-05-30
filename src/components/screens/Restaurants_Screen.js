@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { backend_api } from '../../constants';
-import { Nav_Button } from "../models/Buttons.js";
+import { Nav_Button } from "../widgets/Buttons.js";
+import { Star_Rating } from "../widgets/Star_Rating";
 import styles from "../../styles/css.js";
 import {
   Image,
@@ -26,7 +27,6 @@ export function Restaurants_Screen({ route }) {
   const [current_shop, set_current_shop] = useState(restaurants[0]);
 
   const [network_error, set_network_error] = useState("");
-  const [remaining_votes, set_remaining_votes] = useState(restaurants.length);
 
   useEffect(() => {
     if (current_index < restaurants.length)
@@ -45,40 +45,13 @@ export function Restaurants_Screen({ route }) {
           }
         });
         if (response.status === 204) {
-          console.log("");
-          console.log("---------------------------------------------");
-          console.log("POST request successful: ", response.status);
-          console.log("URL:", response.url);
-          console.log("flock_info: ", flock_info.flock_name);
-          console.log("response.method: ", response.method);
-          console.log("response.headers: ", response.headers);
-          console.log("response.body: ", response.body);
-          console.log("---------------------------------------------");
-          // const json_res = await response.json();
-          set_remaining_votes(remaining_votes - 1);
+          set_current_index(current_index => current_index + 1);
 
         } else if (response.status === 400) {
           set_network_error("Provided vote info is invalid! Try again.");
-          console.log("");
-          console.log("---------------------------------------------");
-          console.log("Bad response:", response.status);
-          console.log("URL:", response.url);
-          console.log("flock_info: ", flock_info.flock_name);
-          console.log("response.method: ", response.method);
-          console.log("response.headers: ", response.headers);
-          console.log("response.body: ", response.body);
-          console.log("---------------------------------------------");
+
         } else {
           set_network_error("Unable to process vote due to server error");
-          console.log("");
-          console.log("---------------------------------------------");
-          console.log("Bad response:", response.status);
-          console.log("URL:", response.url);
-          console.log("flock_info: ", flock_info);
-          console.log("response.method: ", response.method);
-          console.log("response.headers: ", response.headers);
-          console.log("response.body: ", response.body);
-          console.log("---------------------------------------------");
         }
       } catch (error) {
         console.error(error);
@@ -86,45 +59,47 @@ export function Restaurants_Screen({ route }) {
     };
 
     vote_restaurant()
-    set_current_index(current_index => current_index + 1);
+  }
+  
+  if (current_index >= restaurants.length) {
+    return (
+      <SafeAreaView style={styles.container}>
+      <StatusBar style="auto" />
+      <Nav_Button
+        button_name="View Results"
+        route="Result"
+        nav_params={{
+          user_info: user_info,
+          flock_info: flock_info
+        }}
+    />
+      </SafeAreaView>
+    )
   }
 
-  console.log("");
-  console.log("*********************************************");
-  console.log("RESTAURANTS_SCREEN");
-  console.log("*********************************************");
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
       <Restaurant_Card
         shop_data={current_shop}
-        remaining_votes={remaining_votes}
       />
       <View style={styles.row}>
         <Vote_Button
           button_name="Dislike"
           press_function={() => advance_list(0)}
           image_path={image_paths.dislike}
-          remaining_votes={remaining_votes}
         />
         <Vote_Button
           button_name="Like"
           press_function={() => advance_list(1)}
           image_path={image_paths.like}
-          remaining_votes={remaining_votes}
-        />
-        <View_Results_Button
-          user_info={user_info}
-          flock_info={flock_info}
-          remaining_votes={remaining_votes}
         />
       </View>
     </SafeAreaView>
   )
 }
 
-function Restaurant_Card({ shop_data, remaining_votes }) {
-  if (remaining_votes === 0) return null;
+function Restaurant_Card({ shop_data }) {
   const image_source = shop_data.image_url 
     ? { uri: shop_data.image_url }
     : image_paths.unavailable;
@@ -135,14 +110,13 @@ function Restaurant_Card({ shop_data, remaining_votes }) {
         source={image_source}
       />
       <Text>{shop_data.name}</Text>
-      <Text>Rating: {shop_data.rating}</Text>
+      <Star_Rating star_num={shop_data.rating} shop_id={shop_data.id}></Star_Rating>
       <Text>Review Count: {shop_data.review_count}</Text>
     </View>
   );
 }
 
-function Vote_Button({ button_name, press_function, image_path, remaining_votes }) {
-  if (remaining_votes === 0) return null;
+function Vote_Button({ button_name, press_function, image_path }) {
   return (
     <TouchableOpacity
       onPress={press_function}
@@ -156,18 +130,4 @@ function Vote_Button({ button_name, press_function, image_path, remaining_votes 
       />
     </TouchableOpacity>
   );
-}
-
-const View_Results_Button = ({ user_info, flock_info, remaining_votes }) => {
-  if (remaining_votes !== 0) return null;
-  return (
-    <Nav_Button
-      button_name="View Results"
-      route="Result"
-      nav_params={{
-        user_info: user_info,
-        flock_info: flock_info
-      }}
-    />
-  )
 }
