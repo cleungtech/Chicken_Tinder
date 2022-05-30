@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../models/Buttons.js";
-import { Credentials } from "../models/TextFields.js";
+import { Nav_Button } from "../widgets/Buttons.js";
+import { Credentials } from "../widgets/TextFields.js";
 import styles from "../../styles/css.js";
 import {
-    Image,
+  Image,
   Animated,
   Text,
   TextInput,
@@ -165,7 +165,7 @@ export const Location_Screen = ({ route }) => {
     useEffect(() => {
       fade_in();
     }, []);
-  
+
     console.log("");
     console.log("*********************************************");
     console.log("LOCATION_SCREEN");
@@ -292,15 +292,15 @@ function Render_Screen({
                                 />
                             </View>
                         </View>
-                    </View>
-  
+                    </View>  
+
                     {/* <View style={{
                         flexDirection: 'column',
                         flex:6,
                         margin:10,
                         }}>
                     </View> */}
-  
+
                     <View style={{
                         flexDirection: 'column',
                         // flex:1,
@@ -314,12 +314,12 @@ function Render_Screen({
                             longitude= {display_long}
                         />
                     </View>
-  
+
                 </View>
-  
+
             </Animated.View>
-  
+
         </SafeAreaView>
       )
-
+      
   }
