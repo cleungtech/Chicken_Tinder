@@ -1,12 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import * as Clipboard from 'expo-clipboard';
-import { Nav_Button } from "../widgets/Buttons.js";
 import QRCode from "react-qr-code";
-import styles from "../../styles/css.js";
-import { Loading } from "../widgets/Loading"
-import { backend_api, frontend_url } from '../../constants';
-import { Display_Error } from "../widgets/Display_Error";
 import {
   Animated,
   Text,
@@ -14,6 +7,16 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import * as Clipboard from 'expo-clipboard';
+
+import { Display_Error } from "../widgets/Display_Error";
+import { Loading } from "../widgets/Loading"
+import { Nav_Button } from "../widgets/Buttons.js";
+import { backend_api, frontend_url } from '../../constants';
+
+import styles from "../../styles/css.js";
+
 
 export const Share_Link_Screen = ({ route }) => {
 

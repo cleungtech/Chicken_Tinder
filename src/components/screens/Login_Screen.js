@@ -1,12 +1,4 @@
-
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../widgets/Buttons.js";
-import { Credentials } from "../widgets/TextFields.js";
-import styles from "../../styles/css.js";
-import * as Linking from 'expo-linking';
-import { isMobile } from 'react-device-detect';
-import { mobile_url } from '../../constants.js';
 import {
   Animated,
   Image,
@@ -14,6 +6,16 @@ import {
   SafeAreaView,
   TouchableOpacity
 } from 'react-native';
+import { isMobile } from 'react-device-detect';
+import { StatusBar } from 'expo-status-bar';
+import * as Linking from 'expo-linking';
+
+import { Nav_Button } from "../widgets/Buttons.js";
+import { Credentials } from "../widgets/TextFields.js";
+import { mobile_url } from '../../constants.js';
+
+import styles from "../../styles/css.js";
+
 
 export const Login_Screen = () => {
 

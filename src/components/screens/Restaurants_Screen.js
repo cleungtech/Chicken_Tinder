@@ -1,9 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Nav_Button } from "../widgets/Buttons.js";
-import { backend_api } from '../../constants';
-import { useNavigation } from '@react-navigation/native';
-import { Star_Rating } from "../widgets/Star_Rating";
 import {
   Image,
   SafeAreaView,
@@ -11,6 +6,13 @@ import {
   View,
   Text,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
+
+import { Nav_Button } from "../widgets/Buttons.js";
+import { Star_Rating } from "../widgets/Star_Rating";
+import { backend_api } from '../../constants';
+
 import styles from "../../styles/css.js";
 
 const image_paths = {
@@ -18,6 +20,7 @@ const image_paths = {
   like: require("../../../assets/like_icon.png"),
   unavailable: require("../../../assets/image_unavailable.png")
 }
+
 
 export function Restaurants_Screen({ route }) {
 

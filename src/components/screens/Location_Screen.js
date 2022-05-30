@@ -1,8 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../widgets/Buttons.js";
-import { Credentials } from "../widgets/TextFields.js";
-import styles from "../../styles/css.js";
 import {
   Image,
   Animated,
@@ -11,11 +7,18 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import * as Location from 'expo-location';
+
+import { Credentials } from "../widgets/TextFields.js";
+import { Nav_Button } from "../widgets/Buttons.js";
+
+import styles from "../../styles/css.js";
 
 const image_paths = {
     search: require("../../../assets/search_icon.png"),
   }
+  
 
 export const Location_Screen = ({ route }) => {
 

@@ -3,8 +3,10 @@ import {
     Text,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import styles from "../../styles/css.js";
 import { MaterialIcons } from '@expo/vector-icons'; 
+
+import styles from "../../styles/css.js";
+
 
 export const Display_Error = ({network_error}) => {
   return (

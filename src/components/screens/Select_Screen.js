@@ -1,13 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { Nav_Button } from "../widgets/Buttons.js";
-import { Credentials } from "../widgets/TextFields.js";
-import styles from "../../styles/css.js";
 import {
   Animated,
   Text,
   SafeAreaView
 } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+
+import { Credentials } from "../widgets/TextFields.js";
+import { Nav_Button } from "../widgets/Buttons.js";
+
+import styles from "../../styles/css.js";
+
 
 export const Select_Screen = ({ route }) => {
 

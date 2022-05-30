@@ -1,9 +1,9 @@
-import styles from "../../styles/css.js";
-import {
-    View,
-  } from 'react-native';
+import { View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; 
+
+import styles from "../../styles/css.js";
 import { chicken_colors } from "../../styles/css.js";
+
 
 export const Star_Rating = ({star_num, shop_id}) => {
     const star_arr = [];

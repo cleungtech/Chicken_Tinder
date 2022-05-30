@@ -1,12 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { backend_api } from '../../constants';
-import { Nav_Button } from "../widgets/Buttons.js";
-import { Star_Rating } from "../widgets/Star_Rating";
-import { Display_Error } from "../widgets/Display_Error";
-import { Loading } from "../widgets/Loading"
-import * as Linking from 'expo-linking';
-import styles from "../../styles/css.js";
 import {
   Animated,
   Image,
@@ -15,6 +7,17 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import * as Linking from 'expo-linking';
+
+import { Display_Error } from "../widgets/Display_Error";
+import { Loading } from "../widgets/Loading"
+import { Nav_Button } from "../widgets/Buttons.js";
+import { Star_Rating } from "../widgets/Star_Rating";
+import { backend_api } from '../../constants';
+
+import styles from "../../styles/css.js";
+
 
 export function Result_Screen({ route }) {
 
@@ -39,8 +42,6 @@ export function Result_Screen({ route }) {
     const restaurant_ratings = Object.fromEntries(restaurants.map(r => {
       return [r.id, r];
     }));
-    console.log(most_voted_restaurants);
-    console.log('here are the ratings');
 
     let highest_rated_restaurant = {};
     let highest_rating = 0;
@@ -51,7 +52,6 @@ export function Result_Screen({ route }) {
       }
     }
 
-    console.log(highest_rated_restaurant);
     set_winner_data(highest_rated_restaurant);
   }
 
@@ -63,10 +63,7 @@ export function Result_Screen({ route }) {
       });
       if (response.status === 200) {
         const json_res = await response.json();
-        console.log('json_res');
-        console.log(json_res);
-        const highest_votes = json_res.most_voted_restaurants;
-        find_winner(highest_votes);
+        find_winner(json_res.most_voted_restaurants);
 
       } else if (response.status === 400) {
         set_network_error("Unable to obtain winner due to invalid form");
@@ -97,8 +94,6 @@ export function Result_Screen({ route }) {
 }
 
 function Winning_Card({ shop_data }) {
-  console.log(shop_data);
-
   function go_to_maps(coords) {
     const map_url =
       "https://www.google.com/maps/dir/?api=1" +
