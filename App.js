@@ -8,9 +8,7 @@ import { Restaurants_Screen } from "./src/components/screens/Restaurants_Screen.
 import { Share_Link_Screen } from "./src/components/screens/Share_Link_Screen.js";
 import { Location_Screen } from "./src/components/screens/Location_Screen.js";
 import { Join_Screen } from "./src/components/screens/Join_Screen.js";
-import { Result_Screen } from "./src/components/screens/Results_Screen.js";
-
-import * as Linking from 'expo-linking';
+import { Result_Screen } from "./src/components/screens/Result_Screen.js";
 
 const Stack = createNativeStackNavigator();
 

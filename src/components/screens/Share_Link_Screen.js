@@ -4,9 +4,9 @@ import * as Clipboard from 'expo-clipboard';
 import { Nav_Button } from "../widgets/Buttons.js";
 import QRCode from "react-qr-code";
 import styles from "../../styles/css.js";
-import * as Linking from "expo-linking";
-import { Loading } from "../widgets/Loading";
+import { Loading } from "../widgets/Loading"
 import { backend_api, frontend_url } from '../../constants';
+import { Display_Error } from "../widgets/Display_Error";
 import {
   Animated,
   Text,
@@ -35,6 +35,16 @@ export const Share_Link_Screen = ({ route }) => {
   const copy_flock_id = () => {
     Clipboard.setString(String(flock_res.flock_id));
     set_has_copied({ join_url: false, flock_id: true });
+  }
+
+  const fade_anim = useRef(new Animated.Value(0)).current;
+
+  const fade_in = () => {
+    Animated.timing(fade_anim, {
+      useNativeDriver: true,
+      toValue: 1,
+      duration: 500,
+    }).start();
   }
 
   const create_flock = async () => {
@@ -66,10 +76,8 @@ export const Share_Link_Screen = ({ route }) => {
           restaurants: json_res.restaurants,
           self: json_res.self
         });
-
       } else if (response.status === 400) {
         set_network_error("Unable to create a new flock due to invalid form");
-
       } else {
         set_network_error("Unable to create user due to server error");
       }
@@ -82,16 +90,6 @@ export const Share_Link_Screen = ({ route }) => {
       fade_in();
     }
   };
-
-  const fade_anim = useRef(new Animated.Value(0)).current;
-
-  const fade_in = () => {
-    Animated.timing(fade_anim, {
-      useNativeDriver: true,
-      toValue: 1,
-      duration: 500,
-    }).start();
-  }
 
   useEffect(() => {
     create_flock();
@@ -106,12 +104,12 @@ export const Share_Link_Screen = ({ route }) => {
     }, [flock_res]);
 
   if (url_is_loading) return <Loading />
+  if (network_error) return <Display_Error network_error={network_error}/>
   return (
     <SafeAreaView style={{ alignItems: "center", marginTop: 50 }}>
       <StatusBar style="auto" />
       <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
         <Report_Status
-          network_error={network_error}
           flock_name={flock_name}
         />
         <Share_QR_Code
@@ -140,8 +138,7 @@ export const Share_Link_Screen = ({ route }) => {
   );
 }
 
-const Report_Status = ({ network_error, flock_name }) => {
-  if (network_error) return <Text>{network_error}</Text>
+const Report_Status = ({ flock_name }) => {
   return <Text>{flock_name} has been created successfully!</Text>
 }
 

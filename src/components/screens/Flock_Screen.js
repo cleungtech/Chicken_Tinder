@@ -4,11 +4,11 @@ import { Nav_Button } from "../widgets/Buttons.js";
 import styles from "../../styles/css.js";
 import { Loading } from "../widgets/Loading";
 import { backend_api } from '../../constants.js';
+import { Display_Error } from "../widgets/Display_Error";
 import {
   Animated,
   SafeAreaView,
   Text,
-  Image,
 } from 'react-native';
 
 export const Flock_Screen = ({ route }) => {
@@ -65,19 +65,18 @@ export const Flock_Screen = ({ route }) => {
       create_user();
     }, 0);
 
-    // clean the state
     return () => {
       set_user_res({});
     }
   }, []);
 
   if (is_loading) return <Loading />
+  if (network_error) return <Display_Error network_error={network_error}/>
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
       <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
         <Report_Status
-          network_error={network_error}
           user_res={user_res}
         />
         <Create_Flock_Button
@@ -96,18 +95,8 @@ export const Flock_Screen = ({ route }) => {
   );
 }
 
-const Report_Status = ({ network_error, user_res }) => {
-  if (!network_error) return <Text>User {user_res.user_name} created!</Text>;
-  return (
-    <>
-      {/* replace this with an icon or something later */}
-      <Image
-        style={styles.placeholder}
-        source={require("../../../assets/tender.jpg")}
-      />
-      <Text>{network_error}</Text>
-    </>
-  )
+const Report_Status = ({ user_res }) => {
+  return <Text>User {user_res.user_name} created!</Text>;
 }
 
 const Create_Flock_Button = ({ show_button, invited, user_res }) => {

@@ -7,15 +7,11 @@ import {
   Image,
   Animated,
   Text,
-  TextInput,
   SafeAreaView,
   TouchableOpacity,
-  Platform,
   View
 } from 'react-native';
-import {Constants, Permissions} from 'expo';
 import * as Location from 'expo-location';
-import { Ionicons } from '@expo/vector-icons';
 
 const image_paths = {
     search: require("../../../assets/search_icon.png"),
@@ -24,12 +20,9 @@ const image_paths = {
 export const Location_Screen = ({ route }) => {
 
     const { user_info, flock_name } = route.params;
-    const [loc, setLoc] = useState({coords: {latitude: "", longitude: ""}});
     const [errorMsg, setErrorMsg] = useState("");
 
     const [reverseLoc, setReverseLoc] = useState("");
-    const [geocodeLoc, setGeocodeLoc] = useState("");
-
     const [searchInput, setSearchInput] = useState("");
 
     const [network_error, set_network_error] = useState("");
@@ -37,16 +30,14 @@ export const Location_Screen = ({ route }) => {
     const [display_lat, set_display_lat] = useState("");
     const [display_long, set_display_long] = useState("");
 
-    const [display_city, set_display_city] = useState("");
-    const [display_region, set_display_region] = useState("");
-
-    const [display, set_display] = useState("");
+    const [display_city, set_display_city] = useState("-");
+    const [display_region, set_display_region] = useState("-");
   
     function Reverse_Geocode(location_input) {
         (async () => {
             try {
-                let reverseLoc = await Location.reverseGeocodeAsync(location_input);
-                setReverseLoc(reverseLoc);
+                let reverse_result = await Location.reverseGeocodeAsync(location_input);
+                setReverseLoc(reverse_result);
             } catch {
             }
         })();
@@ -65,87 +56,36 @@ export const Location_Screen = ({ route }) => {
                 set_display_region(new_region);
             }
         }
-
-        return(
-            Render_Screen({
-                fade_anim, 
-                display_city, 
-                display_region, 
-                display_lat, 
-                display_long, 
-                searchInput, 
-                setSearchInput,
-                Geocode_Search, 
-                user_info, 
-                flock_name,
-                Search_Location_Button
-            })
-        )
     };
     
     function Geocode_Search(search_input) {
         (async () => {
             try {
-                let geocodeLoc = await Location.geocodeAsync(search_input);
-                setGeocodeLoc(geocodeLoc);
+                let geocode_result = await Location.geocodeAsync(search_input);
 
                 if (errorMsg) {
                     set_network_error("Unable to find location due to restricted permissions");
-                } else if (geocodeLoc) {
+                } else if (geocode_result) {
         
-                    const new_lat = geocodeLoc[0].latitude;
-                    const new_long = geocodeLoc[0].longitude;
-        
-                    set_display_lat(new_lat);
-                    set_display_long(new_long);
+                    set_display_lat(geocode_result[0].latitude);
+                    set_display_long(geocode_result[0].longitude);
         
                     Reverse_Geocode({latitude:display_lat, longitude:display_long})
                 }
             } catch {
                 alert('Invalid input!'); 
-                return(
-                    Render_Screen({
-                        fade_anim, 
-                        display_city, 
-                        display_region, 
-                        display_lat, 
-                        display_long, 
-                        searchInput, 
-                        setSearchInput,
-                        Geocode_Search, 
-                        user_info, 
-                        flock_name,
-                        Search_Location_Button
-                    }))
             }
         })();
     };
   
     useEffect(() => {
       (async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync();
+        let { status }  = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
           setErrorMsg('Permission to access location was denied');
-          return (
-            <SafeAreaView style={styles.container}>
-              <StatusBar style="auto" />
-              <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
-                <Text>Search Locations:</Text>
-                <Credentials
-                  inputfield="Find locations to search near"
-                />
-                <Search_Location_Button
-                  button_name="Search"
-                  press_function={Geocode_Search}
-                  search_input={searchInput}
-                />
-              </Animated.View>
-            </SafeAreaView>
-          )
         }
   
         let loc = await Location.getCurrentPositionAsync({});
-        setLoc(loc);
         set_display_lat(loc.coords.latitude);
         set_display_long(loc.coords.longitude);
 
@@ -165,12 +105,7 @@ export const Location_Screen = ({ route }) => {
     useEffect(() => {
       fade_in();
     }, []);
-
-    console.log("");
-    console.log("*********************************************");
-    console.log("LOCATION_SCREEN");
-    console.log("*********************************************");
-
+  
     return(
         Render_Screen({
             fade_anim, 
@@ -266,44 +201,30 @@ function Render_Screen({
                         </Text>
                         <View style={{
                             flexDirection: 'row',
-                            // flex:1,
+                            alignItems: 'center',
                             margin:10,
-                            }}>
-                            <View style={{
-                                }}>
-                                <Credentials 
-                                    style={{
-                                        height: 30,
-                                        margin: 0,
-                                        borderWidth: 1,
-                                        padding: 0,
-                                        backgroundColor: 'white',
-                                    }}
-                                    inputfield="Find locations to search near"
-                                    change_function={searchInput => setSearchInput(searchInput.toString())}
-                                />
-                            </View>
-                            <View style={{
-                                }}>
-                                <Search_Location_Button
-                                    press_function={Geocode_Search}
-                                    search_input={searchInput}
-                                    image_path={image_paths.search}
-                                />
-                            </View>
-                        </View>
-                    </View>  
-
-                    {/* <View style={{
-                        flexDirection: 'column',
-                        flex:6,
-                        margin:10,
                         }}>
-                    </View> */}
-
+                          <Credentials 
+                              style={{
+                                  height: 30,
+                                  margin: 0,
+                                  borderWidth: 1,
+                                  padding: 0,
+                                  backgroundColor: 'white',
+                              }}
+                              inputfield="Find locations to search near"
+                              change_function={searchInput => setSearchInput(searchInput.toString())}
+                          />
+                          <Search_Location_Button
+                              press_function={Geocode_Search}
+                              search_input={searchInput}
+                              image_path={image_paths.search}
+                          />
+                        </View>
+                    </View>
+  
                     <View style={{
                         flexDirection: 'column',
-                        // flex:1,
                         margin:10,
                         }}>
                         <Send_Location_Button
@@ -321,5 +242,4 @@ function Render_Screen({
 
         </SafeAreaView>
       )
-      
   }

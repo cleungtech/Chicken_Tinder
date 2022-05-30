@@ -9,7 +9,7 @@ export const Star_Rating = ({star_num, shop_id}) => {
     const star_arr = [];
     for (let i = 0; i < 5; i++) {
         star_arr.push(
-            <FontAwesome
+            <FontAwesome 
                 key={"empty" + shop_id + i}
                 name="star-o" 
                 size={24} 
@@ -24,7 +24,7 @@ export const Star_Rating = ({star_num, shop_id}) => {
     if (star_remainder > 0) {
         star_arr.pop();
         star_arr.unshift(
-            <FontAwesome
+            <FontAwesome 
                 key={"halfstar" + shop_id + 'laststar'}
                 name="star-half-o" 
                 size={24} 
@@ -36,14 +36,14 @@ export const Star_Rating = ({star_num, shop_id}) => {
     for (let i = 0; i < star_whole; i++) {
         star_arr.pop();
         star_arr.unshift(
-            <FontAwesome
+            <FontAwesome 
                 key={"fullstar" + shop_id + i}
                 name="star" 
                 size={24} 
                 color={chicken_colors.yellow_light} 
             />
         );
-    } 
+    }
 
     return (
         <View style={styles.container_horizontal}>
