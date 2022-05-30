@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Nav_Button } from "../models/Buttons.js";
 import { backend_api, frontend_url } from '../../constants';
 // import { useNavigation } from '@react-navigation/native';
+import { Loading } from "../models/Loading";
 import {
   Animated,
   Image,
@@ -16,59 +17,14 @@ import { Star_Rating } from "../models/Star_Rating";
 import * as Linking from 'expo-linking';
 import styles from "../../styles/css.js";
 
-const fake_data = {
-  "id":"woXlprCuowrLJswWere3TQ",
-  "alias":"täkō-pittsburgh-4",
-  "name":"täkō",
-  "image_url":"https://s3-media1.fl.yelpcdn.com/bphoto/W2J52omHmHj54VA4aZffZw/o.jpg",
-  "is_closed":false,
-  "url":"https://www.yelp.com/biz/t%C3%A4k%C5%8D-pittsburgh-4?adjust_creative=4NyEZ_ADjDEi-lQ7QpfThw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=4NyEZ_ADjDEi-lQ7QpfThw",
-  "review_count":1726,
-  "categories":[
-      {
-          "alias":"newamerican",
-          "title":"American (New)"
-      },
-      {
-          "alias":"mexican",
-          "title":"Mexican"
-      }
-  ],
-  "rating":4.5,
-  "coordinates":{
-      "latitude":40.4422285652929,
-      "longitude":-80.0019846968895
-  },
-  "transactions":[
-      "restaurant_reservation"
-  ],
-  "price":"$$",
-  "location":{
-      "address1":"214 6th St",
-      "address2":"",
-      "address3":"",
-      "city":"Pittsburgh",
-      "zip_code":"15222",
-      "country":"US",
-      "state":"PA",
-      "display_address":[
-          "214 6th St",
-          "Pittsburgh, PA 15222"
-      ]
-  },
-  "phone":"+14124718256",
-  "display_phone":"(412) 471-8256",
-  "distance":545.8436859188364
-}
-
 
 export function Result_Screen({ route }) {
-  const flock_info = route.params;
+
+  const { user_info, flock_info } = route.params;
   const restaurants = flock_info.restaurants;
 
-  const [winner, set_winner] = useState("");
-  const [winner_data, set_winner_data] = useState({});
-  const [url_is_loading, set_url_loading] = useState(true);
+  const [is_waiting, set_is_waiting] = useState(true);
+
   const [network_error, set_network_error] = useState("");
 
   const fade_anim = useRef(new Animated.Value(0)).current;
@@ -81,16 +37,19 @@ export function Result_Screen({ route }) {
     }).start();
   }
 
-  const find_winner = () => {
-    for(const shop of restaurants) {
-      if (shop.id == winner) {
-        set_winner_data(shop);
-      }
-    }
-  }
+  // const find_winner = (most_voted_restaurants) => {
+  //   console.log("find_winner");
+  //   console.log(most_voted_restaurants);
+  //   let highest_rated_restaurant = null;
+
+  //   for (r in most_voted_restaurants) {
+  //     console.log(r);
+  //   }
+  // }
   
   const get_result = async () => {
     try {
+      console.log("Fetching");
       const response = await fetch(
         `${backend_api}flock/${flock_info.flock_id}/status`, {
         method: 'GET',
@@ -99,10 +58,13 @@ export function Result_Screen({ route }) {
           'Content-Type': 'application/json'
         }
       });
-      if (response.status === 201) {
+      
+      if (response.status === 200) {
         const json_res = await response.json();
-        set_winner(json_res.most_voted_restaurants[0]);
-        find_winner();
+
+        if (json_res.remaining_votes === 0)
+          find_winner(json_res.most_voted_restaurants);
+
       } else if (response.status === 400) {
         set_network_error("Unable to create a new flock due to invalid form");
       } else {
@@ -113,22 +75,27 @@ export function Result_Screen({ route }) {
       console.error(error);
       alert(error.toString());
     } finally {
-      set_url_loading(false);
       fade_in();
     }
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      get_result();
-    }, 0);
+    get_result();
   }, []);
 
-  if (url_is_loading) return <Loading />
+  if (is_waiting) {
+    return (
+      <Loading
+        message="Waiting for others..."
+      />
+    )
+  }
+
   return (
     <SafeAreaView style={styles.result_container}>
       <StatusBar style="auto" />
-      <Winning_Card shop_data={winner_data} />
+      <Text>Result Screen</Text>
+      {/* <Winning_Card shop_data={winner_data} /> */}
     </SafeAreaView>
   )
 }
