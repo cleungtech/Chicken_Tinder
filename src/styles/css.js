@@ -36,10 +36,15 @@ export default StyleSheet.create({
         height: 200,
         resizeMode: 'contain'
     },
-    card: {
-        flex: 3,
+    restaurants_card: {
+        flex: .2,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+    },
+    results_card: {
+        flex: 6,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     row: {
         flex: 1,
@@ -85,6 +90,7 @@ export default StyleSheet.create({
     },
     header_container: {
         flexDirection: 'column',
+        width: '100%',
         flex: 1,
         alignItems: 'center',
         position: 'relative',
@@ -116,14 +122,6 @@ export default StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 20,
         backgroundColor: chicken_colors.red,
-    },
-    image_container: {
-        marginTop: 30,
-        alignItems: 'center',
-        padding: 10,
-        borderRadius: 20,
-        borderColor: chicken_colors.red_light,
-        borderWidth: 5,
     },
     button_text: {
         fontSize: 16,

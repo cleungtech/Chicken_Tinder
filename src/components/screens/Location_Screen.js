@@ -174,15 +174,12 @@ function Render_Screen({
               <View style={styles.container}>
                 <View style={{
                     flexDirection: 'column',
-                    // flex:1,
                     margin:20,
                     }}>
-              
                     <View style={{
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        // flex:1,
                     }}>
                         <Text>Your location is:</Text>
                         <Text style={styles.bold_text_yellow}>{display_city}, {display_region}</Text>

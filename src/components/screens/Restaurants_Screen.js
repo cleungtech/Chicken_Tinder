@@ -83,12 +83,12 @@ export function Restaurants_Screen({ route }) {
           <Restaurant_Card shop_data={current_shop} />
           <View style={styles.row}>
             <Vote_Button
-              button_name="Dislike"
+              button_name=""
               press_function={() => advance_list("0")}
               image_path={image_paths.dislike}
             />
             <Vote_Button
-              button_name="Like"
+              button_name=""
               press_function={() => advance_list("1")}
               image_path={image_paths.like}
             />
@@ -116,7 +116,7 @@ function Restaurant_Card({ shop_data }) {
     ? { uri: shop_data.image_url }
     : image_paths.unavailable;
   return (
-    <View style={styles.card}>
+    <View style={styles.restaurants_card}>
       <Image
         style={styles.image_rounded}
         source={image_source}
@@ -146,13 +146,18 @@ function Vote_Button({ button_name, press_function, image_path }) {
 
 const View_Results_Button = ({ button_name, user_info, flock_info }) => {
   return (
-    <Nav_Button
-      button_name={button_name}
-      route="Result"
-      nav_params={{
-        user_info: user_info,
-        flock_info: flock_info
-      }}
-    />
+    <SafeAreaView style={styles.header_container}>
+      <Landing_Banner/>
+      <View style={styles.header_container}>
+        <Nav_Button
+          button_name={button_name}
+          route="Result"
+          nav_params={{
+            user_info: user_info,
+            flock_info: flock_info
+          }}
+        />
+      </View>
+    </SafeAreaView>
   )
 }

@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
 import { backend_api } from '../../constants';
-import { Nav_Button } from "../widgets/Buttons.js";
+import { Nav_Button, Landing_Banner } from "../widgets/Buttons.js";
 import { Star_Rating } from "../widgets/Star_Rating";
 import { Display_Error } from "../widgets/Display_Error";
 import { Loading } from "../widgets/Loading"
@@ -114,37 +114,40 @@ function Winning_Card({ shop_data }) {
   }
 
   return (
-    <View style={styles.card}>
-      <Text style={styles.winner_name}>{shop_data.name}</Text>
-      <Image
-        style={styles.image_rounded}
-        source={{ uri: shop_data.image_url }}
-      />
-      <Star_Rating star_num={shop_data.rating} shop_id={shop_data.id}></Star_Rating>
-      <Text style={styles.winner_button_header}>
-        Review Count: {shop_data.review_count}
-      </Text>
-      <TouchableOpacity
-        onPress={() => go_to_maps(shop_data.coordinates)}
-        style={styles.maps_button}
-        activeOpacity={0.5}
-      >
-        <Text style={styles.winner_button_header}>Get Directions: </Text>
-        <Text>{shop_data.location.display_address[0]}</Text>
-        <Text>{shop_data.location.display_address[1]}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => go_to_phone(shop_data.phone)}
-        style={styles.contact_button}
-        activeOpacity={0.5}
-      >
-        <Text style={styles.winner_button_header}>Contact: </Text>
-        <Text>{shop_data.display_phone}</Text>
-      </TouchableOpacity>
-      <Nav_Button
-        button_name="Start Over"
-        route="Login"
-      />
-    </View>
+    <SafeAreaView style={styles.header_container}>
+      {/* <Landing_Banner/> */}
+      <View style={styles.results_card}>
+        <Text style={styles.winner_name}>{shop_data.name}</Text>
+        <Image
+          style={styles.image_rounded}
+          source={{ uri: shop_data.image_url }}
+        />
+        <Star_Rating star_num={shop_data.rating} shop_id={shop_data.id}></Star_Rating>
+        <Text style={styles.winner_button_header}>
+          Review Count: {shop_data.review_count}
+        </Text>
+        <TouchableOpacity
+          onPress={() => go_to_maps(shop_data.coordinates)}
+          style={styles.maps_button}
+          activeOpacity={0.5}
+        >
+          <Text style={styles.winner_button_header}>Get Directions: </Text>
+          <Text>{shop_data.location.display_address[0]}</Text>
+          <Text>{shop_data.location.display_address[1]}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => go_to_phone(shop_data.phone)}
+          style={styles.contact_button}
+          activeOpacity={0.5}
+        >
+          <Text style={styles.winner_button_header}>Contact: </Text>
+          <Text>{shop_data.display_phone}</Text>
+        </TouchableOpacity>
+        <Nav_Button
+          button_name="Start Over"
+          route="Login"
+        />
+      </View>
+    </SafeAreaView>
   );
 }
