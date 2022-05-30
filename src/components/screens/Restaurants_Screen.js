@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { backend_api } from '../../constants';
-import { Nav_Button } from "../widgets/Buttons.js";
+import { useNavigation } from '@react-navigation/native';
 import { Star_Rating } from "../widgets/Star_Rating";
 import styles from "../../styles/css.js";
 import {
@@ -20,6 +20,8 @@ const image_paths = {
 
 export function Restaurants_Screen({ route }) {
 
+  const navigation = useNavigation();
+
   const { user_info, flock_info } = route.params;
   const restaurants = flock_info.restaurants;
 
@@ -29,8 +31,14 @@ export function Restaurants_Screen({ route }) {
   const [network_error, set_network_error] = useState("");
 
   useEffect(() => {
-    if (current_index < restaurants.length)
+    if (current_index < restaurants.length) {
       set_current_shop(restaurants[current_index]);
+    } else {
+      navigation.navigate("Result", {
+        user_info: user_info,
+        flock_info: flock_info
+      })
+    }
   }, [current_index]);
 
   function advance_list(vote_id) {
@@ -60,22 +68,6 @@ export function Restaurants_Screen({ route }) {
 
     vote_restaurant()
   }
-  
-  if (current_index >= restaurants.length) {
-    return (
-      <SafeAreaView style={styles.container}>
-      <StatusBar style="auto" />
-      <Nav_Button
-        button_name="View Results"
-        route="Result"
-        nav_params={{
-          user_info: user_info,
-          flock_info: flock_info
-        }}
-    />
-      </SafeAreaView>
-    )
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -100,7 +92,7 @@ export function Restaurants_Screen({ route }) {
 }
 
 function Restaurant_Card({ shop_data }) {
-  const image_source = shop_data.image_url 
+  const image_source = shop_data.image_url
     ? { uri: shop_data.image_url }
     : image_paths.unavailable;
   return (
