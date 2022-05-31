@@ -1,13 +1,11 @@
-import { 
-    StyleSheet, 
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const chicken_colors = {
     red: '#ff6a6a',
     yellow: '#ecaa1d',
     red_light: '#fc9797',
     yellow_light: '#eace92',
-    yellow_dark:'#b87f04',
+    yellow_dark: '#b87f04',
 }
 
 export default StyleSheet.create({
@@ -79,7 +77,7 @@ export default StyleSheet.create({
         backgroundColor: chicken_colors.red,
         alignItems: 'center',
         justifyContent: 'center',
-      },
+    },
     header: {
         position: 'absolute',
         width: '50%',
@@ -215,5 +213,4 @@ export default StyleSheet.create({
         borderRadius: 20,
         backgroundColor: chicken_colors.yellow,
     },
-
 });
