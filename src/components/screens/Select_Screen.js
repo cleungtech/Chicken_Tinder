@@ -3,12 +3,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Nav_Button, Landing_Banner } from "../widgets/Buttons.js";
 import { Credentials } from "../widgets/TextFields.js";
 import styles from "../../styles/css.js";
+import { auto_flock_name } from '../../constants.js';
 import {
   Animated,
   Text,
   SafeAreaView,
   View
 } from 'react-native';
+
+const { auto_name_1, auto_name_2 } = auto_flock_name;
 
 export const Select_Screen = ({ route }) => {
 
@@ -54,9 +57,6 @@ export const Select_Screen = ({ route }) => {
     </SafeAreaView>
   )
 }
-
-const auto_name_1 = ["rutabaga", "pasticcio", "biryani", "tonkatsu", "tofu", "gruyere", "zongzi", "kimbap", "bratwurst", "potato"];
-const auto_name_2 = ["farmers", "grocers", "chefs", "munchers", "eaters", "sellers", "crunchers", "friends", "family", "platoon"];
 
 const Create_Flock_Button = ({ button_name, user_info, flock_name }) => {
   if (!flock_name) {

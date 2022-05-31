@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { backend_api } from '../../constants';
+import { backend_api, google_map_api } from '../../constants';
 import { Nav_Button } from "../widgets/Buttons.js";
 import { Star_Rating } from "../widgets/Star_Rating";
 import { Display_Error } from "../widgets/Display_Error";
@@ -107,12 +107,7 @@ export const Result_Screen = ({ route }) => {
 const Winning_Card = ({ shop_data }) => {
 
   const go_to_maps = (coords) => {
-    const map_url =
-      "https://www.google.com/maps/dir/?api=1" +
-      "&destination=" +
-      coords.latitude +
-      "," +
-      coords.longitude;
+    const map_url = `${google_map_api}=${coords.latitude},${coords.longitude}`;
     Linking.openURL(map_url);
   }
 
