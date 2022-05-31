@@ -29,8 +29,7 @@ export function Restaurants_Screen({ route }) {
   const [current_index, set_current_index] = useState(0);
   const [current_shop, set_current_shop] = useState(restaurants[0]);
 
-  const [network_error, set_network_error] = useState();
-  const [still_voting, set_still_voting] = useState(true);
+  const [network_error, set_network_error] = useState("");
 
   useEffect(() => {
     if (current_index < restaurants.length) {
@@ -55,60 +54,43 @@ export function Restaurants_Screen({ route }) {
           }
         });
         if (response.status === 204) {
+          set_current_index(current_index => current_index + 1);
+
         } else if (response.status === 400) {
           set_network_error("Provided vote info is invalid! Try again.");
+
         } else {
           set_network_error("Unable to process vote due to server error");
         }
       } catch (error) {
         console.error(error);
-      } 
+      }
     };
 
     vote_restaurant()
-
-    if (current_index == 9) {
-      set_still_voting(false);
-    } else {
-      set_current_index(current_index => current_index + 1);
-    }
   }
 
-  if (still_voting) {
-    return (
-      <SafeAreaView style={styles.header_container}>
-        <StatusBar style="auto" />
-        <Landing_Banner/>
+  return (
+    <SafeAreaView style={styles.header_container}>
+      <StatusBar style="auto" />
+      <Landing_Banner/>
         <View style={styles.container}>
           <Restaurant_Card shop_data={current_shop} />
-          <View style={styles.row}>
-            <Vote_Button
-              button_name=""
-              press_function={() => advance_list("0")}
-              image_path={image_paths.dislike}
-            />
-            <Vote_Button
-              button_name=""
-              press_function={() => advance_list("1")}
-              image_path={image_paths.like}
-            />
-          </View>
-        </View>
-      </SafeAreaView>
-    )
-  } else {
-    return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar style="auto" />
-        <View_Results_Button 
-          button_name = 'View Winner!'
-          user_info = {user_info}
-          flock_info = {flock_info}
+      <View style={styles.row}>
+        <Vote_Button
+          button_name=""
+          press_function={() => advance_list(0)}
+          image_path={image_paths.dislike}
         />
-        
-      </SafeAreaView>
-    );
-  }
+        <Vote_Button
+          button_name=""
+          press_function={() => advance_list(1)}
+          image_path={image_paths.like}
+        />
+      </View>
+    </View>
+    </SafeAreaView>
+  )
 }
 
 function Restaurant_Card({ shop_data }) {
@@ -142,22 +124,4 @@ function Vote_Button({ button_name, press_function, image_path }) {
       />
     </TouchableOpacity>
   );
-}
-
-const View_Results_Button = ({ button_name, user_info, flock_info }) => {
-  return (
-    <SafeAreaView style={styles.header_container}>
-      <Landing_Banner/>
-      <View style={styles.header_container}>
-        <Nav_Button
-          button_name={button_name}
-          route="Result"
-          nav_params={{
-            user_info: user_info,
-            flock_info: flock_info
-          }}
-        />
-      </View>
-    </SafeAreaView>
-  )
 }
