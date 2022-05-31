@@ -18,12 +18,12 @@
     ],
     "ios": {
       "bundleIdentifier": "com.chickentinder.cleungtech",
-      "buildNumber": "2.0.0",
+      "buildNumber": "1.0.1",
       "supportsTablet": true
     },
     "android": {
       "package": "com.chickentinder.cleungtech",
-      "versionCode": 2,
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
