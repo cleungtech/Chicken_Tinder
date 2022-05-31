@@ -6,7 +6,7 @@ import { Credentials } from "../widgets/TextFields.js";
 import styles from "../../styles/css.js";
 import * as Linking from 'expo-linking';
 import { isMobile } from 'react-device-detect';
-import { mobile_url } from '../../constants.js';
+import { mobile_url, auto_user_name } from '../../constants.js';
 import {
   Animated,
   Image,
@@ -14,6 +14,8 @@ import {
   SafeAreaView,
   TouchableOpacity
 } from 'react-native';
+
+const { auto_name_1, auto_name_2 } = auto_user_name;
 
 export const Login_Screen = () => {
 
@@ -96,9 +98,6 @@ export const Login_Screen = () => {
     </SafeAreaView>
   );
 }
-
-const auto_name_1 = ["chicken", "bread", "food", "cheese", "rice", "ramen", "chocolate", "pizza", "pasta", "potato"];
-const auto_name_2 = ["lover", "kid", "fan", "hoarder", "enthusiast", "connoisseur", "professor", "whiz", "geek", "nerd"];
 
 const Get_Started_Button = ({ user_name, is_invited, invitation }) => {
   if (!user_name) {
