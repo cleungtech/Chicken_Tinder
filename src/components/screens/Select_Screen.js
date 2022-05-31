@@ -31,7 +31,7 @@ export const Select_Screen = ({ route }) => {
   return (
     <SafeAreaView style={styles.header_container}>
       <StatusBar style="auto" />
-      <Landing_Banner/>
+      <Landing_Banner />
       <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
         <View style={styles.container}>
           <Text>Flock Name:</Text>

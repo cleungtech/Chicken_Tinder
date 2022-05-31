@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; 
 import { chicken_colors } from "../../styles/css.js";
 
-export const Star_Rating = ({star_num, shop_id}) => {
+export const Star_Rating = ({ star_num, shop_id }) => {
     const star_arr = [];
     for (let i = 0; i < 5; i++) {
         star_arr.push(

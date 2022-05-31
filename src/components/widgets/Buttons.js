@@ -21,7 +21,7 @@ export const Nav_Button = ({ button_name, route, nav_params, disabled }) => {
   );
 }
 
-export const Landing_Banner = ({}) => {
+export const Landing_Banner = () => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
