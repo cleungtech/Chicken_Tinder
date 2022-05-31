@@ -1,7 +1,4 @@
-import { 
-    SafeAreaView,
-    Text,
-} from 'react-native';
+import { SafeAreaView, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import styles from "../../styles/css.js";
 import { MaterialIcons } from '@expo/vector-icons'; 
