@@ -9,7 +9,6 @@ import {
   Animated,
   SafeAreaView,
   Text,
-  Image,
   View
 } from 'react-native';
 
@@ -73,11 +72,11 @@ export const Flock_Screen = ({ route }) => {
   }, []);
 
   if (is_loading) return <Loading />
-  if (network_error) return <Display_Error network_error={network_error}/>
+  if (network_error) return <Display_Error network_error={network_error} />
   return (
     <SafeAreaView style={styles.header_container}>
       <StatusBar style="auto" />
-      <Landing_Banner/>
+      <Landing_Banner />
       <Animated.View style={[{ opacity: fade_anim, alignItems: 'center' }]}>
         <View style={styles.container}>
           <Report_Status

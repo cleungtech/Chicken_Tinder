@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import styles from "../../styles/css.js";
 import { MaterialIcons } from '@expo/vector-icons'; 
 
-export const Display_Error = ({network_error}) => {
+export const Display_Error = ({ network_error }) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />

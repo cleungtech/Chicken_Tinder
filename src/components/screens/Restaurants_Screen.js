@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Nav_Button, Landing_Banner } from "../widgets/Buttons.js";
+import { Landing_Banner } from "../widgets/Buttons.js";
 import { backend_api } from '../../constants';
 import { useNavigation } from '@react-navigation/native';
 import { Star_Rating } from "../widgets/Star_Rating";
@@ -19,7 +19,7 @@ const image_paths = {
   unavailable: require("../../../assets/image_unavailable.png")
 }
 
-export function Restaurants_Screen({ route }) {
+export const Restaurants_Screen = ({ route }) => {
 
   const navigation = useNavigation();
 
@@ -42,7 +42,7 @@ export function Restaurants_Screen({ route }) {
     }
   }, [current_index]);
 
-  function advance_list(vote_id) {
+  const advance_list = (vote_id) => {
     const vote_restaurant = async () => {
       try {
         const response = await fetch(
@@ -73,27 +73,27 @@ export function Restaurants_Screen({ route }) {
   return (
     <SafeAreaView style={styles.header_container}>
       <StatusBar style="auto" />
-      <Landing_Banner/>
-        <View style={styles.container}>
-          <Restaurant_Card shop_data={current_shop} />
-      <View style={styles.row}>
-        <Vote_Button
-          button_name=""
-          press_function={() => advance_list(0)}
-          image_path={image_paths.dislike}
-        />
-        <Vote_Button
-          button_name=""
-          press_function={() => advance_list(1)}
-          image_path={image_paths.like}
-        />
+      <Landing_Banner />
+      <View style={styles.container}>
+        <Restaurant_Card shop_data={current_shop} />
+        <View style={styles.row}>
+          <Vote_Button
+            button_name=""
+            press_function={() => advance_list(0)}
+            image_path={image_paths.dislike}
+          />
+          <Vote_Button
+            button_name=""
+            press_function={() => advance_list(1)}
+            image_path={image_paths.like}
+          />
+        </View>
       </View>
-    </View>
     </SafeAreaView>
   )
 }
 
-function Restaurant_Card({ shop_data }) {
+const Restaurant_Card = ({ shop_data }) => {
   const image_source = shop_data.image_url
     ? { uri: shop_data.image_url }
     : image_paths.unavailable;
@@ -110,7 +110,7 @@ function Restaurant_Card({ shop_data }) {
   );
 }
 
-function Vote_Button({ button_name, press_function, image_path }) {
+const Vote_Button = ({ button_name, press_function, image_path }) => {
   return (
     <TouchableOpacity
       onPress={press_function}

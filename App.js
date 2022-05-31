@@ -12,8 +12,8 @@ import { Result_Screen } from "./src/components/screens/Result_Screen.js";
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
-
+const App = () => {
+  
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
@@ -29,3 +29,5 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+export default App;

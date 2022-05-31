@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
 import { backend_api } from '../../constants';
-import { Nav_Button, Landing_Banner } from "../widgets/Buttons.js";
+import { Nav_Button } from "../widgets/Buttons.js";
 import { Star_Rating } from "../widgets/Star_Rating";
 import { Display_Error } from "../widgets/Display_Error";
 import { Loading } from "../widgets/Loading";
@@ -16,7 +16,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-export function Result_Screen({ route }) {
+export const Result_Screen = ({ route }) => {
 
   const { flock_info } = route.params;
   const restaurants = flock_info.restaurants;
@@ -93,7 +93,7 @@ export function Result_Screen({ route }) {
 
   if (is_waiting) return <Loading message="Waiting for others..." />
   if (network_error) return <Display_Error network_error={network_error} />
-  
+
 
   clearInterval(interval_id);
   return (
@@ -104,9 +104,9 @@ export function Result_Screen({ route }) {
   )
 }
 
-function Winning_Card({ shop_data }) {
+const Winning_Card = ({ shop_data }) => {
 
-  function go_to_maps(coords) {
+  const go_to_maps = (coords) => {
     const map_url =
       "https://www.google.com/maps/dir/?api=1" +
       "&destination=" +
@@ -116,44 +116,44 @@ function Winning_Card({ shop_data }) {
     Linking.openURL(map_url);
   }
 
-  function go_to_phone(telnum) {
+  const go_to_phone = (telnum) => {
     Linking.openURL('tel:' + telnum);
   }
 
   return (
     <SafeAreaView style={styles.header_container}>
-    <View style={styles.results_card}>
-      <Text style={styles.winner_name}>{shop_data.name}</Text>
-      <Image
-        style={styles.image_rounded}
-        source={{ uri: shop_data.image_url }}
-      />
-      <Star_Rating star_num={shop_data.rating} shop_id={shop_data.id}></Star_Rating>
-      <Text style={styles.winner_button_header}>
-        Review Count: {shop_data.review_count}
-      </Text>
-      <TouchableOpacity
-        onPress={() => go_to_maps(shop_data.coordinates)}
-        style={styles.maps_button}
-        activeOpacity={0.5}
-      >
-        <Text style={styles.winner_button_header}>Get Directions: </Text>
-        <Text>{shop_data.location.display_address[0]}</Text>
-        <Text>{shop_data.location.display_address[1]}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => go_to_phone(shop_data.phone)}
-        style={styles.contact_button}
-        activeOpacity={0.5}
-      >
-        <Text style={styles.winner_button_header}>Contact: </Text>
-        <Text>{shop_data.display_phone}</Text>
-      </TouchableOpacity>
-      <Nav_Button
-        button_name="Start Over"
-        route="Login"
-      />
-    </View>
+      <View style={styles.results_card}>
+        <Text style={styles.winner_name}>{shop_data.name}</Text>
+        <Image
+          style={styles.image_rounded}
+          source={{ uri: shop_data.image_url }}
+        />
+        <Star_Rating star_num={shop_data.rating} shop_id={shop_data.id}></Star_Rating>
+        <Text style={styles.winner_button_header}>
+          Review Count: {shop_data.review_count}
+        </Text>
+        <TouchableOpacity
+          onPress={() => go_to_maps(shop_data.coordinates)}
+          style={styles.maps_button}
+          activeOpacity={0.5}
+        >
+          <Text style={styles.winner_button_header}>Get Directions: </Text>
+          <Text>{shop_data.location.display_address[0]}</Text>
+          <Text>{shop_data.location.display_address[1]}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => go_to_phone(shop_data.phone)}
+          style={styles.contact_button}
+          activeOpacity={0.5}
+        >
+          <Text style={styles.winner_button_header}>Contact: </Text>
+          <Text>{shop_data.display_phone}</Text>
+        </TouchableOpacity>
+        <Nav_Button
+          button_name="Start Over"
+          route="Login"
+        />
+      </View>
     </SafeAreaView>
   );
 }
